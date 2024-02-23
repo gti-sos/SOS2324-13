@@ -30,5 +30,12 @@ dataset
 
 let mediaCalculada = suma / contador; // Divide entre el numero de veces que aparece un dato
 
-// c) Al ejecutar node index-RRG se mostrará el resultado por consola.
-console.log("Media calculada: ", mediaCalculada);
+//API RUBROMGUI
+
+const API_BASE = "/samples";
+
+module.exports = (app) => {
+    app.get(API_BASE+"/RRG", (req,res)=>{
+        res.send(`<html><body><h1>${mediaCalculada}</h1></body></html>`);
+    });
+};
