@@ -8,7 +8,6 @@ let rubromguiAPI = require("./samples/RRG");
 let app = express();
 
 app.use(bodyParser.json());
-app.use("/", express.static("./public"));
 
 // Esto va dentro de cada api personal: vaconst API_BASE = "/samples";
 //Llamada a APIs de los integrantes del grupo
@@ -22,9 +21,7 @@ app.listen(PORT);
 console.log(`Server listening on port ${PORT}.`);
 
 // Ruta raíz "/"
-app.get("/", (req,res)=>{
-    res.send("<html><body><h1>Proyecto SOS2324-13</h1></body></html>");
-});
+app.use("/", express.static("./home"));
 
 // Ruta "/cool"
 app.get("/cool", (req,res)=>{
