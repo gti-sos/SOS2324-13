@@ -28,5 +28,14 @@ dataset
 
 let mediaCalculada = suma / contador;
 
-// c) Al ejecutar node index-ALB se mostrará el resultado por consola.
-console.log("Media calculada: ", mediaCalculada);
+
+
+//API ANTLOPBAR
+
+const API_BASE = "/samples";
+
+module.exports = (app) => {
+    app.get(API_BASE+"/ALB", (req,res)=>{
+        res.send(`<html><body><h1>${mediaCalculada}</h1></body></html>`);
+    });
+};

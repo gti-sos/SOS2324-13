@@ -3,6 +3,7 @@ let cool = require("cool-ascii-faces");
 let express = require("express");
 let bodyParser = require("body-parser");
 let rubromguiAPI = require("./samples/RRG");
+let antlopbarAPI = require("./samples/ALB");
 
 //inicio del servidor
 let app = express();
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 // Esto va dentro de cada api personal: vaconst API_BASE = "/samples";
 //Llamada a APIs de los integrantes del grupo
 rubromguiAPI(app);
+antlopbarAPI(app);
 //API2(app);
 //API3(app);
 
