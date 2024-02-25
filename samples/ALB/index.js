@@ -27,7 +27,7 @@ dataset
     }); // Acumula la suma
 
 let mediaCalculada = suma / contador;
-
+//Devolvemos la media calculada
 
 
 //API ANTLOPBAR
