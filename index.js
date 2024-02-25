@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 //Llamada a APIs de los integrantes del grupo
 rubromguiAPI(app);
 antlopbarAPI(app);
-//API2(app);
 //API3(app);
 
 // Configuracion del puerto
