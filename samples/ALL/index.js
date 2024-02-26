@@ -32,6 +32,6 @@ const API_BASE = "/samples";
 
 module.exports = (app) => {
     app.get(API_BASE+"/ALL", (req,res)=>{
-        res.send(`<html><body><h1>${mediaCalculada3}</h1></body></html>`);
+        res.send(`<html><body><h1>${"Media calculada para United States - Salary: ", mediaCalculada3}</h1></body></html>`);
     });
 };
