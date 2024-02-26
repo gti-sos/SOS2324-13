@@ -26,12 +26,13 @@ dataset3
 
 let mediaCalculada3 = suma3 / contador3;
 
-console.log("Media calculada para United States - Salary: ", mediaCalculada3);
+console.log(mediaCalculada3);
 
 const API_BASE = "/samples";
 
 module.exports = (app) => {
     app.get(API_BASE+"/ALL", (req,res)=>{
-        res.send(`<html><body><h1>${"Media calculada para United States - Salary: ", mediaCalculada3}</h1></body></html>`);
+        res.send(`<html><body>{<h1>Salario Medio en Estados Unidos</h1>
+  <p>La media calculada para Estados Unidos es: <%= mediaCalculada3 %></p></body></html>`);
     });
 };
