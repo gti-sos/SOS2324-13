@@ -21,8 +21,8 @@ dataset2
     }).map((data)=>{
         return data.schizophrenia;
     }).forEach((valor) => {
-        suma += valor;
-        contador++;
+        suma2 += valor;
+        contador2++;
     }); // Acumula la suma
 
 let mediaCalculada2 = suma2 / contador2;
