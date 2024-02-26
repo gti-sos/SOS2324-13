@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 rubromguiAPI(app);
 antlopbarAPI(app);
 aarlopleaAPI(app);
-//API3(app);
 
 // Configuracion del puerto
 const PORT = (process.env.PORT || 10000);

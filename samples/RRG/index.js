@@ -27,6 +27,8 @@ dataset
 
 let mediaCalculada = suma / contador; // Divide entre el numero de veces que aparece un dato
 
+const API_BASE = "/samples";
+
 //API RUBROMGUI
 module.exports = (app) => {
     app.get(API_BASE+"/RRG", (req,res)=>{

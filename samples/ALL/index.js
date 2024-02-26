@@ -20,13 +20,15 @@ dataset3
   .filter((data) => data.country === "United States")
   .map((data) => data.salary)
   .forEach((valor) => {
-      suma += valor;
-      contador++;
+      suma3 += valor;
+      contador3++;
   });
 
 let mediaCalculada3 = suma3 / contador3;
 
 console.log("Media calculada para United States - Salary: ", mediaCalculada3);
+
+const API_BASE = "/samples";
 
 module.exports = (app) => {
     app.get(API_BASE+"/ALL", (req,res)=>{
