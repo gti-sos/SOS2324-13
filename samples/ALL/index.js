@@ -32,7 +32,7 @@ const API_BASE = "/samples";
 
 module.exports = (app) => {
     app.get(API_BASE+"/ALL", (req,res)=>{
-        res.send(`<html><body>{<h1>Salario Medio en Estados Unidos</h1>
-  <p>La media calculada para Estados Unidos es: <%= mediaCalculada3 %></p></body></html>`);
+        res.send(`<html><body><h1>Salario Medio en Estados Unidos</h1>
+  <p>La media calculada para Estados Unidos es: <%= mediaCalculada3 %></p> </body></html>`);
     });
 };
