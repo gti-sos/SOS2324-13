@@ -4,6 +4,7 @@ let express = require("express");
 let bodyParser = require("body-parser");
 let rubromguiAPI = require("./samples/RRG");
 let antlopbarAPI = require("./samples/ALB");
+let aarlopleaAPI = require("./samples/ALL");
 
 //inicio del servidor
 let app = express();
@@ -14,6 +15,7 @@ app.use(bodyParser.json());
 //Llamada a APIs de los integrantes del grupo
 rubromguiAPI(app);
 antlopbarAPI(app);
+aarlopleaAPI(app);
 //API3(app);
 
 // Configuracion del puerto
