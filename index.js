@@ -3,15 +3,17 @@ let cool = require("cool-ascii-faces");
 let express = require("express");
 let bodyParser = require("body-parser");
 
+let wris_datasetsAPI = require("./api-wris-datasets");
+
 //inicio del servidor
 let app = express();
+// Configuracion del puerto
+const PORT = (process.env.PORT || 10000);
 
 app.use(bodyParser.json());
 
-const API_BASE = "/samples";
+wris_datasetsAPI(app);
 
-// Configuracion del puerto
-const PORT = (process.env.PORT || 10000);
 app.listen(PORT);
 console.log(`Server listening on port ${PORT}.`);
 
@@ -23,7 +25,7 @@ app.get("/cool", (req,res)=>{
     res.send(`<html><body><h1>${cool()}</h1></body></html>`);
 });
 
-//CODIGO RUBROMGUI
+//CODIGO RUBROMGUI F03
 let dataset = 
     [{ country: "Kiribati", wri: 1.88, exposure: 3.31, vulnerability: 56.87, susceptibility: 41.52, lack_of_coping_capability: 83.54, lack_of_adaptive_capacity: 45.56, year: 2011, exposure_category: "Very Low", wri_category: "Very Low", vulnerability_category: "High", susceptibility_category: "High"},
      { country: "Kiribati", wri: 1.78, exposure: 3.05, vulnerability: 58.48, susceptibility: 42.90, lack_of_coping_capability: 82.49, lack_of_adaptive_capacity: 50.06, year: 2013, exposure_category: "Very Low", wri_category: "Very Low", vulnerability_category: "High", susceptibility_category: "High"},
@@ -53,10 +55,14 @@ dataset
 
 let mediaCalculada = suma / contador; // Divide entre el numero de veces que aparece un dato
 
-//API RUBROMGUI
-app.get(API_BASE+"/RRG", (req,res)=>{
-    res.send(`<html><body><h1>${mediaCalculada}</h1></body></html>`);
+//API SAMPLES RUBROMGUI
+app.get("/samples/RRG", (req,res)=>{
+    res.send(`<html><body><h1><p>La media calculada es: ${mediaCalculada}</p></h1></body></html>`);
 });
+
+
+
+
 
 //CODIGO ANTLOPBAR
 let dataset2 = 
@@ -91,9 +97,13 @@ let mediaCalculada2 = suma2 / contador2;
 
 //API ANTLOPBAR
 
-app.get(API_BASE+"/ALB", (req,res)=>{
+app.get("samples/ALB", (req,res)=>{
     res.send(`<html><body><h1>${mediaCalculada2}</h1></body></html>`);
 });
+
+
+
+
 
 //CODIGO AARLOPLEA
 let dataset3 = [
@@ -126,7 +136,7 @@ let mediaCalculada3 = suma3 / contador3;
 
 console.log(mediaCalculada3);
 
-app.get(API_BASE+"/ALL", (req,res)=>{
+app.get("samples/ALL", (req,res)=>{
     res.send(`<html><body><h1>Salario Medio en Estados Unidos</h1>
   <p>La media calculada para Estados Unidos es:  ${mediaCalculada3} </p> </body></html>`);
 });
