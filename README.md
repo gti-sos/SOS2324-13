@@ -8,5 +8,5 @@
 - **URL**: https://sos2324-13.appspot.com
 -  **APIs**:
     - RRG: https://sos2324-13.appspot.com/api/v1/wris-datasets
-    - ALB: https://sos2324-13.appspot.com/samples/ALB
+    - ALB: https://sos2324-13.appspot.com/api/v1/mentalhealth-datasets
     - ALL: https://sos2324-13.appspot.com/samples/ALL

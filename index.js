@@ -4,6 +4,7 @@ let express = require("express");
 let bodyParser = require("body-parser");
 
 let wris_datasetsAPI = require("./api-wris-datasets");
+let mentalhealth_datasetsAPI = require("./api-mentalhealth-datasets")
 
 //inicio del servidor
 let app = express();
@@ -13,6 +14,7 @@ const PORT = (process.env.PORT || 10000);
 app.use(bodyParser.json());
 
 wris_datasetsAPI(app);
+mentalhealth_datasetsAPI(app);
 
 app.listen(PORT);
 console.log(`Server listening on port ${PORT}.`);
