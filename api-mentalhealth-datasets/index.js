@@ -9,7 +9,7 @@ module.exports = (app) => {
     // Método en la raiz
          //POST
          app.post(API_BASE+ "/", (req, res) => {
-            const mentalHealth = req.body.name;
+            const mentalHealth = req.body.country;
     
             // Verificar si los datos ya existen
             if (!mentalHealth) {
@@ -111,8 +111,8 @@ module.exports = (app) => {
      //PARA PAIS EN ESPECIFICO
         // GET
         app.get(API_BASE + "/:country", (req, res) => {
-        const nombrePais = req.params.nombrePais;
-        const pais = townsData[nombrePais];
+        const nombrePais = req.params.country;
+        const pais = datosPais[nombrePais];
         if (pais) {
             res.status(200).json(pais);
         } else {
@@ -123,7 +123,7 @@ module.exports = (app) => {
 
         //PUT
         app.put(API_BASE + "/:country", (req, res) => {
-        const nombrePais = req.params.nombrePais;
+        const nombrePais = req.params.country;
         if (!datosPais[nombrePais]) {
             res.status(404).json({ message: 'El pais especificado no fue encontrado.' });
         } else {
@@ -139,7 +139,7 @@ module.exports = (app) => {
 
         // DELETE
         app.delete(API_BASE + "/:country", (req, res) => {
-        const nombrePais = req.params.nombrePais;
+        const nombrePais = req.params.country;
         if (!datosPais[nombrePais]) {
             res.status(404).json({ message: 'El pais especificado no fue encontrado.' });
         } else {
