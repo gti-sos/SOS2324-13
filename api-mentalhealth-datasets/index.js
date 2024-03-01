@@ -1,7 +1,7 @@
 const API_BASE = "/api/v1/mentalhealth-datasets";
 
 // Creamos un array vacío para almacenar los datos
-let datos = [];
+var datos = [];
 
 // Exportamos el módulo que maneja las operaciones de la API
 module.exports = (app) => {
@@ -82,7 +82,7 @@ module.exports = (app) => {
    
      //PARA PAIS EN ESPECIFICO
         // GET
-        app.get(API_BASE + "/Afghanistan", (req, res) => {
+        app.get(API_BASE + "/:country", (req, res) => {
         const nombrePais = req.params.nombrePais;
         const pais = townsData[nombrePais];
         if (pais) {
@@ -94,7 +94,7 @@ module.exports = (app) => {
 
 
         //PUT
-        app.put(API_BASE + "/Afghanistan", (req, res) => {
+        app.put(API_BASE + "/:country", (req, res) => {
         const nombrePais = req.params.nombrePais;
         if (!datosPais[nombrePais]) {
             res.status(404).json({ message: 'El pais especificado no fue encontrado.' });
@@ -105,12 +105,12 @@ module.exports = (app) => {
     });
 
         // POST
-         app.post(API_BASE + "/Afghanistan", (req, res) => {
+         app.post(API_BASE + "/:country", (req, res) => {
         res.status(405).json({ message: 'Método no permitido' });
         });
 
         // DELETE
-        app.delete(API_BASE + "/Afghanistan", (req, res) => {
+        app.delete(API_BASE + "/:country", (req, res) => {
         const nombrePais = req.params.nombrePais;
         if (!datosPais[nombrePais]) {
             res.status(404).json({ message: 'El pais especificado no fue encontrado.' });
