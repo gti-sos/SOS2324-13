@@ -17,7 +17,7 @@ module.exports = (app) => {
             }if (datos[mentalHealth]) {
                 res.status(409).json({ message: 'Conflicto,ya existe' });
             } else {
-                datos[mentalHealth] = req.body;
+                datos.push(mentalHealth);
                 res.status(201).json({ message: 'Creado correctamente.' });
             }
             });
@@ -30,7 +30,6 @@ module.exports = (app) => {
     
             // DELETE
             app.delete(API_BASE+ "/", (req, res) => {
-            datos = {};
             datos.splice(0, datos.length);
             res.status(200).json({ message: 'Borrado correctamente.' });
             });
