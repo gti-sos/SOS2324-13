@@ -5,6 +5,66 @@ var datos = [];
 
 // Exportamos el módulo que maneja las operaciones de la API
 module.exports = (app) => {
+
+    // Método en la raiz
+         //POST
+         app.post(API_BASE+ "/", (req, res) => {
+            const mentalHealth = req.body.name;
+    
+            // Verificar si los datos ya existen
+            if (!mentalHealth) {
+                res.status(400).json({ message: 'Solicitud incorrecta.' });
+            }if (datos[mentalHealth]) {
+                res.status(409).json({ message: 'Conflicto,ya existe' });
+            } else {
+                datos[mentalHealth] = req.body;
+                res.status(201).json({ message: 'Creado correctamente.' });
+            }
+            });
+    
+            // GET
+            app.get(API_BASE+ "/", (req, res) => {
+            res.send(JSON.stringify(datos))
+            res.status(200).json(Object.values(datos));
+            });
+    
+            // DELETE
+            app.delete(API_BASE+ "/", (req, res) => {
+            datos = {};
+            datos.splice(0, datos.length);
+            res.status(200).json({ message: 'Borrado correctamente.' });
+            });
+    
+             // PUT
+            app.put(API_BASE+ "/", (req, res) => {
+            res.status(405).json({ message: 'Método no permitido. No se puede usar PUT en la raiz.' });
+             });
+       
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Método para cargar datos iniciales
     app.get(API_BASE + "/loadInitialData", (req, res) => {
         // Verificar si el array de datos está vacío
@@ -42,39 +102,7 @@ module.exports = (app) => {
 
 
 
-    // Método en la raiz
-         //POST
-        app.post(API_BASE+ "/", (req, res) => {
-        const mentalHealth = req.body.name;
 
-        // Verificar si los datos ya existen
-        if (!mentalHealth) {
-            res.status(400).json({ message: 'Solicitud incorrecta.' });
-        }if (datos[mentalHealth]) {
-            res.status(409).json({ message: 'Conflicto,ya existe' });
-        } else {
-            datos[mentalHealth] = req.body;
-            res.status(201).json({ message: 'Creado correctamente.' });
-        }
-        });
-
-        // GET
-        app.get(API_BASE+ "/", (req, res) => {
-        res.status(200).json(Object.values(datos));
-        });
-
-        // DELETE
-        app.delete(API_BASE+ "/", (req, res) => {
-        datos = {};
-        res.status(200).json({ message: 'Borrado correctamente.' });
-        });
-
-         // PUT
-        app.put(API_BASE+ "/", (req, res) => {
-        res.status(405).json({ message: 'Método no permitido. No se puede usar PUT en la raiz.' });
-         });
-   
-   
    
    
    
