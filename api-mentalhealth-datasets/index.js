@@ -21,14 +21,14 @@ module.exports = (app) => {
     
             if (exitenDatos) {
                 //si ya existen
-                res.sendStatus(409, "Hay un conflicto");
+                res.sendStatus(409).json({ message: 'Hay un conflicto.409' });
             } else if (!data || Object.keys(data).length === 0) {
                 //si no son validos
-                res.sendStatus(400, "No es valido ");
+                res.sendStatus(400).json({ message: 'No es valido.400' })
             } else {
                 //lo creamos
                 datos.push(data);
-                res.sendStatus(201, "Creado correctamente");
+                res.sendStatus(201).json({ message: 'Creado correctamente.200' })
             }
         });
             // GET
