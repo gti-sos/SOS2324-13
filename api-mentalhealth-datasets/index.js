@@ -8,21 +8,29 @@ module.exports = (app) => {
 
     // Método en la raiz
          //POST
-         app.post(API_BASE+ "/", (req, res) => {
+         app.post(API_BASE + "/", (req, res) => {
+            //pedimos el contenido
             let data = req.body;
-            const existenDatos = datos.some(h => h.country === data.country && h.year === data.year);
     
-            // Verificar si los datos ya existen
-            if (!existenDatos) {
-                res.senStatus(400).json({ message: 'Solicitud incorrecta. 400' });
-            }if (datos[existenDatos]) {
-                res.sendStatus(409).json({ message: 'Conflicto,ya existe. 409' });
+            //veo si los datos ya existen (mismo pais y año)
+            const exitenDatos = datos.some(g => g.country === g.country
+                && g.year === g.year);
+    
+            //veo si los datos son validos
+    
+    
+            if (exitenDatos) {
+                //si ya existen
+                res.sendStatus(409, "Hay un conflicto");
+            } else if (!data || Object.keys(data).length === 0) {
+                //si no son validos
+                res.sendStatus(400, "No es valido ");
             } else {
+                //lo creamos
                 datos.push(data);
-                res.sendStatus(201).json({ message: 'Creado correctamente. 201' });
+                res.sendStatus(201, "Creado correctamente");
             }
-            });
-    
+        });
             // GET
             app.get(API_BASE+ "/", (req, res) => {
             res.send(JSON.stringify(datos))
