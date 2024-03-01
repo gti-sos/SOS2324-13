@@ -7,8 +7,8 @@ var datos = [];
 module.exports = (app) => {
 
     // Método en la raiz
-         //POST
-         app.post(API_BASE + "/", (req, res) => {
+          //POST
+          app.post(API_BASE + "/", (req, res) => {
             //pedimos el contenido
             let data = req.body;
     
@@ -20,17 +20,18 @@ module.exports = (app) => {
     
     
             if (exitenDatos) {
-                //si ya existen
-                res.sendStatus(409).json({ message: 'Hay un conflicto.409' });
+                //miramos si ya existen
+                res.sendStatus(409,'Conflicted')
             } else if (!data || Object.keys(data).length === 0) {
-                //si no son validos
-                res.sendStatus(400).json({ message: 'No es valido.400' })
+                //miramossi no son validos
+                res.sendStatus(400, "Bad Request");
             } else {
                 //lo creamos
-                datos.push(data);
-                res.sendStatus(201).json({ message: 'Creado correctamente.200' })
+                dataset.push(data);
+                res.sendStatus(201, "Created");
             }
         });
+        
             // GET
             app.get(API_BASE+ "/", (req, res) => {
             res.send(JSON.stringify(datos))
@@ -40,12 +41,12 @@ module.exports = (app) => {
             // DELETE
             app.delete(API_BASE+ "/", (req, res) => {
             datos.splice(0, datos.length);
-            res.sendStatus(200).json({ message: 'Borrado correctamente.200' });
+            res.sendStatus(200).json({ message: 'Deleted' });
             });
     
              // PUT
             app.put(API_BASE+ "/", (req, res) => {
-            res.sendStatus(405).json({ message: 'Método no permitido. No se puede usar PUT en la raiz.405' });
+            res.sendStatus(405).json({ message: 'Method not allowed' });
              });
        
        
@@ -91,10 +92,10 @@ module.exports = (app) => {
             {country:"Afghanistan",code:"AFG",year:2000,schizophrenia:0.161621,bipolar_disorder:0.700015,eating_disorder:0.086021,anxiety_disorder:4.827047,drug_use_disorder:1.788395,depression:4.11861,alcoholism:0.662479}]; // Inserta tus datos iniciales aquí
             
             datos.push(data);
-            res.sendStatus(201).json({ message: 'Datos iniciales creados correctamente.201' });
+            res.sendStatus(201).json({ message: 'Created' });
         } else {
             res.send(JSON.stringify(datos))
-            res.sendStatus(200).json({ message: 'El array de datos ya contiene elementos.200' });
+            res.sendStatus(200).json({ message: 'Array has elements' });
            
         }
 
@@ -124,7 +125,7 @@ module.exports = (app) => {
         if (pais) {
             res.sendStatus(200).json(pais);
         } else {
-            res.sendStatus(404).json({ message: 'El pais especificado no fue encontrado. 404' });
+            res.sendStatus(404).json({ message: 'Country not founded' });
         }
      });
 
@@ -133,33 +134,33 @@ module.exports = (app) => {
         app.put(API_BASE + "/:country", (req, res) => {
         const nombrePais = req.params.country;
         if (!datosPais[nombrePais]) {
-            res.sendStatus(404).json({ message: 'El pais especificado no fue encontrado. 404' });
+            res.sendStatus(404).json({ message: 'Country not founded' });
         } else {
             datosPais[nombrePais] = req.body;
-            res.sendStatus(200).json({ message: 'Datos del pais actualizados correctamente. 200' });
+            res.sendStatus(200).json({ message: 'Data updated' });
         }
     });
 
         // POST
          app.post(API_BASE + "/:country", (req, res) => {
-        res.sendStatus(405).json({ message: 'Método no permitido. 405' });
+        res.sendStatus(405).json({ message: 'Method not allowed' });
         });
 
         // DELETE
         app.delete(API_BASE + "/:country", (req, res) => {
         const nombrePais = req.params.country;
         if (!datosPais[nombrePais]) {
-            res.sendStatus(404).json({ message: 'El pais especificado no fue encontrado. 404' });
+            res.sendStatus(404).json({ message: 'Country not founded' });
         } else {
             delete datosPais[nombrePais];
-            res.sendStatus(200).json({ message: 'Pais eliminado correctamente. 200' });
+            res.sendStatus(200).json({ message: 'Country deleted' });
         }
     });
 
         // ERROR 401(no sabia donde ponerlo)
          // Manejar el error 401 para solicitudes no autorizadas
         app.use((req, res, next) => {
-        res.sendStatus(401).json({ message: 'No autorizado. Se requiere autenticación para acceder a este recurso. 401 ' });
+        res.sendStatus(401).json({ message: 'Not authorized 401'});
     });
 })};
 
