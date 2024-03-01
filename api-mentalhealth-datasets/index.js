@@ -106,7 +106,7 @@ module.exports = (app) => {
 
         // POST
          app.post(API_BASE + "/Afghanistan", (req, res) => {
-        res.status(405).json({ message: 'Método no permitido. No se puede usar POST en /towns/:townName.' });
+        res.status(405).json({ message: 'Método no permitido' });
         });
 
         // DELETE
