@@ -30,7 +30,7 @@ app.get(API_BASE, (req, res) => {
     if (datosPais.length > 0) {
         res.status(200).json(datosPais);
     } else {
-        res.status(404).json({ message: 'Data not found' });
+        res.status(404).json({ message: 'Data not found.404' });
     }
 });
 
@@ -55,14 +55,14 @@ app.post(API_BASE + "/", (req, res) => {
 
     // Verificar si los datos son válidos
     if (!data || Object.keys(data).length === 0) {
-        res.status(400).send("Bad Request");
+        res.status(400).send("Bad Request,400");
     } else if (datosExisten) {
         // Si ya existen
-        res.status(409).send("Conflict");
+        res.status(409).send("Conflict,409");
     } else {
         // Crear los datos
         datosPais.push(data);
-        res.status(201).send("Created");
+        res.status(201).send("Created,201");
     }
 });
 
@@ -95,7 +95,7 @@ app.delete(API_BASE, (req, res) => {
         datosPais = [];
         res.status(200).json({ message: 'Deleted' });
     } else {
-        res.status(404).json({ message: 'No data to delete' });
+        res.status(404).json({ message: 'No data to delete,404' });
     }
 });
 
