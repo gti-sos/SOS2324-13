@@ -116,7 +116,7 @@ module.exports = (app) => {
     });
 
     //PUT -- OK
-    app.get(API_BASE +"/:country", (req, res) => {
+    app.put(API_BASE +"/:country", (req, res) => {
         const pais = req.params.country;
         let data = req.body;
 
@@ -133,7 +133,7 @@ module.exports = (app) => {
     });
 
     //DELETE -- OK
-    app.get(API_BASE +"/:country", (req, res) => {
+    app.delete(API_BASE +"/:country", (req, res) => {
         //como estamos en el directorio de un pais,
         //el metodo delete borra todo de ese pais
         const pais = req.params.country;
