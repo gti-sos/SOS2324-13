@@ -80,12 +80,13 @@ app.put(API_BASE + "/", (req, res) => {
 app.put(API_BASE + "/:country", (req, res) => {
     const countryName = req.params.country;
     const newData = req.body;
-    const countryIndex = datosPais.findIndex(data => data.country === countryName);
-    if (countryIndex !== -1) {
-        datosPais[countryIndex] = newData;
-        res.status(200).json({ message: 'Updated' });
-    } else {
+    const countryIndex = datosPais.filter(data => data.country === countryName);
+    if (!newData || Object.keys(newData).length === 0) {
         res.status(400).json({ message: 'Bad request,400' });
+    } else {
+        countryIndex.push(newData);
+        res.status(200).json({ message: 'Updated' });
+       
     }
 });
 
