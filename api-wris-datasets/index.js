@@ -119,14 +119,10 @@ module.exports = (app) => {
     app.put(API_BASE +"/:country", (req, res) => {
         const pais = req.params.country;
         let data = req.body;
-        const countryNameBody = data.country
-
-        //filtro para obtener los datos del pais introducido
-        if (pais !== countryNameBody) {
-            res.status(400).json({ message: 'Error 400, bad reequest' });
-            return;
-          }
+       
           
+        //filtro para obtener los datos del pais introducido
+        const countryData = dataset.filter(p => p.country === pais);
 
         //veo si los datos introducidos no son vacios (si son validos)
         if (!data || Object.keys(data).length === 0 || data.country !== pais) {

@@ -77,10 +77,18 @@ app.put(API_BASE + "/", (req, res) => {
     res.status(405).json({ error: 'Method not allowed,405' });
 })
 // PUT para actualizar datos de un país específico
-app.put(API_BASE + "/:country", (req, res) => {
-    const countryName = req.params.country;
-    const newData = req.body;
-    const countryIndex = datosPais.filter(data => data.country === countryName);
+    app.put(API_BASE +"/:country", (req, res) => {
+        const pais = req.params.country;
+        let data = req.body;
+        const countryNameBody = data.country
+
+        //filtro para obtener los datos del pais introducido
+        if (pais !== countryNameBody) {
+            res.sendStatus(400,"Bad request");
+            return;
+          }
+
+
     if (!newData || Object.keys(newData).length === 0) {
         res.status(400).json({ message: 'Bad request,400' });
     } else {
