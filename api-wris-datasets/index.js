@@ -148,7 +148,7 @@ module.exports = (app) => {
             dataset = nuevoDataset;
             res.sendStatus(200, "Ok");
         } else {
-            //si no se ha borrado ninguna fila, ese pais no existe
+            //si no se ha borrado ninguna 401, ese pais no existe
             //en el dataset
             res.sendStatus(404, "Not Found");
         }

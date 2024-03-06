@@ -2,7 +2,6 @@ const API_BASE = '/api/v1/mentalhealth-datasets';
 
 
 // Datos de ejemplo
-let datosPais = [];
 module.exports = (app,dbMental) => {
 // Método para cargar datos iniciales si el array está vacío
 app.get(API_BASE + "/loadInitialData", (req, res) => {
