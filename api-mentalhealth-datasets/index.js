@@ -1,9 +1,73 @@
 const API_BASE = '/api/v1/mentalhealth-datasets';
 
 
+
+
 // Datos de ejemplo
 module.exports = (app,dbMental) => {
-// Método para cargar datos iniciales si el array está vacío
+
+
+
+
+  //BUSQUEDA Y PAGINACION
+    // Ruta para realizar búsquedas por todos los campos del recurso
+    app.get(API_BASE + "/search", (req, res) => {
+        const query = req.query;
+
+         // Convertir valores numéricos a números si es necesario
+    for (const key in query) {
+        if (!isNaN(query[key])) {
+            query[key] = parseFloat(query[key]);
+            }
+        }
+    
+        // Realizar la búsqueda en la base de datos
+        dbMental.find(query, (err, result) => {
+                if (err) {
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+                if (result.length > 0) {
+                    res.status(200).json(result);
+                } else {
+                    res.status(404).json({ message: 'No matching data found' });
+                }
+            });
+        });
+    
+        // Ruta para obtener datos con paginación
+    app.get(API_BASE + "/", (req, res) => {
+        const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
+        const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
+    
+        dbMental.find({})
+            .skip(offset)
+            .limit(limit)
+            .exec((err, data) => {
+                if (err) {
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+                if (data.length > 0) {
+                    res.status(200).json(data);
+                } else {
+                    res.status(404).json({ message: 'Data not found' });
+                }
+            });
+    });
+    
+
+
+
+
+
+
+
+
+
+
+
+    // Método para cargar datos iniciales si el array está vacío
 app.get(API_BASE + "/loadInitialData", (req, res) => {
     dbMental.find({}, (err, datosMental) => {
         if (err) {
@@ -53,7 +117,7 @@ app.get(API_BASE, (req, res) => {
 // GET para obtener datos de un país específico
 app.get(API_BASE + "/:country", (req, res) => {
     const countryName = req.params.country;
-    db.find({ country: countryName }, (err, datosMental) => {
+    dbMental.find({ country: countryName }, (err, datosMental) => {
         if (err) {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
@@ -66,35 +130,37 @@ app.get(API_BASE + "/:country", (req, res) => {
     });
 });
 
-// POST para agregar nuevos datos 
 app.post(API_BASE + "/", (req, res) => {
     // Pedimos el contenido
     let data = req.body;
+    const expectedFields = ['country', 'code', 'year', 'schizophrenia','bipolar_disorder','eating_disorder','anxiety_disorder','drug_use_disorder','depression','alcoholism'];
+    const receivedFields = Object.keys(data);
 
+    const isValidData = expectedFields.every(field => receivedFields.includes(field));
 
     // Verificar si los datos son válidos
-    if (!data || Object.keys(data).length === 0) {
-        res.status(400).send("Bad Request,400");
-     // Verificar si los datos ya existen (mismo país y año)
-     dbMental.findOne({ country: data.country, year: data.year }, (err, existingData) => {
+    if (!isValidData) {
+        return res.status(400).send("Bad Request");
+    } else{
+
+    // Verificar si los datos ya existen (mismo país y año)
+    dbMental.findOne({ country: data.country, year: data.year }, (err, existingData) => {
         if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (existingData) {
-            res.status(409).send("Conflict");
-        } else {
-            // Insertar nuevos datos
-            dbMental.insert(data, (err, newData) => {
-                if (err) {
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    return;
-                }
-                res.status(201).send("Created");
-            });
+            return res.status(409).send("Conflict");
         }
+        
+        // Insertar nuevos datos
+        dbMental.insert(data, (err, newData) => {
+            if (err) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+            return res.status(201).send("Created");
+        });
     });
-    }});
+}});
 
 
 //POST PARA PAIS CONCRETO
@@ -107,23 +173,28 @@ app.put(API_BASE + "/", (req, res) => {
     res.status(405).json({ error: 'Method not allowed,405' });
 })
 // PUT para actualizar datos de un país específico
-    app.put(API_BASE +"/:country", (req, res) => {
-        const countryName = req.params.country;
-        const newData = req.body;
-        
+app.put(API_BASE + "/:country", (req, res) => {
+    const countryName = req.params.country;
+    const newData = req.body;
 
-        dbMental.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
-            if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
-            }
-            if (numUpdated > 0) {
-                res.status(200).json({ message: 'Updated' });
-            } else {
-                res.status(404).json({ message: 'Country not found' });
-            }
-        });
+    // Verificar que el ID en el cuerpo coincida con el ID en la URL
+    if (newData.country && newData.country !== countryName) {
+        res.status(400).json({ error: 'Mismatched ID in the request body' });
+        return;
+    }
+
+    dbMental.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
+        if (err) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        if (numUpdated > 0) {
+            res.status(200).json({ message: 'Updated' });
+        } else {
+            res.status(404).json({ message: 'Country not found' });
+        }
     });
+});
 
 // DELETE para eliminar todos los datos
 app.delete(API_BASE, (req, res) => {
