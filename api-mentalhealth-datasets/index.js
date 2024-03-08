@@ -130,6 +130,32 @@ app.get(API_BASE + "/:country", (req, res) => {
     });
 });
 
+app.get(API_BASE + "/:country/:year", (req, res) => {
+    const countryName = req.params.country;
+    const year = parseInt(req.params.year); // Parsear el año como un número entero
+
+    // Verificar si el año es válido
+    if (isNaN(year)) {
+        res.status(400).json({ error: 'Invalid year' });
+        return;
+    }
+
+    // Aquí se construye el filtro para buscar por país y año específico
+    dbMental.find({ country: countryName, year: year }, (err, datosMental) => {
+        if (err) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        if (datosMental.length > 0) {
+            res.status(200).json(datosMental);
+        } else {
+            res.status(404).json({ message: 'Data not found for the specified country and year' });
+        }
+    });
+});
+
+
+//POST GENERAL
 app.post(API_BASE + "/", (req, res) => {
     // Pedimos el contenido
     let data = req.body;
@@ -176,6 +202,15 @@ app.put(API_BASE + "/", (req, res) => {
 app.put(API_BASE + "/:country", (req, res) => {
     const countryName = req.params.country;
     const newData = req.body;
+    const expectedFields = ['country', 'code', 'year', 'schizophrenia','bipolar_disorder','eating_disorder','anxiety_disorder','drug_use_disorder','depression','alcoholism'];
+    const receivedFields = Object.keys(newData);
+
+    const isValidData = expectedFields.every(field => receivedFields.includes(field));
+
+    // Verificar si los datos son válidos
+    if (!isValidData) {
+        return res.status(400).send("Bad Request");
+    } else{
 
     // Verificar que el ID en el cuerpo coincida con el ID en la URL
     if (newData.country && newData.country !== countryName) {
@@ -194,8 +229,7 @@ app.put(API_BASE + "/:country", (req, res) => {
             res.status(404).json({ message: 'Country not found' });
         }
     });
-});
-
+}});
 // DELETE para eliminar todos los datos
 app.delete(API_BASE, (req, res) => {
     dbMental.remove({}, { multi: true }, (err, numRemoved) => {
@@ -222,6 +256,7 @@ app.delete(API_BASE + "/:country", (req, res) => {
         }
     });
 });
-};
 
+
+}
 
