@@ -354,6 +354,26 @@ app.delete(API_BASE + "/:country", (req, res) => {
 
 
 
+// DELETE para eliminar datos de un país específico y año específico
+app.delete(API_BASE + "/:country/:year", (req, res) => {
+    const countryName = req.params.country;
+    const year = parseInt(req.params.year); // Parsear el año a número entero
+
+    dbMental.remove({ country: countryName, year: year }, { multi: true }, (err, numRemoved) => {
+        if (err) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        if (numRemoved > 0) {
+            res.status(200).json({ message: 'Deleted' });
+        } else {
+            res.status(404).json({ message: 'Country or year not found' });
+        }
+    });
+});
+
+
+
 
 
 
