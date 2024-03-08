@@ -387,7 +387,7 @@ app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
 
 
 // GET para obtener estadísticas en un periodo específico sin un país concreto
-app.get(`${API_BASE}/statistics2/:startYear/:endYear`, (req, res) => {
+app.get(API_BASE+"/statistics2/:startYear/:endYear", (req, res) => {
     const startYear = parseInt(req.params.startYear);
     const endYear = parseInt(req.params.endYear);
 
