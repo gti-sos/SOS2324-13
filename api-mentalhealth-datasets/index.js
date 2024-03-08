@@ -7,6 +7,15 @@ const API_BASE = '/api/v1/mentalhealth-datasets';
 module.exports = (app,dbMental) => {
 
 
+// Ruta para redirigir al portal de documentación de Postman
+app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
+    // Redirigir al portal de documentación de Postman
+    res.redirect('https://documenter.getpostman.com/view/32965348/2sA2xh1rtd');
+});
+
+
+
+
 
 
   //BUSQUEDA Y PAGINACION
@@ -130,7 +139,52 @@ app.get(API_BASE + "/:country", (req, res) => {
     });
 });
 
-app.get(API_BASE + "/:country/:year", (req, res) => {
+//GET AÑO CONCRETO
+// GET para obtener datos de un año concreto
+app.get(API_BASE + "/year/:year", (req, res) => {
+    let year = req.params.year;
+
+    // Verificar si year es una cadena que puede ser parseada a un número
+    if (isNaN(year)) {
+        res.status(400).json({ error: 'Invalid year' });
+        return;
+    }
+
+    // Parsear year a un número entero
+    year = parseInt(year);
+
+    // Realizar la búsqueda en la base de datos
+    dbMental.find({ year: year }, (err, data) => {
+        if (err) {
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        if (data.length > 0) {
+            res.status(200).json(data);
+        } else {
+            res.status(404).json({ message: 'Data not found for the specified year' });
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//GET PAIS Y AÑO CONCRETO
+app.get(`${API_BASE}/country/:country/:year`, (req, res) => {
     const countryName = req.params.country;
     const year = parseInt(req.params.year); // Parsear el año como un número entero
 
@@ -141,19 +195,18 @@ app.get(API_BASE + "/:country/:year", (req, res) => {
     }
 
     // Aquí se construye el filtro para buscar por país y año específico
-    dbMental.find({ country: countryName, year: year }, (err, datosMental) => {
+    dbMental.findOne({ country: countryName, year: year }, (err, datosMental) => {
         if (err) {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        if (datosMental.length > 0) {
-            res.status(200).json(datosMental);
+        if (datosMental) {
+            res.status(200).json(datosMental); // Devuelve un solo objeto
         } else {
             res.status(404).json({ message: 'Data not found for the specified country and year' });
         }
     });
 });
-
 
 //POST GENERAL
 app.post(API_BASE + "/", (req, res) => {
@@ -230,6 +283,48 @@ app.put(API_BASE + "/:country", (req, res) => {
         }
     });
 }});
+
+
+// PUT para actualizar datos de un país específico en un año específico
+app.put(API_BASE+ "/:country/:year", (req, res) => {
+    const countryName = req.params.country;
+    const year = parseInt(req.params.year);
+    const newData = req.body;
+    const expectedFields = ['code', 'schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'];
+
+    // Verificar si los datos incluyen los campos esperados
+    const isValidData = expectedFields.every(field => field in newData);
+
+    if (!isValidData) {
+        return res.status(400).json({ error: 'Missing or invalid fields in the request body' });
+    }
+
+    // Verificar si hay un ID de país en la solicitud y si coincide con el ID en la URL
+    if (newData.country && newData.country !== countryName) {
+        return res.status(400).json({ error: 'Mismatched country ID in the request body' });
+    }
+
+    // Verificar si hay un año en la solicitud y si coincide con el año en la URL
+    if (newData.year && newData.year !== year) {
+        return res.status(400).json({ error: 'Mismatched year in the request body' });
+    }
+
+    // Actualizar los datos en la base de datos para el país y el año específicos
+    dbMental.update({ country: countryName, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (numUpdated > 0) {
+            return res.status(200).json({ message: 'Updated' });
+        } else {
+            return res.status(404).json({ message: 'Country or year not found' });
+        }
+    });
+});
+
+
+
+
 // DELETE para eliminar todos los datos
 app.delete(API_BASE, (req, res) => {
     dbMental.remove({}, { multi: true }, (err, numRemoved) => {
@@ -256,6 +351,65 @@ app.delete(API_BASE + "/:country", (req, res) => {
         }
     });
 });
+
+
+
+
+
+
+
+
+//BUSQUEDA PAIS CONCRETO PERIODO
+// GET para obtener estadísticas de un país en un periodo específico
+app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
+    const countryName = req.params.country;
+    const startYear = parseInt(req.params.startYear);
+    const endYear = parseInt(req.params.endYear);
+
+    // Verificar si los años son válidos
+    if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
+        return res.status(400).json({ error: 'Invalid years' });
+    }
+
+    // Realizar la búsqueda en la base de datos de las estadísticas para el país y el periodo especificados
+    dbMental.find({ country: countryName, year: { $gte: startYear, $lte: endYear } }, (err, statistics) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (statistics.length > 0) {
+            return res.status(200).json(statistics);
+        } else {
+            return res.status(404).json({ message: 'No statistics found for the specified country and period' });
+        }
+    });
+});
+
+
+
+// GET para obtener estadísticas en un periodo específico sin un país concreto
+app.get(`${API_BASE}/statistics2/:startYear/:endYear`, (req, res) => {
+    const startYear = parseInt(req.params.startYear);
+    const endYear = parseInt(req.params.endYear);
+
+    // Verificar si los años son válidos
+    if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
+        return res.status(400).json({ error: 'Invalid years' });
+    }
+
+    // Realizar la búsqueda en la base de datos de las estadísticas para el periodo especificado
+    dbMental.find({ year: { $gte: startYear, $lte: endYear } }, (err, statistics) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (statistics.length > 0) {
+            return res.status(200).json(statistics);
+        } else {
+            return res.status(404).json({ message: 'No statistics found for the specified period' });
+        }
+    });
+});
+
+
 
 
 }
