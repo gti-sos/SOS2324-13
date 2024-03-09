@@ -45,11 +45,11 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
             res.status(500).json({ message: 'Internal Error' });
         } else {
             // Eliminamos el campo _id de los resultados
-            const resultsWithoutId = datosMental.map(student => {
+            const resultsWithoutId = datosMental.map(mental => {
                 const { _id, ...mentalWithoutId } = mental;
                 return mentalWithoutId;
             });
-            res.status(200).json(resultsWithoutId," 200 OK");
+            res.status(200).json(resultsWithoutId);
         }
     });
 });
