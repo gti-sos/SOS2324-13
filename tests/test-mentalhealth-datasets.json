@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "902dc66b-4674-40af-b1b5-ffe01d349368",
-		"name": "SOS-F04",
+		"name": "SOS-ALB",
 		"description": "Es una colección de peticiones dentro de mi API, la cual consiste en un dataset de trastornos mentales y sus proporciones , en diferentes países y años.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32965348"
@@ -46,7 +46,7 @@
 			"response": []
 		},
 		{
-			"name": "Cargar datos raiz",
+			"name": "Cargar datos con paginacion y busquedas por campos",
 			"event": [
 				{
 					"listen": "test",
@@ -56,9 +56,11 @@
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
 							"\r",
+							"\r",
+							"\r",
 							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(11); \r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(10); \r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -69,7 +71,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:10000/api/v1/mentalhealth-datasets/getTodo",
+					"raw": "http://localhost:10000/api/v1/mentalhealth-datasets/paginacion",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -79,10 +81,10 @@
 						"api",
 						"v1",
 						"mentalhealth-datasets",
-						"getTodo"
+						"paginacion"
 					]
 				},
-				"description": "Esta petición carga todos los datos de la raíz."
+				"description": "Cargar datos con paginacion"
 			},
 			"response": []
 		},
@@ -155,54 +157,6 @@
 					]
 				},
 				"description": "Si se intenta acceder a un recurso inexistente devolverá error 404"
-			},
-			"response": []
-		},
-		{
-			"name": "Busqueda todos campos",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:10000/api/v1/mentalhealth-datasets/search?country=Afghanistan&year=1991",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "10000",
-					"path": [
-						"api",
-						"v1",
-						"mentalhealth-datasets",
-						"search"
-					],
-					"query": [
-						{
-							"key": "country",
-							"value": "Afghanistan"
-						},
-						{
-							"key": "year",
-							"value": "1991"
-						}
-					]
-				},
-				"description": "Esta petición devuelve la línea del dataset que coincida con los parámetros utilizados,en caso contrario, error."
 			},
 			"response": []
 		},
@@ -370,49 +324,6 @@
 					]
 				},
 				"description": "Cargar datos con periodo determinado"
-			},
-			"response": []
-		},
-		{
-			"name": "Cargar datos con paginacion",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"\r",
-							"\r",
-							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(10); \r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:10000/api/v1/mentalhealth-datasets/paginacion",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "10000",
-					"path": [
-						"api",
-						"v1",
-						"mentalhealth-datasets",
-						"paginacion"
-					]
-				},
-				"description": "Cargar datos con paginacion"
 			},
 			"response": []
 		},
