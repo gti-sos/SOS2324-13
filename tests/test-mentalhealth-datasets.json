@@ -95,7 +95,49 @@
 						}
 					]
 				},
-				"description": "Cargar datos con paginacion"
+				"description": "Cargar datos con paginacion y buquedas por campos"
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar todos los datos con paginacion (sin busquedas concretas)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(10)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:10000/api/v1/mentalhealth-datasets/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10000",
+					"path": [
+						"api",
+						"v1",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Carga todos los datos con paginacion."
 			},
 			"response": []
 		},
