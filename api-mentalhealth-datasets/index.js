@@ -115,7 +115,7 @@ app.get(API_BASE + "/:country", (req, res) => {
             });
             res.status(200).json(datosSinId);
         } else {
-            res.status(404).json({ message: 'Country not found,404' });
+            res.status(404).json({ message: 'Country not found, 404' });
         }
     });
 });
