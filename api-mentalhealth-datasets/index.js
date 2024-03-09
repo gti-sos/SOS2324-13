@@ -100,28 +100,14 @@ app.get(API_BASE + "/loadInitialData", (req, res) => {
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
                 }
-                res.status(201).json({ message: 'Created initial data' });
+                res.status(201).json({ message: 'Created initial data,201' });
             });
         } else {
-            res.status(409).json({ message: 'Data already exists' });
+            res.status(409).json({ message: 'Data already exists.409' });
         }
     });
 });
 
-// GET para obtener todos los datos
-app.get(API_BASE, (req, res) => {
-    dbMental.find({}, (err, datosMental) => {
-        if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-        }
-        if (datosMental.length > 0) {
-            res.status(200).json(datosMental);
-        } else {
-            res.status(404).json({ message: 'Data not found' });
-        }
-    });
-});
 
 // GET para obtener datos de un país específico
 app.get(API_BASE + "/:country", (req, res) => {
@@ -132,9 +118,14 @@ app.get(API_BASE + "/:country", (req, res) => {
             return;
         }
         if (datosMental.length > 0) {
-            res.status(200).json(datosMental);
+            // Eliminar el campo _id de cada documento en datosMental
+            const datosSinId = datosMental.map(doc => {
+                delete doc._id;
+                return doc;
+            });
+            res.status(200).json(datosSinId);
         } else {
-            res.status(404).json({ message: 'Country not found' });
+            res.status(404).json({ message: 'Country not found,404' });
         }
     });
 });
@@ -162,7 +153,7 @@ app.get(API_BASE + "/year/:year", (req, res) => {
         if (data.length > 0) {
             res.status(200).json(data);
         } else {
-            res.status(404).json({ message: 'Data not found for the specified year' });
+            res.status(404).json({ message: 'Data not found for the specified year,404' });
         }
     });
 });
@@ -203,7 +194,7 @@ app.get(`${API_BASE}/country/:country/:year`, (req, res) => {
         if (datosMental) {
             res.status(200).json(datosMental); // Devuelve un solo objeto
         } else {
-            res.status(404).json({ message: 'Data not found for the specified country and year' });
+            res.status(404).json({ message: 'Data not found for the specified country and year,404' });
         }
     });
 });
@@ -219,7 +210,7 @@ app.post(API_BASE + "/", (req, res) => {
 
     // Verificar si los datos son válidos
     if (!isValidData) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).send("Bad Request,400");
     } else{
 
     // Verificar si los datos ya existen (mismo país y año)
@@ -228,7 +219,7 @@ app.post(API_BASE + "/", (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (existingData) {
-            return res.status(409).send("Conflict");
+            return res.status(409).send("Conflict,409");
         }
         
         // Insertar nuevos datos
@@ -236,7 +227,7 @@ app.post(API_BASE + "/", (req, res) => {
             if (err) {
                 return res.status(500).json({ error: 'Internal Server Error' });
             }
-            return res.status(201).send("Created");
+            return res.status(201).send("Created,201");
         });
     });
 }});
@@ -262,12 +253,12 @@ app.put(API_BASE + "/:country", (req, res) => {
 
     // Verificar si los datos son válidos
     if (!isValidData) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).send("Bad Request,400");
     } else{
 
     // Verificar que el ID en el cuerpo coincida con el ID en la URL
     if (newData.country && newData.country !== countryName) {
-        res.status(400).json({ error: 'Mismatched ID in the request body' });
+        res.status(400).json({ error: 'Mismatched ID in the request body,400' });
         return;
     }
 
@@ -277,9 +268,9 @@ app.put(API_BASE + "/:country", (req, res) => {
             return;
         }
         if (numUpdated > 0) {
-            res.status(200).json({ message: 'Updated' });
+            res.status(200).json({ message: 'Updated,200' });
         } else {
-            res.status(404).json({ message: 'Country not found' });
+            res.status(404).json({ message: 'Country not found,404' });
         }
     });
 }});
@@ -296,17 +287,17 @@ app.put(API_BASE+ "/:country/:year", (req, res) => {
     const isValidData = expectedFields.every(field => field in newData);
 
     if (!isValidData) {
-        return res.status(400).json({ error: 'Missing or invalid fields in the request body' });
+        return res.status(400).json({ error: 'Missing or invalid fields in the request body,400' });
     }
 
     // Verificar si hay un ID de país en la solicitud y si coincide con el ID en la URL
     if (newData.country && newData.country !== countryName) {
-        return res.status(400).json({ error: 'Mismatched country ID in the request body' });
+        return res.status(400).json({ error: 'Mismatched country ID in the request body,400' });
     }
 
     // Verificar si hay un año en la solicitud y si coincide con el año en la URL
     if (newData.year && newData.year !== year) {
-        return res.status(400).json({ error: 'Mismatched year in the request body' });
+        return res.status(400).json({ error: 'Mismatched year in the request body,400' });
     }
 
     // Actualizar los datos en la base de datos para el país y el año específicos
@@ -317,7 +308,7 @@ app.put(API_BASE+ "/:country/:year", (req, res) => {
         if (numUpdated > 0) {
             return res.status(200).json({ message: 'Updated' });
         } else {
-            return res.status(404).json({ message: 'Country or year not found' });
+            return res.status(404).json({ message: 'Country or year not found,404' });
         }
     });
 });
@@ -332,7 +323,7 @@ app.delete(API_BASE, (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        res.status(200).json({ message: 'Deleted' });
+        res.status(200).json({ message: 'Deleted,200' });
     });
 });
 
@@ -345,9 +336,9 @@ app.delete(API_BASE + "/:country", (req, res) => {
             return;
         }
         if (numRemoved > 0) {
-            res.status(200).json({ message: 'Deleted' });
+            res.status(200).json({ message: 'Deleted.200' });
         } else {
-            res.status(404).json({ message: 'Country not found' });
+            res.status(404).json({ message: 'Country not found,404' });
         }
     });
 });
@@ -365,9 +356,9 @@ app.delete(API_BASE + "/:country/:year", (req, res) => {
             return;
         }
         if (numRemoved > 0) {
-            res.status(200).json({ message: 'Deleted' });
+            res.status(200).json({ message: 'Deleted,200' });
         } else {
-            res.status(404).json({ message: 'Country or year not found' });
+            res.status(404).json({ message: 'Country or year not found,404' });
         }
     });
 });
@@ -388,7 +379,7 @@ app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
 
     // Verificar si los años son válidos
     if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
-        return res.status(400).json({ error: 'Invalid years' });
+        return res.status(400).json({ error: 'Invalid years,400' });
     }
 
     // Realizar la búsqueda en la base de datos de las estadísticas para el país y el periodo especificados
@@ -399,7 +390,7 @@ app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
         if (statistics.length > 0) {
             return res.status(200).json(statistics);
         } else {
-            return res.status(404).json({ message: 'No statistics found for the specified country and period' });
+            return res.status(404).json({ message: 'No statistics found for the specified country and period,404' });
         }
     });
 });
@@ -413,7 +404,7 @@ app.get(API_BASE+"/statistics2/:startYear/:endYear", (req, res) => {
 
     // Verificar si los años son válidos
     if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
-        return res.status(400).json({ error: 'Invalid years' });
+        return res.status(400).json({ error: 'Invalid years,400' });
     }
 
     // Realizar la búsqueda en la base de datos de las estadísticas para el periodo especificado
@@ -424,7 +415,7 @@ app.get(API_BASE+"/statistics2/:startYear/:endYear", (req, res) => {
         if (statistics.length > 0) {
             return res.status(200).json(statistics);
         } else {
-            return res.status(404).json({ message: 'No statistics found for the specified period' });
+            return res.status(404).json({ message: 'No statistics found for the specified period,404' });
         }
     });
 });
