@@ -37,7 +37,11 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
                     return;
                 }
                 if (result.length > 0) {
-                    res.status(200).json(result);
+                    const datosSinId = result.map(doc => {
+                        delete doc._id;
+                        return doc;
+                    });
+                    res.status(200).json(datosSinId);
                 } else {
                     res.status(404).json({ message: 'No matching data found' });
                 }
@@ -45,7 +49,7 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
         });
     
         // Ruta para obtener datos con paginación
-    app.get(API_BASE + "/", (req, res) => {
+    app.get(API_BASE + "/paginacion", (req, res) => {
         const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
         const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
     
@@ -58,7 +62,11 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
                     return;
                 }
                 if (data.length > 0) {
-                    res.status(200).json(data);
+                    const datosSinId = data.map(c => {
+                        delete c._id;
+                        return c;
+                    });
+                    return res.status(200).json(datosSinId);
                 } else {
                     res.status(404).json({ message: 'Data not found' });
                 }
@@ -109,6 +117,43 @@ app.get(API_BASE + "/loadInitialData", (req, res) => {
 });
 
 
+
+// GET para obtener todos los datos
+app.get(API_BASE  + "/getTodo", (req, res) => {
+    dbMental.find({}, (err, datosMental) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (datosMental.length > 0) {
+            // Eliminar el campo _id de cada documento
+            const datosSinId = datosMental.map(c => {
+                delete c._id;
+                return c;
+            });
+            return res.status(200).json(datosSinId);
+        } else {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+    });
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // GET para obtener datos de un país específico
 app.get(API_BASE + "/:country", (req, res) => {
     const countryName = req.params.country;
@@ -151,7 +196,11 @@ app.get(API_BASE + "/year/:year", (req, res) => {
             return;
         }
         if (data.length > 0) {
-            res.status(200).json(data);
+            const datosSinId = data.map(doc => {
+                delete doc._id;
+                return doc;
+            });
+            res.status(200).json(datosSinId);
         } else {
             res.status(404).json({ message: 'Data not found for the specified year,404' });
         }
@@ -192,6 +241,7 @@ app.get(`${API_BASE}/country/:country/:year`, (req, res) => {
             return;
         }
         if (datosMental) {
+            delete datosMental._id;
             res.status(200).json(datosMental); // Devuelve un solo objeto
         } else {
             res.status(404).json({ message: 'Data not found for the specified country and year,404' });
@@ -221,7 +271,8 @@ app.post(API_BASE + "/", (req, res) => {
         if (existingData) {
             return res.status(409).send("Conflict,409");
         }
-        
+        // Eliminar el campo _id del documento antes de insertarlo
+        delete data._id;
         // Insertar nuevos datos
         dbMental.insert(data, (err, newData) => {
             if (err) {
@@ -256,6 +307,9 @@ app.put(API_BASE + "/:country", (req, res) => {
         return res.status(400).send("Bad Request,400");
     } else{
 
+
+   // Eliminar el campo _id del objeto newData
+        delete newData._id;
     // Verificar que el ID en el cuerpo coincida con el ID en la URL
     if (newData.country && newData.country !== countryName) {
         res.status(400).json({ error: 'Mismatched ID in the request body,400' });
@@ -300,6 +354,8 @@ app.put(API_BASE+ "/:country/:year", (req, res) => {
         return res.status(400).json({ error: 'Mismatched year in the request body,400' });
     }
 
+    // Eliminar el campo _id del objeto newData
+    delete newData._id;
     // Actualizar los datos en la base de datos para el país y el año específicos
     dbMental.update({ country: countryName, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
         if (err) {
@@ -388,7 +444,11 @@ app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (statistics.length > 0) {
-            return res.status(200).json(statistics);
+            const datosSinId = statistics.map(doc => {
+                delete doc._id;
+                return doc;
+            });
+            res.status(200).json(datosSinId);
         } else {
             return res.status(404).json({ message: 'No statistics found for the specified country and period,404' });
         }
@@ -413,7 +473,11 @@ app.get(API_BASE+"/statistics2/:startYear/:endYear", (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (statistics.length > 0) {
-            return res.status(200).json(statistics);
+            const datosSinId = statistics.map(doc => {
+                delete doc._id;
+                return doc;
+            });
+            res.status(200).json(datosSinId);
         } else {
             return res.status(404).json({ message: 'No statistics found for the specified period,404' });
         }
