@@ -20,59 +20,39 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
 
   //BUSQUEDA Y PAGINACION
     // Ruta para realizar búsquedas por todos los campos del recurso
-    app.get(API_BASE + "/search", (req, res) => {
-        const query = req.query;
-
-         // Convertir valores numéricos a números si es necesario
-    for (const key in query) {
-        if (!isNaN(query[key])) {
-            query[key] = parseFloat(query[key]);
-            }
-        }
-    
-        // Realizar la búsqueda en la base de datos
-        dbMental.find(query, (err, result) => {
-                if (err) {
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    return;
-                }
-                if (result.length > 0) {
-                    const datosSinId = result.map(doc => {
-                        delete doc._id;
-                        return doc;
-                    });
-                    res.status(200).json(datosSinId);
-                } else {
-                    res.status(404).json({ message: 'No matching data found' });
-                }
-            });
-        });
-    
-        // Ruta para obtener datos con paginación
-    app.get(API_BASE + "/paginacion", (req, res) => {
+    app.get(API_BASE + "/", (req, res) => {
+        const queryParameters = req.query;
         const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
         const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
-    
-        dbMental.find({})
-            .skip(offset)
-            .limit(limit)
-            .exec((err, data) => {
-                if (err) {
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    return;
-                }
-                if (data.length > 0) {
-                    const datosSinId = data.map(c => {
-                        delete c._id;
-                        return c;
-                    });
-                    return res.status(200).json(datosSinId);
-                } else {
-                    res.status(404).json({ message: 'Data not found' });
-                }
-            });
+
+         
+    let query = {};
+       
+     // Iteramos sobre cada parámetro de búsqueda
+     Object.keys(queryParameters).forEach(key => {
+        // Si el parámetro no es "limit", "offset" u otros parámetros de paginación, lo consideramos como un atributo de búsqueda
+        if (key !== 'limit' && key !== 'offset') {
+            // Verificamos si el valor es numérico
+            const value = !isNaN(queryParameters[key]) ? parseInt(queryParameters[key]) : queryParameters[key];
+            // Si es numérico, agregamos un filtro de igualdad, de lo contrario, realizamos la búsqueda de texto como antes
+            query[key] = !isNaN(value) ? value : new RegExp(value, 'i');
+        }
     });
-    
+
+    // Ejecutamos la consulta en la base de datos con paginación
+    dbMental.find(query).skip(offset).limit(limit).exec((err, datosMental) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal Error' });
+        } else {
+            // Eliminamos el campo _id de los resultados
+            const resultsWithoutId = datosMental.map(student => {
+                const { _id, ...mentalWithoutId } = mental;
+                return mentalWithoutId;
+            });
+            res.status(200).json(resultsWithoutId," 200 OK");
+        }
+    });
+});
 
 
 
@@ -115,41 +95,6 @@ app.get(API_BASE + "/loadInitialData", (req, res) => {
         }
     });
 });
-
-
-
-// GET para obtener todos los datos
-app.get(API_BASE  + "/getTodo", (req, res) => {
-    dbMental.find({}, (err, datosMental) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (datosMental.length > 0) {
-            // Eliminar el campo _id de cada documento
-            const datosSinId = datosMental.map(c => {
-                delete c._id;
-                return c;
-            });
-            return res.status(200).json(datosSinId);
-        } else {
-            return res.status(404).json({ message: 'Data not found' });
-        }
-    });
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
