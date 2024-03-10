@@ -58,8 +58,7 @@ module.exports = (app, salarieDB) => {
         });
     });
 
-    // RUTA para actualizar un registro por ID
-// PUT -- Actualizar
+// RUTA para actualizar un registro por ID
 app.put(API_BASE + "/update/:id", (req, res) => {
     const id = req.params.id;
     const updatedData = req.body;  // Asume que el cuerpo de la solicitud contiene los nuevos datos
@@ -78,7 +77,6 @@ app.put(API_BASE + "/update/:id", (req, res) => {
 });
 
 // RUTA para eliminar un registro por ID
-// DELETE -- Eliminar
 app.delete(API_BASE + "/delete/:id", (req, res) => {
     const id = req.params.id;
 
@@ -94,6 +92,36 @@ app.delete(API_BASE + "/delete/:id", (req, res) => {
         }
     });
 });
+
+
+ // GET para obtener un recurso por ID
+ app.get(API_BASE + '/:id', (req, res) => {
+    const resourceId = req.params.id;
+
+    salarieDB.findOne({ _id: resourceId }, (err, resource) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (!resource) {
+            return res.status(404).json({ message: 'Resource not found' });
+        }
+
+        return res.status(200).json(resource);
+    });
+});
+
+// DELETE para borrar todos los datos
+app.delete(API_BASE, (req, res) => {
+    salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        return res.status(200).json({ message: 'Deleted all data', removedCount: numRemoved });
+    });
+});
+
 
 };
 
