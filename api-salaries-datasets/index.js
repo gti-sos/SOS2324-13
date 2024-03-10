@@ -1,7 +1,6 @@
 const API_BASE = '/api/v1/salaries-datasets';
 
 module.exports = (app, salarieDB) => {
-
     // PAGINA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
@@ -29,8 +28,7 @@ module.exports = (app, salarieDB) => {
                     { year: 2021, timestamp: '12/10/2020 8:25:12', salary: 105000, country: 'United States', primary_database: 'Microsoft SQL Server', time_with_this_database: 10, employment_state: 'Full time employee', job_title: 'DBA (General - splits time evenly between writing & tuning queries AND building & troubleshooting servers)', manage_staff: 'No', time_in_current_job: 2, other_people_on_your_team: '4', magnitude_of_company: 50, sector: 'Private business' },
                     { year: 2021, timestamp: '12/10/2020 8:25:36', salary: 61100, country: 'United Kingdom', primary_database: 'Microsoft SQL Server', time_with_this_database: 10, employment_state: 'Full time employee', job_title: 'Developer: T-SQL', manage_staff: 'Yes', time_in_current_job: 10, other_people_on_your_team: 'None', magnitude_of_company: 7, sector: 'Private business' },
                     { year: 2021, timestamp: '12/10/2020 8:25:51', salary: 18000, country: 'Paraguay', primary_database: 'Microsoft SQL Server', time_with_this_database: 5, employment_state: 'Full time employee', job_title: 'DBA (General - splits time evenly between writing & tuning queries AND building & troubleshooting servers)', manage_staff: 'No', time_in_current_job: 5, other_people_on_your_team: 'None', magnitude_of_company: 20, sector: 'Private business' },
-                    // Agrega más datos según sea necesario
-                ];
+                     ];
 
                 salarieDB.insert(initialData, (err, newDocs) => {
                     if (err) {
@@ -45,6 +43,59 @@ module.exports = (app, salarieDB) => {
         });
     });
 
-    
+    // GET para obtener todos los datos
+    app.get(API_BASE, (req, res) => {
+        salarieDB.find({}, (err, salariesData) => {
+            if (err) {
+                return res.status(500).json({ error: '500, Internal Server Error' });
+            }
+
+            if (salariesData.length > 0) {
+                return res.status(200).json(salariesData);
+            } else {
+                return res.status(404).json({ message: '404, No data found' });
+            }
+        });
+    });
+
+    // RUTA para actualizar un registro por ID
+// PUT -- Actualizar
+app.put(API_BASE + "/update/:id", (req, res) => {
+    const id = req.params.id;
+    const updatedData = req.body;  // Asume que el cuerpo de la solicitud contiene los nuevos datos
+
+    salarieDB.update({ _id: id }, { $set: updatedData }, {}, (err, numReplaced) => {
+        if (err) {
+            res.status(500).json({ error: '500, Internal Server Error' });
+            return;
+        }
+        if (numReplaced === 0) {
+            res.status(404).json({ message: '404, No matching data found for update' });
+        } else {
+            res.status(200).json({ message: '200, Data updated successfully' });
+        }
+    });
+});
+
+// RUTA para eliminar un registro por ID
+// DELETE -- Eliminar
+app.delete(API_BASE + "/delete/:id", (req, res) => {
+    const id = req.params.id;
+
+    salarieDB.remove({ _id: id }, {}, (err, numRemoved) => {
+        if (err) {
+            res.status(500).json({ error: '500, Internal Server Error' });
+            return;
+        }
+        if (numRemoved === 0) {
+            res.status(404).json({ message: '404, No matching data found for deletion' });
+        } else {
+            res.status(200).json({ message: '200, Data deleted successfully' });
+        }
+    });
+});
 
 };
+
+                
+               
