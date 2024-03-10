@@ -107,7 +107,7 @@ app.get(API_BASE + "/:country", (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
-        if (datosMental.length > 0) {
+        if (datosMental.length >  0) {
             // Eliminar el campo _id de cada documento en datosMental
             const datosSinId = datosMental.map(doc => {
                 delete doc._id;
