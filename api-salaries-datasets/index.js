@@ -1,6 +1,6 @@
-const API_BASE = '/api/v1/sos2324-salaries';
+const API_BASE = '/api/v1/salaries-datasets';
 
-module.exports = (app, dataset) => {
+module.exports = (app, salarieDB) => {
 
     // PAGINA "/DOCS"
     // GET -- OK
@@ -11,7 +11,7 @@ module.exports = (app, dataset) => {
     // RUTA "/loadInitialData"
     // GET -- OK
     app.get(API_BASE + "/loadInitialData", (req, res) => {
-        dataset.find({}, (err, salariesData) => {
+        salarieDB.find({}, (err, salariesData) => {
             if (err) {
                 res.status(500).json({ error: '500, Internal Server Error' });
                 return;
@@ -32,7 +32,7 @@ module.exports = (app, dataset) => {
                     // Agrega más datos según sea necesario
                 ];
 
-                dataset.insert(initialData, (err, newDocs) => {
+                salarieDB.insert(initialData, (err, newDocs) => {
                     if (err) {
                         res.status(500).json({ error: '500, Internal Server Error' });
                         return;
