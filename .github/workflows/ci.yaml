@@ -5,6 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
+      - run : npm install
       - run : npm start &
-      - run : npm test
+      - run : npm test-wri
+      - run : npm test-mh
