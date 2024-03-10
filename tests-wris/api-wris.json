@@ -1,0 +1,734 @@
+{
+	"info": {
+		"_postman_id": "7e2a1c16-fd5d-4567-8e5d-19a3f00989f7",
+		"name": "SOS2324-13 rubromgui",
+		"description": "Mi colección de APIs para SOS-2324, grupo 13. Hay dos entornos, el entorno local (definido como localhost:10000) y el entorno de gcloud (por defecto y definido como https://sos2324-13.appspot.com).\n\n  \nDesarrollado por Rubén Romero Guisado.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32976490"
+	},
+	"item": [
+		{
+			"name": "loadInitialData",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}{{loadData}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}{{loadData}}"
+					]
+				},
+				"description": "Carga los datos en la base de datos si está vacía. En caso contrario, devuelve un Error 409, Conflicto (ya existen datos)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET \"/\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Obtiene todos los datos que haya en la base de datos."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Kiribati"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				},
+				"description": "Obtiene todos los datos que haya en la base de datos para un país en concreto."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byId&year",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati?year=2011",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Kiribati"
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "2011"
+						}
+					]
+				},
+				"description": "Obtiene el dato concreto para un país y año (mediante búsqueda por query)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byId/byYear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati/2011",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Kiribati",
+						"2011"
+					]
+				},
+				"description": "Obtiene el dato concreto para un país y año (mediante búsqueda por recursos)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byId&from-to",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati?from=2010&to=2014",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Kiribati"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "2010"
+						},
+						{
+							"key": "to",
+							"value": "2014"
+						}
+					]
+				},
+				"description": "Obtiene los datos (o dato) para un país concreto comprendidos en un rango de años (ambos inclusive)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byColumn",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/?vulnerability_category=High",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "vulnerability_category",
+							"value": "High"
+						}
+					]
+				},
+				"description": "Obtiene los datos cuya columna (o propiedad) coincidan con el valor que se pasa como parámetro."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byFields",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/?fields=country,wri",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "country,wri"
+						}
+					]
+				},
+				"description": "Obtiene los datos a través de una vista personalizada, mostrando sólo los campos que se pasan como parámetros."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byLimit&Offset",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/?limit=3&offset=2",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "offset",
+							"value": "2"
+						}
+					]
+				},
+				"description": "Obtiene los datos con paginación y desplazamiento."
+			},
+			"response": []
+		},
+		{
+			"name": "GET byId (Error 404)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Germany",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Germany"
+					]
+				},
+				"description": "Obtiene los datos de un país en concreto. Este país no está en la base de datos, por lo que devuelve un 'Error 404, Data not found'."
+			},
+			"response": []
+		},
+		{
+			"name": "POST \"/\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"wri\": 1.00,\r\n    \"exposure\": 3.00,\r\n    \"vulnerability\": 50.00,\r\n    \"susceptibility\": 30.00,\r\n    \"lack_of_coping_capability\": 80.00,\r\n    \"lack_of_adaptive_capacity\": 40.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very Low\",\r\n    \"wri_category\": \"Very Low\",\r\n    \"vulnerability_category\": \"Low\",\r\n    \"susceptibility_category\": \"Low\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Añade un nuevo dato a la base de datos."
+			},
+			"response": []
+		},
+		{
+			"name": "POST \"/\" (Error 400)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"year\": 2024\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Añade un nuevo dato a la base de datos. Faltan la gran mayoría de campos, por lo que la petición no es válida. Devuelve un 'Error 400, Bad Request'."
+			},
+			"response": []
+		},
+		{
+			"name": "POST \"/\" (Error 409)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Kiribati\",\r\n    \"wri\": 1.00,\r\n    \"exposure\": 3.00,\r\n    \"vulnerability\": 50.00,\r\n    \"susceptibility\": 30.00,\r\n    \"lack_of_coping_capability\": 80.00,\r\n    \"lack_of_adaptive_capacity\": 40.00,\r\n    \"year\": 2011,\r\n    \"exposure_category\": \"Very Low\",\r\n    \"wri_category\": \"Very Low\",\r\n    \"vulnerability_category\": \"Low\",\r\n    \"susceptibility_category\": \"Low\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Añade un nuevo dato a la base de datos. El dato que se intenta añadir ya existe (coincide con otro que tiene mismo país y año), por lo que la petición no es válida. Devuelve un 'Error 409, Conflict'."
+			},
+			"response": []
+		},
+		{
+			"name": "POST byId (Error 405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"wri\": 1.00,\r\n    \"exposure\": 3.00,\r\n    \"vulnerability\": 50.00,\r\n    \"susceptibility\": 30.00,\r\n    \"lack_of_coping_capability\": 80.00,\r\n    \"lack_of_adaptive_capacity\": 40.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very Low\",\r\n    \"wri_category\": \"Very Low\",\r\n    \"vulnerability_category\": \"Low\",\r\n    \"susceptibility_category\": \"Low\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Spain",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Spain"
+					]
+				},
+				"description": "Añade un nuevo dato a la base de datos dentro de un país concreto. Esta petición no es válida. Devuelve un 'Error 405, Method not allowed'."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT \"/\" (Error 405)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"wri\": 8.00,\r\n    \"exposure\": 2.00,\r\n    \"vulnerability\": 40.00,\r\n    \"susceptibility\": 80.00,\r\n    \"lack_of_coping_capability\": 83.00,\r\n    \"lack_of_adaptive_capacity\": 42.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very High\",\r\n    \"wri_category\": \"Very High\",\r\n    \"vulnerability_category\": \"High\",\r\n    \"susceptibility_category\": \"High\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Actualiza un dato de la base de datos desde la ruta raíz (o recurso base). Esta petición no es válida. Devuelve un 'Error 405, Method not allowed'."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT byId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"wri\": 8.00,\r\n    \"exposure\": 2.00,\r\n    \"vulnerability\": 40.00,\r\n    \"susceptibility\": 80.00,\r\n    \"lack_of_coping_capability\": 83.00,\r\n    \"lack_of_adaptive_capacity\": 42.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very High\",\r\n    \"wri_category\": \"Very High\",\r\n    \"vulnerability_category\": \"High\",\r\n    \"susceptibility_category\": \"High\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Spain",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Spain"
+					]
+				},
+				"description": "Actualiza un dato de la base de datos dentro de un país concreto."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT byId (Error 400)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"France\",\r\n    \"wri\": 8.00,\r\n    \"exposure\": 2.00,\r\n    \"vulnerability\": 40.00,\r\n    \"susceptibility\": 80.00,\r\n    \"lack_of_coping_capability\": 83.00,\r\n    \"lack_of_adaptive_capacity\": 42.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very High\",\r\n    \"wri_category\": \"Very High\",\r\n    \"vulnerability_category\": \"High\",\r\n    \"susceptibility_category\": \"High\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Spain",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Spain"
+					]
+				},
+				"description": "Actualiza un dato de la base de datos dentro de un país concreto. El campo país que se quiere actualizar en el cuerpo de la petición no coincide con el pasado en la URL, por lo que esta petición no es válida. Devuelve un 'Error 400, Bad Request'."
+			},
+			"response": []
+		},
+		{
+			"name": "PUT byId/byYear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Kiribati\",\r\n    \"wri\": 8.00,\r\n    \"exposure\": 2.00,\r\n    \"vulnerability\": 40.00,\r\n    \"susceptibility\": 80.00,\r\n    \"lack_of_coping_capability\": 3.00,\r\n    \"lack_of_adaptive_capacity\": 30.00,\r\n    \"year\": 2011,\r\n    \"exposure_category\": \"Very High\",\r\n    \"wri_category\": \"Very High\",\r\n    \"vulnerability_category\": \"High\",\r\n    \"susceptibility_category\": \"High\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati/2011",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Kiribati",
+						"2011"
+					]
+				},
+				"description": "Actualiza un dato de la base de datos dentro de un país y año concretos."
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE byId",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/Spain",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						"Spain"
+					]
+				},
+				"description": "Elimina todos los datos de la base de datos que sean de ese país en concreto."
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE \"/\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					]
+				},
+				"description": "Elimina todos los datos de la base de datos."
+			},
+			"response": []
+		}
+	]
+}
