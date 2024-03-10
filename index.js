@@ -8,7 +8,7 @@ let salarieDB = new dataStore();
 
 let wris_datasetsAPI = require("./api-wris-datasets");
 let mentalhealth_datasetsAPI = require("./api-mentalhealth-datasets");
-let salaries_datasets = require("./api-salaries-datasets")
+let salaries_datasetsAPI = require("./api-salaries-datasets")
 
 //inicio del servidor
 let app = express();
