@@ -1,0 +1,27 @@
+{
+	"id": "7100dbdb-1dc2-4fba-89cb-8a56322cd3d7",
+	"name": "gcloud",
+	"values": [
+		{
+			"key": "SERVER",
+			"value": "https://sos2324-13.appspot.com/",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "wrisAPI",
+			"value": "/api/v1/wris-datasets",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "loadData",
+			"value": "/loadInitialData",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-03-10T13:58:40.338Z",
+	"_postman_exported_using": "Postman/10.23.12-240308-0814"
+}
