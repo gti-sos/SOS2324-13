@@ -233,7 +233,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/mentalhealth-datasets/country/Albania/1991",
+					"raw": "{{SERVER}}/api/v1/mentalhealth-datasets/Albania/1991",
 					"host": [
 						"{{SERVER}}"
 					],
@@ -241,7 +241,6 @@
 						"api",
 						"v1",
 						"mentalhealth-datasets",
-						"country",
 						"Albania",
 						"1991"
 					]
