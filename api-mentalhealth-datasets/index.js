@@ -18,59 +18,84 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
 
 
 
-  //BUSQUEDA Y PAGINACION
-//BUSQUEDA Y PAGINACION
-app.get(API_BASE +"/", (req, res) => {
+  //GET - PAGINACIÓN, BÚSQUEDAD POR CAMPOS Y PERIODO
+  app.get(API_BASE + "/", (req, res) => {
     const queryParameters = req.query;
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseInt(queryParameters.limit) || 14;
+    const offset = parseInt(queryParameters.offset) || 0;
     let from = req.query.from;
     let to = req.query.to;
 
     // Verifica si hay parámetros 'from' y 'to'
     if (from !== undefined && to !== undefined) {
-        const fromYear = new Date(from);
-        const toYear = new Date(to);
-
-        // Verificar si las fechas son válidas
-        if (isNaN(fromYear.getTime()) || isNaN(toYear.getTime())) {
-            return res.status(400).json({ error: 'Invalid date format. Please provide valid date values.' });
+        const fromYear = parseInt(from);
+        const toYear = parseInt(to);
+        if (isNaN(fromYear) || isNaN(toYear)) {
+            return res.status(400).send("Invalid year format. Please provide valid year values.");
         }
-
-        // Si las fechas son válidas, construye la consulta para filtrar por el rango de fechas
+        // Si los años son válidos, construye la consulta para filtrar por el rango de años
         queryParameters.year = { $gte: fromYear, $lte: toYear };
     }
 
     let query = {};
-
-    // Iteramos sobre cada parámetro de búsqueda
+    // Construir la consulta basada en los parámetros proporcionados
     Object.keys(queryParameters).forEach(key => {
-        // Si el parámetro no es "limit", "offset" u otros parámetros de paginación, lo consideramos como un atributo de búsqueda
         if (key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to') {
-            // Verificamos si el valor es numérico
-            const value = !isNaN(queryParameters[key]) ? parseInt(queryParameters[key]) : queryParameters[key];
-            // Si es numérico, agregamos un filtro de igualdad, de lo contrario, realizamos la búsqueda de texto como antes
-            query[key] = !isNaN(value) ? value : new RegExp(value, 'i');
+            const value = !isNaN(queryParameters[key]) ? parseFloat(queryParameters[key]) : queryParameters[key];
+            if (typeof value === 'string') {
+                query[key] = new RegExp(value, 'i');
+            } else {
+                query[key] = value;
+            }
         }
     });
 
-    // Ejecutamos la consulta en la base de datos con paginación
-    dbMental.find(query).skip(offset).limit(limit).exec((err, datosMental) => {
-        if (err) {
-            res.status(500).json({ message: 'Internal Error' });
-        } else {
-            // Eliminamos el campo _id de los resultados
-            const resultsWithoutId = datosMental.map(mental => {
-                const { _id, ...mentalWithoutId } = mental;
-                return mentalWithoutId;
-            });
-            res.status(200).json(resultsWithoutId);
-        }
-    });
-});
+    // Verificar si se proporcionaron parámetros de búsqueda
+    const hasSearchParameters = Object.keys(queryParameters).some(key => key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to');
 
-
-
+    if (!hasSearchParameters) {
+        dbMental.count({}, (err, count) => {
+            if (err) {
+                res.sendStatus(500);
+            } else {
+                if (count === 0) {
+                    res.status(200).json([]);
+                } else {
+                    dbMental.find({}).skip(offset).limit(limit).exec((err, data) => {
+                        if (err) {
+                            
+                            res.sendStatus(500);
+                        } else {
+                            const resultsWithoutId = data.map(d => {
+                                const { _id, ...datWithoutId } = d;
+                                return datWithoutId;
+                            });
+                            
+                            res.status(200).json(resultsWithoutId);
+                        }
+                    });
+                }
+            }
+        });
+    } else {
+        dbMental.find(query).skip(offset).limit(limit).exec((err, data) => {
+            if (err) {
+                
+                res.status(500).send("Internal Server Error");
+                return;
+            }
+            if (data.length > 0) {
+                const formattedData = data.map((d) => {
+                    const { _id, ...formatted } = d;
+                    return formatted;
+                });
+                res.status(200).json(formattedData);
+            } else {
+                res.status(404).send("Not Found");
+            }
+        });
+       }
+    });
 
 
     // Método para cargar datos iniciales si el array está vacío
