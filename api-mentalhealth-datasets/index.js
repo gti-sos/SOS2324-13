@@ -19,7 +19,7 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
 
 
   //BUSQUEDA Y PAGINACION
-  app.get(API_BASE + "/", (req, res) => {
+router.get("/", (req, res) => {
     const queryParameters = req.query;
     const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
     const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
@@ -67,9 +67,6 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
         }
     });
 });
-
-
-
 
 
 
