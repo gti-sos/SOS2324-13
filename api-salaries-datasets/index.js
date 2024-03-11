@@ -10,76 +10,102 @@ module.exports = (app, salarieDB) => {
 
     // POST PARA PAIS CONCRETO
     app.post(API_BASE + "/:country", (req, res) => {
-        res.status(405).json({ error: 'Method not allowed,405' });
+        res.status(405).json({ error: 'Method not allowed, 405' });
     });
 
     // PUT GENERAL - Método no permitido
     app.put(API_BASE + "/", (req, res) => {
-        res.status(405).json({ error: 'Method not allowed,405' });
+        res.status(405).json({ error: 'Method not allowed, 405' });
     });
 
     // Función para validar datos
     function isValidData(data) {
         const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
 
-        const keys = Object.keys(data);
-        for (const key of keys) {
-            if (!expectedFields.includes(key)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    
-// Ruta para buscar por todos los campos con paginación
-app.get(API_BASE + '/search', (req, res) => {
-    const limit = parseInt(req.query.limit) || 10;
-    const offset = parseInt(req.query.offset) || 0;
-
-    const searchTerm = req.query; 
-
-    if (!searchTerm) {
-        return res.status(400).json({ error: 'Bad Request - Missing search term' });
-    }
-
-    const query = {};
-    const searchFields = ['year','country', 'employment_state', 'job_title', 'manage_staff', 'other_people_on_your_team', 'sector'];
-
-    searchFields.forEach(field => {
-        if (searchTerm[field]) {
-            if (field == 'year'){
-            query.year = parseInt(searchTerm.year)
-            }
-            else{
-                console.log(field)
-            query[field] = { $regex: new RegExp(searchTerm[field], 'i') };
-            
-        }
-    }
-       
-    });
-console.log(query)
-    salarieDB.find(query)
-        .limit(limit)
-        .skip(offset)
-        .exec((err, data) => {
-            if (err) {
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-
-            if (data.length > 0) {
-                const datosSinId = data.map(doc => {
-                    delete doc._id;
-                    return doc;
-                });
-                return res.status(200).json(datosSinId);
+        return expectedFields.every(field => {
+            if (field === 'year') {
+                return !isNaN(parseInt(data[field]));
             } else {
-                return res.status(404).json({ message: 'No data found for the specified search term' });
+                return Object.keys(data).includes(field);
             }
         });
-});
+    }
+
+    // Ruta para búsqueda por campos con paginación
+    app.get(API_BASE + "/", (req, res) => {
+        const queryParameters = req.query;
+        const limit = parseInt(queryParameters.limit) || 10;
+        const offset = parseInt(queryParameters.offset) || 0;
+        let from = req.query.from;
+        let to = req.query.to;
+
+        // Verifica si hay parámetros 'from' y 'to'
+        if (from !== undefined && to !== undefined) {
+            const fromYear = parseInt(from);
+            const toYear = parseInt(to);
+            if (isNaN(fromYear) || isNaN(toYear)) {
+                return res.status(400).json({ error: 'Invalid year format. Please provide valid year values.' });
+            }
+            // Si los años son válidos, construye la consulta para filtrar por el rango de años
+            queryParameters.year = { $gte: fromYear, $lte: toYear };
+        }
+
+        let query = {};
+        // Construir la consulta basada en los parámetros proporcionados
+        Object.keys(queryParameters).forEach(key => {
+            if (key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to') {
+                const value = !isNaN(queryParameters[key]) ? parseFloat(queryParameters[key]) : queryParameters[key];
+                if (typeof value === 'string') {
+                    query[key] = { $regex: new RegExp(value, 'i') };
+                } else {
+                    query[key] = value;
+                }
+            }
+        });
+
+        // Verificar si se proporcionaron parámetros de búsqueda
+        const hasSearchParameters = Object.keys(queryParameters).some(key => key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to');
+
+        if (!hasSearchParameters) {
+            salarieDB.count({}, (err, count) => {
+                if (err) {
+                    return res.sendStatus(500);
+                } else {
+                    if (count === 0) {
+                        return res.status(200).json([]);
+                    } else {
+                        salarieDB.find({}).skip(offset).limit(limit).exec((err, data) => {
+                            if (err) {
+                                return res.sendStatus(500);
+                            } else {
+                                const resultsWithoutId = data.map(d => {
+                                    const { _id, ...datWithoutId } = d;
+                                    return datWithoutId;
+                                });
+                                return res.status(200).json(resultsWithoutId);
+                            }
+                        });
+                    }
+                }
+            });
+        } else {
+            salarieDB.find(query).skip(offset).limit(limit).exec((err, data) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                if (data.length > 0) {
+                    const formattedData = data.map((d) => {
+                        const { _id, ...formatted } = d;
+                        return formatted;
+                    });
+                    return res.status(200).json(formattedData);
+                } else {
+                    return res.status(404).json({ error: 'Not Found' });
+                }
+            });
+        }
+    });
+
     // RUTA "/loadInitialData"
     // GET -- OK
     app.get(API_BASE + "/loadInitialData", (req, res) => {
@@ -209,7 +235,7 @@ console.log(query)
                 if (numReplaced > 0) {
                     return res.status(200).json({ message: 'Resource updated successfully' });
                 } else {
-                    return res.status(404).json({ error: 'Resource not found' });
+                    return res.status(500).json({ error: '500, Internal Server Error - Resource not updated' });
                 }
             });
         });
@@ -225,14 +251,14 @@ console.log(query)
             }
 
             if (numRemoved > 0) {
-                return res.status(200).json({ message: 'Resource removed successfully' });
+                return res.status(200).json({ message: 'Resource deleted successfully' });
             } else {
                 return res.status(404).json({ error: 'Resource not found' });
             }
         });
     });
 
-    // POST para crear nuevos datos
+    // POST para añadir nuevo salario
     app.post(API_BASE, (req, res) => {
         const newData = req.body;
 
@@ -240,12 +266,18 @@ console.log(query)
             return res.status(400).json({ error: '400, Bad Request - Invalid data format' });
         }
 
-        salarieDB.insert(newData, (err, doc) => {
+        // Añadir nuevo salario
+        salarieDB.insert(newData, (err, newDoc) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
 
-            res.status(201).json({ message: '201, Resource created successfully', id: doc._id });
+            if (newDoc) {
+                const { _id, ...responseData } = newDoc;
+                return res.status(201).json({ id: _id, ...responseData });
+            } else {
+                return res.status(500).json({ error: '500, Internal Server Error - Resource not created' });
+            }
         });
     });
 };
