@@ -21,7 +21,7 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
   //GET - PAGINACIÓN, BÚSQUEDAD POR CAMPOS Y PERIODO
   app.get(API_BASE + "/", (req, res) => {
     const queryParameters = req.query;
-    const limit = parseInt(queryParameters.limit) || 14;
+    const limit = parseInt(queryParameters.limit) || 10;
     const offset = parseInt(queryParameters.offset) || 0;
     let from = req.query.from;
     let to = req.query.to;
