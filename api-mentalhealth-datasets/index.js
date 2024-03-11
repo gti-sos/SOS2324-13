@@ -120,37 +120,6 @@ app.get(API_BASE + "/:country", (req, res) => {
     });
 });
 
-//GET AÑO CONCRETO
-// GET para obtener datos de un año concreto
-app.get(API_BASE + "/year/:year", (req, res) => {
-    let year = req.params.year;
-
-    // Verificar si year es una cadena que puede ser parseada a un número
-    if (isNaN(year)) {
-        res.status(400).json({ error: 'Invalid year' });
-        return;
-    }
-
-    // Parsear year a un número entero
-    year = parseInt(year);
-
-    // Realizar la búsqueda en la base de datos
-    dbMental.find({ year: year }, (err, data) => {
-        if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-        }
-        if (data.length > 0) {
-            const datosSinId = data.map(doc => {
-                delete doc._id;
-                return doc;
-            });
-            res.status(200).json(datosSinId);
-        } else {
-            res.status(404).json({ message: 'Data not found for the specified year,404' });
-        }
-    });
-});
 
 
 
