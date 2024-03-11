@@ -5,7 +5,7 @@ module.exports = (app, salarieDB) => {
        // PAGINA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
-        res.redirect('');
+        res.redirect('https://documenter.getpostman.com/view/32946791/2sA2xiVrAy');
     });
 
 
@@ -53,7 +53,7 @@ app.get(API_BASE + '/search', (req, res) => {
             { timestamp: { $regex: new RegExp(searchTerm, 'i') } },
             { salary: searchTerm },
             { country: { $regex: new RegExp(searchTerm, 'i') } },
-            // Agregar más campos según sea necesario
+        
         ]
     };
 
