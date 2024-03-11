@@ -91,7 +91,6 @@ app.get(API_BASE + "/year/:year", (req, res) => {
     });
 });
 
-
     // GET por ID
     app.get(API_BASE + '/:id', (req, res) => {
         const id = req.params.id;
@@ -104,7 +103,7 @@ app.get(API_BASE + "/year/:year", (req, res) => {
             if (salary) {
                 return res.status(200).json(salary);
             } else {
-                return res.status(404).json({ message: 'Resource not found' });
+                return res.status(404).json({ error: 'Resource not found' });
             }
         });
     });
@@ -122,7 +121,7 @@ app.get(API_BASE + "/year/:year", (req, res) => {
             if (numReplaced > 0) {
                 return res.status(200).json({ message: 'Resource updated successfully' });
             } else {
-                return res.status(404).json({ message: 'Resource not found' });
+                return res.status(404).json({ error: 'Resource not found' });
             }
         });
     });
@@ -139,7 +138,7 @@ app.get(API_BASE + "/year/:year", (req, res) => {
             if (numRemoved > 0) {
                 return res.status(200).json({ message: 'Resource deleted successfully' });
             } else {
-                return res.status(404).json({ message: 'Resource not found' });
+                return res.status(404).json({ error: 'Resource not found' });
             }
         });
     });
@@ -155,13 +154,43 @@ app.get(API_BASE + "/year/:year", (req, res) => {
         });
     });
 
+    // POST para insertar un solo dato sin repetir
     app.post(API_BASE, (req, res) => {
-        const newData = req.body; 
-    
+        const newData = req.body;
+
         if (!newData) {
             return res.status(400).json({ error: 'Bad Request - No data provided' });
         }
-    
+
+        // Verificar si ya existe un registro con el mismo timestamp
+        salarieDB.findOne({ timestamp: newData.timestamp }, (err, existingData) => {
+            if (err) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            if (existingData) {
+                // Ya existe un registro con el mismo timestamp
+                return res.status(409).json({ error: 'Conflict - Data already exists' });
+            } else {
+                // No hay conflicto, insertar el nuevo dato
+                salarieDB.insert(newData, (err, newDoc) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Internal Server Error' });
+                    }
+                    res.status(201).json({ message: 'Created new data', data: newDoc });
+                });
+            }
+        });
+    });
+
+    // POST para insertar un solo dato (sin la verificación de duplicados)
+    app.post(API_BASE, (req, res) => {
+        const newData = req.body;
+
+        if (!newData) {
+            return res.status(400).json({ error: 'Bad Request - No data provided' });
+        }
+
         // Insertar nuevos datos en la base de datos
         salarieDB.insert(newData, (err, newDocs) => {
             if (err) {
@@ -171,34 +200,16 @@ app.get(API_BASE + "/year/:year", (req, res) => {
         });
     });
 
-    // POST para insertar un solo dato sin repetir
-app.post(API_BASE, (req, res) => {
-    const newData = req.body;
-
-    if (!newData) {
-        return res.status(400).json({ error: 'Bad Request - No data provided' });
-    }
-
-    // Verificar si ya existe un registro con el mismo timestamp
-    salarieDB.findOne({ timestamp: newData.timestamp }, (err, existingData) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-
-        if (existingData) {
-            // Ya existe un registro con el mismo timestamp
-            return res.status(409).json({ message: 'Conflict - Data already exists' });
-        } else {
-            // No hay conflicto, insertar el nuevo dato
-            salarieDB.insert(newData, (err, newDoc) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                }
-                res.status(201).json({ message: 'Created new data', data: newDoc });
-            });
-        }
+    // GET para obtener datos por año y país
+    app.get(API_BASE + '/year/:year/country/:country', (req, res) => {
+        // Resto del código...
     });
-});
+
+    // GET por país (405 Method Not Allowed)
+    app.get(API_BASE + '/country/:country', (req, res) => {
+        res.status(405).json({ error: 'Method Not Allowed' });
+    });
+
 
 
 // GET para obtener datos por año y país
@@ -229,8 +240,5 @@ app.get(API_BASE + '/year/:year/country/:country', (req, res) => {
     });
 });
 
-};      
 
-
-                
-               
+};
