@@ -1,9 +1,25 @@
 const API_BASE = '/api/v1/salaries-datasets';
 
-// Función para manejar los métodos no permitidos
-function handleMethodNotAllowed(req, res) {
-    res.status(405).json({ error: 'Method Not Allowed' });
-}
+module.exports = (app, salarieDB) => {
+
+       // PAGINA "/DOCS"
+    // GET -- OK
+    app.get(API_BASE + '/docs', (req, res) => {
+        res.redirect('');
+    });
+
+
+    //POST PARA PAIS CONCRETO
+app.post(API_BASE + "/:country", (req, res) => {
+    res.status(405).json({ error: 'Method not allowed,405' });
+})
+
+
+// PUT GENERAL - Método no permitido
+app.put(API_BASE + "/", (req, res) => {
+    res.status(405).json({ error: 'Method not allowed,405' });
+})
+
 
 // Función para validar datos
 function isValidData(data) {
@@ -19,14 +35,47 @@ function isValidData(data) {
     return true;
 }
 
+// Ruta para buscar por todos los campos con paginación
+app.get(API_BASE + '/search', (req, res) => {
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
 
-module.exports = (app, salarieDB) => {
+    const searchTerm = req.query.q; // Obtener el término de búsqueda de la consulta
 
-       // PAGINA "/DOCS"
-    // GET -- OK
-    app.get(API_BASE + '/docs', (req, res) => {
-        res.redirect('');
-    });
+    if (!searchTerm) {
+        return res.status(400).json({ error: 'Bad Request - Missing search term' });
+    }
+
+    // Construir una consulta que busca en todos los campos
+    const query = {
+        $or: [
+            { year: searchTerm },
+            { timestamp: { $regex: new RegExp(searchTerm, 'i') } },
+            { salary: searchTerm },
+            { country: { $regex: new RegExp(searchTerm, 'i') } },
+            // Agregar más campos según sea necesario
+        ]
+    };
+
+    salarieDB.find(query)
+        .limit(limit)
+        .skip(offset)
+        .exec((err, data) => {
+            if (err) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            if (data.length > 0) {
+                const datosSinId = data.map(doc => {
+                    delete doc._id;
+                    return doc;
+                });
+                return res.status(200).json(datosSinId);
+            } else {
+                return res.status(404).json({ message: 'No data found for the specified search term' });
+            }
+        });
+});
 
 
     // RUTA "/loadInitialData"
