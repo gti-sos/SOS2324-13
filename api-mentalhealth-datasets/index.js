@@ -187,7 +187,7 @@ app.get(API_BASE + "/:country/:year", (req, res) => {
                 delete doc._id;
                 return doc;
             });
-            return res.status(200).json(riskData);
+            return res.status(200).json(datosSinId);
         } else {
             return res.status(404).json({ message: '404, Data not found for the specified country and year' });
         }
