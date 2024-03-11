@@ -2,61 +2,65 @@ const API_BASE = '/api/v1/salaries-datasets';
 
 module.exports = (app, salarieDB) => {
 
-       // PAGINA "/DOCS"
+    // PAGINA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
         res.redirect('https://documenter.getpostman.com/view/32946791/2sA2xiVrAy');
     });
 
+    // POST PARA PAIS CONCRETO
+    app.post(API_BASE + "/:country", (req, res) => {
+        res.status(405).json({ error: 'Method not allowed,405' });
+    });
 
-    //POST PARA PAIS CONCRETO
-app.post(API_BASE + "/:country", (req, res) => {
-    res.status(405).json({ error: 'Method not allowed,405' });
-})
+    // PUT GENERAL - Método no permitido
+    app.put(API_BASE + "/", (req, res) => {
+        res.status(405).json({ error: 'Method not allowed,405' });
+    });
 
+    // Función para validar datos
+    function isValidData(data) {
+        const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
 
-// PUT GENERAL - Método no permitido
-app.put(API_BASE + "/", (req, res) => {
-    res.status(405).json({ error: 'Method not allowed,405' });
-})
-
-
-// Función para validar datos
-function isValidData(data) {
-    const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
-
-    const keys = Object.keys(data);
-    for (const key of keys) {
-        if (!expectedFields.includes(key)) {
-            return false;
+        const keys = Object.keys(data);
+        for (const key of keys) {
+            if (!expectedFields.includes(key)) {
+                return false;
+            }
         }
+
+        return true;
     }
 
-    return true;
-}
-
+    
 // Ruta para buscar por todos los campos con paginación
 app.get(API_BASE + '/search', (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const offset = parseInt(req.query.offset) || 0;
 
-    const searchTerm = req.query.q; // Obtener el término de búsqueda de la consulta
+    const searchTerm = req.query; 
 
     if (!searchTerm) {
         return res.status(400).json({ error: 'Bad Request - Missing search term' });
     }
 
-    // Construir una consulta que busca en todos los campos
-    const query = {
-        $or: [
-            { year: searchTerm },
-            { timestamp: { $regex: new RegExp(searchTerm, 'i') } },
-            { salary: searchTerm },
-            { country: { $regex: new RegExp(searchTerm, 'i') } },
-        
-        ]
-    };
+    const query = {};
+    const searchFields = ['year','country', 'employment_state', 'job_title', 'manage_staff', 'other_people_on_your_team', 'sector'];
 
+    searchFields.forEach(field => {
+        if (searchTerm[field]) {
+            if (field == 'year'){
+            query.year = parseInt(searchTerm.year)
+            }
+            else{
+                console.log(field)
+            query[field] = { $regex: new RegExp(searchTerm[field], 'i') };
+            
+        }
+    }
+       
+    });
+console.log(query)
     salarieDB.find(query)
         .limit(limit)
         .skip(offset)
@@ -76,8 +80,6 @@ app.get(API_BASE + '/search', (req, res) => {
             }
         });
 });
-
-
     // RUTA "/loadInitialData"
     // GET -- OK
     app.get(API_BASE + "/loadInitialData", (req, res) => {
@@ -99,7 +101,6 @@ app.get(API_BASE + '/search', (req, res) => {
                     { year: 2021, timestamp: '12/10/2020 8:25:12', salary: 105000, country: 'United States', primary_database: 'Microsoft SQL Server', time_with_this_database: 10, employment_state: 'Full time employee', job_title: 'DBA (General - splits time evenly between writing & tuning queries AND building & troubleshooting servers)', manage_staff: 'No', time_in_current_job: 2, other_people_on_your_team: '4', magnitude_of_company: 50, sector: 'Private business' },
                     { year: 2021, timestamp: '12/10/2020 8:25:36', salary: 61100, country: 'United Kingdom', primary_database: 'Microsoft SQL Server', time_with_this_database: 10, employment_state: 'Full time employee', job_title: 'Developer: T-SQL', manage_staff: 'Yes', time_in_current_job: 10, other_people_on_your_team: 'None', magnitude_of_company: 7, sector: 'Private business' },
                     { year: 2021, timestamp: '12/10/2020 8:25:51', salary: 18000, country: 'Paraguay', primary_database: 'Microsoft SQL Server', time_with_this_database: 5, employment_state: 'Full time employee', job_title: 'DBA (General - splits time evenly between writing & tuning queries AND building & troubleshooting servers)', manage_staff: 'No', time_in_current_job: 5, other_people_on_your_team: 'None', magnitude_of_company: 20, sector: 'Private business' },
-                    
                 ];
 
                 salarieDB.insert(initialData, (err, newDocs) => {
@@ -189,16 +190,28 @@ app.get(API_BASE + '/search', (req, res) => {
             return res.status(400).json({ error: 'ID in the body does not match the ID in the URL' });
         }
 
-        salarieDB.update({ _id: id }, { $set: updatedData }, {}, (err, numReplaced) => {
+        // Verificar si la ID existe
+        salarieDB.findOne({ _id: id }, (err, existingData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
 
-            if (numReplaced > 0) {
-                return res.status(200).json({ message: 'Resource updated successfully' });
-            } else {
-                return res.status(404).json({ error: 'Resource not found' });
+            if (!existingData) {
+                return res.status(400).json({ error: '400, Bad Request - Resource not found' });
             }
+
+            // Actualizar el recurso
+            salarieDB.update({ _id: id }, { $set: updatedData }, {}, (err, numReplaced) => {
+                if (err) {
+                    return res.status(500).json({ error: '500, Internal Server Error' });
+                }
+
+                if (numReplaced > 0) {
+                    return res.status(200).json({ message: 'Resource updated successfully' });
+                } else {
+                    return res.status(404).json({ error: 'Resource not found' });
+                }
+            });
         });
     });
 
@@ -212,124 +225,27 @@ app.get(API_BASE + '/search', (req, res) => {
             }
 
             if (numRemoved > 0) {
-                return res.status(200).json({ message: 'Resource deleted successfully' });
+                return res.status(200).json({ message: 'Resource removed successfully' });
             } else {
                 return res.status(404).json({ error: 'Resource not found' });
             }
         });
     });
 
-    // DELETE para borrar todos los datos
-    app.delete(API_BASE, (req, res) => {
-        salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
+    // POST para crear nuevos datos
+    app.post(API_BASE, (req, res) => {
+        const newData = req.body;
+
+        if (!isValidData(newData)) {
+            return res.status(400).json({ error: '400, Bad Request - Invalid data format' });
+        }
+
+        salarieDB.insert(newData, (err, doc) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
 
-            return res.status(200).json({ message: 'All resources deleted successfully' });
+            res.status(201).json({ message: '201, Resource created successfully', id: doc._id });
         });
     });
-
-    // POST para insertar un solo dato sin repetir
-    app.post(API_BASE, (req, res) => {
-        const newData = req.body;
-
-        if (!newData || !isValidData(newData)) {
-            return res.status(400).json({ error: 'Bad Request - Invalid data provided' });
-        }
-
-        // Verificar duplicados por timestamp
-        salarieDB.findOne({ timestamp: newData.timestamp }, (err, existingData) => {
-            if (err) {
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-
-            if (existingData) {
-                return res.status(409).json({ error: 'Conflict - Data already exists' });
-            } else {
-                salarieDB.insert(newData, (err, newDoc) => {
-                    if (err) {
-                        return res.status(500).json({ error: 'Internal Server Error' });
-                    }
-                    res.status(201).json({ message: 'Created new data', data: newDoc });
-                });
-            }
-        });
-    });
-
-    // POST para insertar un solo dato (sin la verificación de duplicados)
-    app.post(API_BASE, (req, res) => {
-        const newData = req.body;
-
-        if (!newData || !isValidData(newData)) {
-            return res.status(400).json({ error: 'Bad Request - Invalid data provided' });
-        }
-
-        salarieDB.insert(newData, (err, newDocs) => {
-            if (err) {
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(201).json({ message: 'Created new data', data: newDocs });
-        });
-    });
-
-    // GET para obtener datos por año y país con paginación
-    app.get(API_BASE + '/year/:year/country/:country', (req, res) => {
-        const year = parseInt(req.params.year);
-        const country = req.params.country;
-        const limit = parseInt(req.query.limit) || 10;
-        const offset = parseInt(req.query.offset) || 0;
-
-        salarieDB.find({ year: year, country: country })
-            .limit(limit)
-            .skip(offset)
-            .exec((err, data) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                }
-
-                if (data.length > 0) {
-                    const datosSinId = data.map(doc => {
-                        delete doc._id;
-                        return doc;
-                    });
-                    return res.status(200).json(datosSinId);
-                } else {
-                    return res.status(404).json({ message: 'No data found for the specified year and country' });
-                }
-            });
-    });
-
-  
-
-const fields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
-
-fields.forEach(field => {
-    app.get(API_BASE + `/${field}`, (req, res) => {
-        const limit = parseInt(req.query.limit) || 10;
-        const offset = parseInt(req.query.offset) || 0;
-
-        const query = {};
-        query[field] = { $exists: true };
-
-        salarieDB.find(query)
-            .limit(limit)
-            .skip(offset)
-            .exec((err, data) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                }
-
-                if (data.length > 0) {
-                    const datosSinId = data.map(doc => {
-                        delete doc._id;
-                        return doc;
-                    });
-                    return res.status(200).json(datosSinId);
-                } else {
-                    return res.status(404).json({ message: `No data found for field: ${field}` });
-                }
-            });
-    });
-});
 };
