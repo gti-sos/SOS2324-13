@@ -19,29 +19,31 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
 
 
   //BUSQUEDA Y PAGINACION
-    // Ruta para realizar búsquedas por todos los campos del recurso
-    app.get(API_BASE + "/", (req, res) => {
-        const queryParameters = req.query;
-        const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
-        const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
-        let from = req.query.from;
-        let to = req.query.to;
+  app.get(API_BASE + "/", (req, res) => {
+    const queryParameters = req.query;
+    const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
+    const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
+    let from = req.query.from;
+    let to = req.query.to;
+
     // Verifica si hay parámetros 'from' y 'to'
     if (from !== undefined && to !== undefined) {
         const fromYear = parseInt(from);
         const toYear = parseInt(to);
-        console.log(fromYear, toYear);
+        
+        // Verificar si los años son válidos
         if (isNaN(fromYear) || isNaN(toYear)) {
-            return res.status(400).send("Invalid year format. Please provide valid year values.");
+            return res.status(400).json({ error: 'Invalid year format. Please provide valid year values.' });
         }
+
         // Si los años son válidos, construye la consulta para filtrar por el rango de años
         queryParameters.year = { $gte: fromYear, $lte: toYear };
     }
-         
+
     let query = {};
-       
-     // Iteramos sobre cada parámetro de búsqueda
-     Object.keys(queryParameters).forEach(key => {
+
+    // Iteramos sobre cada parámetro de búsqueda
+    Object.keys(queryParameters).forEach(key => {
         // Si el parámetro no es "limit", "offset" u otros parámetros de paginación, lo consideramos como un atributo de búsqueda
         if (key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to') {
             // Verificamos si el valor es numérico
@@ -65,6 +67,7 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
         }
     });
 });
+
 
 
 
