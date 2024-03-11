@@ -200,17 +200,6 @@ app.get(API_BASE + "/year/:year", (req, res) => {
         });
     });
 
-    // GET para obtener datos por año y país
-    app.get(API_BASE + '/year/:year/country/:country', (req, res) => {
-        // Resto del código...
-    });
-
-    // GET por país (405 Method Not Allowed)
-    app.get(API_BASE + '/country/:country', (req, res) => {
-        res.status(405).json({ error: 'Method Not Allowed' });
-    });
-
-
 
 // GET para obtener datos por año y país
 app.get(API_BASE + '/year/:year/country/:country', (req, res) => {
