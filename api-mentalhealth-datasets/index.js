@@ -171,31 +171,30 @@ app.get(API_BASE + "/:country", (req, res) => {
 
 
 
-//GET PAIS Y AÑO CONCRETO
-app.get(API_BASE/+ ':country/:year', (req, res) => {
+// GET para obtener datos de un país específico en un año específico
+app.get(API_BASE + "/:country/:year", (req, res) => {
     const countryName = req.params.country;
     const year = parseInt(req.params.year); // Parsear el año como un número entero
 
-    // Verificar si el año es válido
-    if (isNaN(year)) {
-        res.status(400).json({ error: 'Invalid year' });
-        return;
-    }
+   
 
-    // Aquí se construye el filtro para buscar por país y año específico
+    // Buscar en la base de datos los datos del país y año específicos
     dbMental.findOne({ country: countryName, year: year }, (err, datosMental) => {
         if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
+            // Error interno del servidor
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        if (datosMental) {
+        if (datosMental > 0 ) {
+            // Si se encuentra, eliminar el campo _id del documento
             delete datosMental._id;
-            res.status(200).json(datosMental); // Devuelve un solo objeto
+            return res.status(200).json(datosMental); // Devolver datos del país y año específico
         } else {
-            res.status(404).json({ message: 'Data not found for the specified country and year,404' });
+            // No se encontraron datos para el país y año especificados
+            return res.status(404).json({ message: 'Data not found for the specified country and year' });
         }
     });
 });
+
 
 //POST GENERAL
 app.post(API_BASE + "/", (req, res) => {
