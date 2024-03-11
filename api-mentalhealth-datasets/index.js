@@ -174,27 +174,25 @@ app.get(API_BASE + "/:country", (req, res) => {
 // GET para obtener datos de un país específico en un año específico
 app.get(API_BASE + "/:country/:year", (req, res) => {
     const countryName = req.params.country;
-    const year = parseInt(req.params.year); // Parsear el año como un número entero
+    const year = parseInt(req.params.year);
 
-   
-
-    // Buscar en la base de datos los datos del país y año específicos
-    dbMental.findOne({ country: countryName, year: year }, (err, datosMental) => {
+    // buscamos los datos específicos para el país y el año
+    datosMental.findOne({ country: countryName, year }, (err, datos) => {
         if (err) {
-            // Error interno del servidor
-            return res.status(500).json({ error: 'Internal Server Error' });
+            return res.status(500).json({ error: '500, Internal Server Error' });
         }
-        if (datosMental > 0 ) {
-            // Si se encuentra, eliminar el campo _id del documento
-            delete datosMental._id;
-            return res.status(200).json(datosMental); // Devolver datos del país y año específico
+        if (datos) {
+            // Eliminar el campo _id de cada documento en datosMental
+            const datosSinId = datosMental.map(doc => {
+                delete doc._id;
+                return doc;
+            });
+            return res.status(200).json(riskData);
         } else {
-            // No se encontraron datos para el país y año especificados
-            return res.status(404).json({ message: 'Data not found for the specified country and year' });
+            return res.status(404).json({ message: '404, Data not found for the specified country and year' });
         }
     });
 });
-
 
 //POST GENERAL
 app.post(API_BASE + "/", (req, res) => {
