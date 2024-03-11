@@ -19,24 +19,25 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
 
 
   //BUSQUEDA Y PAGINACION
-router.get("/", (req, res) => {
+//BUSQUEDA Y PAGINACION
+app.get(API_BASE +"/", (req, res) => {
     const queryParameters = req.query;
-    const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
-    const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
     let from = req.query.from;
     let to = req.query.to;
 
     // Verifica si hay parámetros 'from' y 'to'
     if (from !== undefined && to !== undefined) {
-        const fromYear = parseInt(from);
-        const toYear = parseInt(to);
-        
-        // Verificar si los años son válidos
-        if (isNaN(fromYear) || isNaN(toYear)) {
-            return res.status(400).json({ error: 'Invalid year format. Please provide valid year values.' });
+        const fromYear = new Date(from);
+        const toYear = new Date(to);
+
+        // Verificar si las fechas son válidas
+        if (isNaN(fromYear.getTime()) || isNaN(toYear.getTime())) {
+            return res.status(400).json({ error: 'Invalid date format. Please provide valid date values.' });
         }
 
-        // Si los años son válidos, construye la consulta para filtrar por el rango de años
+        // Si las fechas son válidas, construye la consulta para filtrar por el rango de fechas
         queryParameters.year = { $gte: fromYear, $lte: toYear };
     }
 
@@ -67,10 +68,6 @@ router.get("/", (req, res) => {
         }
     });
 });
-
-
-
-
 
 
 
