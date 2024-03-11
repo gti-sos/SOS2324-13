@@ -24,14 +24,26 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
         const queryParameters = req.query;
         const limit = parseInt(req.query.limit) || 10; // Límite predeterminado: 10
         const offset = parseInt(req.query.offset) || 0; // Offset predeterminado: 0
-
+        let from = req.query.from;
+        let to = req.query.to;
+    // Verifica si hay parámetros 'from' y 'to'
+    if (from !== undefined && to !== undefined) {
+        const fromYear = parseInt(from);
+        const toYear = parseInt(to);
+        console.log(fromYear, toYear);
+        if (isNaN(fromYear) || isNaN(toYear)) {
+            return res.status(400).send("Invalid year format. Please provide valid year values.");
+        }
+        // Si los años son válidos, construye la consulta para filtrar por el rango de años
+        queryParameters.year = { $gte: fromYear, $lte: toYear };
+    }
          
     let query = {};
        
      // Iteramos sobre cada parámetro de búsqueda
      Object.keys(queryParameters).forEach(key => {
         // Si el parámetro no es "limit", "offset" u otros parámetros de paginación, lo consideramos como un atributo de búsqueda
-        if (key !== 'limit' && key !== 'offset') {
+        if (key !== 'limit' && key !== 'offset' && key !== 'from' && key !== 'to') {
             // Verificamos si el valor es numérico
             const value = !isNaN(queryParameters[key]) ? parseInt(queryParameters[key]) : queryParameters[key];
             // Si es numérico, agregamos un filtro de igualdad, de lo contrario, realizamos la búsqueda de texto como antes
@@ -334,69 +346,6 @@ app.delete(API_BASE + "/:country/:year", (req, res) => {
 });
 
 
-
-
-
-
-
-
-//BUSQUEDA PAIS CONCRETO PERIODO
-// GET para obtener estadísticas de un país en un periodo específico
-app.get(API_BASE+ "/statistics/:country/:startYear/:endYear", (req, res) => {
-    const countryName = req.params.country;
-    const startYear = parseInt(req.params.startYear);
-    const endYear = parseInt(req.params.endYear);
-
-    // Verificar si los años son válidos
-    if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
-        return res.status(400).json({ error: 'Invalid years,400' });
-    }
-
-    // Realizar la búsqueda en la base de datos de las estadísticas para el país y el periodo especificados
-    dbMental.find({ country: countryName, year: { $gte: startYear, $lte: endYear } }, (err, statistics) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (statistics.length > 0) {
-            const datosSinId = statistics.map(doc => {
-                delete doc._id;
-                return doc;
-            });
-            res.status(200).json(datosSinId);
-        } else {
-            return res.status(404).json({ message: 'No statistics found for the specified country and period,404' });
-        }
-    });
-});
-
-
-
-// GET para obtener estadísticas en un periodo específico sin un país concreto
-app.get(API_BASE+"/statistics2/:startYear/:endYear", (req, res) => {
-    const startYear = parseInt(req.params.startYear);
-    const endYear = parseInt(req.params.endYear);
-
-    // Verificar si los años son válidos
-    if (isNaN(startYear) || isNaN(endYear) || startYear > endYear) {
-        return res.status(400).json({ error: 'Invalid years,400' });
-    }
-
-    // Realizar la búsqueda en la base de datos de las estadísticas para el periodo especificado
-    dbMental.find({ year: { $gte: startYear, $lte: endYear } }, (err, statistics) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (statistics.length > 0) {
-            const datosSinId = statistics.map(doc => {
-                delete doc._id;
-                return doc;
-            });
-            res.status(200).json(datosSinId);
-        } else {
-            return res.status(404).json({ message: 'No statistics found for the specified period,404' });
-        }
-    });
-});
 
 
 
