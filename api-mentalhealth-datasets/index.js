@@ -91,8 +91,8 @@ app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
                 });
                 res.status(200).json(formattedData);
             } else {
-                res.status(404).send("Not Found");
-            }
+                res.status(404).send("Not Found");  
+              }
         });
        }
     });
@@ -217,7 +217,7 @@ app.post(API_BASE + "/", (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (existingData) {
-            return res.status(409).send("Conflict,409");
+            return res.status(409).send("Conflict, 409");
         }
         // Eliminar el campo _id del documento antes de insertarlo
         delete data._id;
