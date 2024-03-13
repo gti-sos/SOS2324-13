@@ -29,7 +29,7 @@ jobs:
 
 
       - name : ' Use gCloud CLI'
-        uses : 'gcloud info'
+        run : 'gcloud info'
 
       - name : Deploy
         run : gcloud app deploy 
