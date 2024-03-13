@@ -172,7 +172,7 @@ app.get(API_BASE + "/:country", (req, res) => {
 
 
 //GET PAIS Y AÑO CONCRETO
-app.get(`${API_BASE}/country/:country/:year`, (req, res) => {
+app.get(`${API_BASE}/:country/:year`, (req, res) => {
     const countryName = req.params.country;
     const year = parseInt(req.params.year); // Parsear el año como un número entero
 
