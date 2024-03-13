@@ -24,11 +24,11 @@ jobs:
           credential_json: '${{ secrets.GCP_SA_KEY_JSON}}'
       
       
-      - name : 'Set up Cloud SDK'
+      - name : 'Setup Cloud SDK'
         uses : 'google-github-actions/setup-gcloud@v1' 
 
 
-      - name : 'Use gCloud CLI'
+      - name : ' Use gCloud CLI'
         uses : 'gcloud info'
 
       - name : Deploy
