@@ -215,7 +215,7 @@ module.exports = (app, salarieDB) => {
             if (numRemoved > 0) {
                 return res.status(200).json({ message: 'Resource deleted successfully' });
             } else {
-                return res.status(404).json({ error: 'Resource not found' });
+                return res.status(400).json({ error: 'Bad request' });
             }
         });
     });
@@ -227,6 +227,9 @@ module.exports = (app, salarieDB) => {
         if (!isValidData(newData)) {
             return res.status(400).json({ error: '400, Bad Request - Invalid data format' });
         }
+        
+        // Eliminar el campo _id del objeto newData
+        delete newData._id;
 
         // Añadir nuevo salario
         salarieDB.insert(newData, (err, newDoc) => {
@@ -244,72 +247,73 @@ module.exports = (app, salarieDB) => {
     });
 
     // PUT GENERAL - Método no permitido
-app.put(API_BASE + "/", (req, res) => {
-    res.status(405).json({ error: 'Method not allowed,405' });
-})
-// PUT para actualizar datos de un país específico
-app.put(API_BASE + '/country/:country', (req, res) => {
-    const countryName = req.params.country;
-    const newData = req.body;
-    const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
-    const receivedFields = Object.keys(newData);
+    app.put(API_BASE + "/", (req, res) => {
+        res.status(405).json({ error: 'Method not allowed,405' });
+    });
 
-    const isValidData = expectedFields.every(field => receivedFields.includes(field));
+    // PUT para actualizar datos de un país específico
+    app.put(API_BASE + '/country/:country', (req, res) => {
+        const countryName = req.params.country;
+        const newData = req.body;
+        const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
+        const receivedFields = Object.keys(newData);
 
-    // Verificar si los datos son válidos
-    if (!isValidData) {
-        return res.status(400).send("Bad Request,400");
-    } else{
+        const isValidData = expectedFields.every(field => receivedFields.includes(field));
 
-
-   // Eliminar el campo _id del objeto newData
-        delete newData._id;
-    // Verificar que el ID en el cuerpo coincida con el ID en la URL
-    if (newData.country && newData.country !== countryName) {
-        res.status(400).json({ error: 'Mismatched ID in the request body,400' });
-        return;
-    }
-
-    salarieDB.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
-        if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-        }
-        if (numUpdated > 0) {
-            res.status(200).json({ message: 'Updated,200' });
+        // Verificar si los datos son válidos
+        if (!isValidData) {
+            return res.status(400).send("Bad Request,400");
         } else {
-            res.status(404).json({ message: 'Country not found,404' });
+            // Eliminar el campo _id del objeto newData
+            delete newData._id;
+
+            // Verificar que el ID en el cuerpo coincida con el ID en la URL
+            if (newData.country && newData.country !== countryName) {
+                res.status(400).json({ error: 'Mismatched ID in the request body,400' });
+                return;
+            }
+
+            salarieDB.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
+                if (err) {
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+                if (numUpdated > 0) {
+                    res.status(200).json({ message: 'Updated,200' });
+                } else {
+                    res.status(404).json({ message: 'Country not found,404' });
+                }
+            });
         }
     });
-}});
 
-// GET para obtener datos por país
-app.get(API_BASE + '/country/:country', (req, res) => {
-    const country = req.params.country;
+    // GET para obtener datos por país
+    app.get(API_BASE + '/country/:country', (req, res) => {
+        const country = req.params.country;
 
-    // Buscar datos por el nombre del país en la base de datos
-    salarieDB.find({ country: country }, (err, data) => {
-        if (err) {
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
+        // Buscar datos por el nombre del país en la base de datos
+        salarieDB.find({ country: country }, (err, data) => {
+            if (err) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
 
-        if (data.length > 0) {
-            return res.status(200).json(data);
-        } else {
-            return res.status(404).json({ error: 'Data not found for the specified country' });
-        }
+            if (data.length > 0) {
+                return res.status(200).json(data);
+            } else {
+                return res.status(404).json({ error: 'Data not found for the specified country' });
+            }
+        });
     });
-});
 
     // DELETE para eliminar todos los datos
-app.delete(API_BASE, (req, res) => {
-    salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
-        if (err) {
-            return res.status(500).json({ error: '500, Internal Server Error' });
-        }
+    app.delete(API_BASE, (req, res) => {
+        salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
+            if (err) {
+                return res.status(500).json({ error: '500, Internal Server Error' });
+            }
 
-        return res.status(200).json({ message: 'All data deleted successfully' });
+            return res.status(200).json({ message: 'All data deleted successfully' });
+        });
     });
-});
 
 };
