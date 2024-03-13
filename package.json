@@ -13,8 +13,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test-wri": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/gcloud.json",
-    "test-mh": "npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/gcloud.json"
+    "test": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/gcloud.json && npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/gcloud.json"
   },
   "author": "rubromgui",
   "license": "GPL-3.0"
