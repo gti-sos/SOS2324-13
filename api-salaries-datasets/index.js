@@ -301,5 +301,15 @@ app.get(API_BASE + '/country/:country', (req, res) => {
     });
 });
 
-    
+    // DELETE para eliminar todos los datos
+app.delete(API_BASE, (req, res) => {
+    salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
+        if (err) {
+            return res.status(500).json({ error: '500, Internal Server Error' });
+        }
+
+        return res.status(200).json({ message: 'All data deleted successfully' });
+    });
+});
+
 };
