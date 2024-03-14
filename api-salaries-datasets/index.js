@@ -227,30 +227,40 @@
     }
 
     // POST para añadir nuevo salario
-    app.post(API_BASE, (req, res) => {
-        const newData = req.body;
+app.post(API_BASE, (req, res) => {
+    const newData = req.body;
 
-        if (!isValidData(newData)) {
-            return res.status(400).json({ error: '400, Bad Request - Invalid data format' });
+    // Verificar si los datos cumplen con todos los campos del CSV
+    if (!isValidData(newData)) {
+        return res.status(400).json({ error: 'Bad Request - Invalid data format' });
+    }
+
+    // Comprobar si los datos ya existen
+    salarieDB.findOne(newData, (err, existingData) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        
-        // Eliminar el campo _id del objeto newData
-        delete newData._id;
 
-        // Añadir nuevo salario
+        if (existingData) {
+            return res.status(409).json({ error: 'Conflict - Data already exists' });
+        }
+
+        // Si los datos no existen, añadir nuevo salario
         salarieDB.insert(newData, (err, newDoc) => {
             if (err) {
-                return res.status(500).json({ error: '500, Internal Server Error' });
+                return res.status(500).json({ error: 'Internal Server Error' });
             }
 
             if (newDoc) {
                 const { _id, ...responseData } = newDoc;
                 return res.status(201).json({ id: _id, ...responseData });
             } else {
-                return res.status(500).json({ error: '500, Internal Server Error - Resource not created' });
+                return res.status(500).json({ error: 'Internal Server Error - Resource not created' });
             }
         });
     });
+});
+
 
     // PUT para actualizar datos de un país específico
     app.put(API_BASE + '/country/:country', (req, res) => {
@@ -287,6 +297,31 @@
             });
         }
     });
+
+    // PUT para actualizar datos por ID
+app.put(API_BASE + '/:id', (req, res) => {
+    const id = req.params.id;
+    const newData = req.body;
+
+    // Verificar si el ID es válido
+    if (!salarieDB.isValidId(id)) {
+        return res.status(400).json({ error: 'Invalid ID format' });
+    }
+
+    // Actualizar datos en la base de datos
+    salarieDB.update({ _id: id }, { $set: newData }, {}, (err, numUpdated) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Verificar si se actualizó algún documento
+        if (numUpdated > 0) {
+            return res.status(200).json({ message: 'Data updated successfully' });
+        } else {
+            return res.status(400).json({ error: 'ID not found, Bad Request' });
+        }
+    });
+});
 
     // DELETE para eliminar todos los datos
     app.delete(API_BASE, (req, res) => {
