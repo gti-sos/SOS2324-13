@@ -1,7 +1,7 @@
 const API_BASE = '/api/v1/wris-datasets';
 
 module.exports = (app, dataset) => {
- 
+
     // PAGINA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
@@ -318,6 +318,25 @@ module.exports = (app, dataset) => {
                 res.status(200).json({ message: '200, Deleted' });
             } else {
                 res.status(404).json({ message: '404, Country not found' });
+            }
+        });
+    });
+
+    // RUTA RECURSO BASE
+    // DELETE byId/byYear -- OK
+    app.delete(API_BASE + "/:country/:year", (req, res) => {
+        const countryName = req.params.country;
+        const yearParam = parseInt(req.params.year);
+
+        dataset.remove({ country: countryName, year: yearParam }, { multi: true }, (err, numRemoved) => {
+            if (err) {
+                res.status(500).json({ error: '500, Internal Server Error' });
+                return;
+            }
+            if (numRemoved > 0) {
+                res.status(200).json({ message: '200, Deleted' });
+            } else {
+                res.status(404).json({ message: '404, No data for that country on that year' });
             }
         });
     });
