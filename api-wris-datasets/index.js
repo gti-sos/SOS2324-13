@@ -11,7 +11,7 @@ module.exports = (app, dataset) => {
     // RUTA "/loadInitialData"
     // GET -- OK
     app.get(API_BASE + "/loadInitialData", (req, res) => {
-        dataset.find({}, (err, riskData) => {
+        dataset.find({}, (err, riskData) => { 
             if (err) {
                 res.status(500).json({ error: '500, Internal Server Error' });
                 return;
