@@ -55,7 +55,7 @@ module.exports = (app, dataset) => {
         const { limit, offset, fields, ...searchParams } = req.query;
 
         // obtengo los datos del dataset
-        dataset.find(searchParams, { _id: 0 }, (err, riskData) => {
+        dataset.find(searchParams, (err, riskData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
@@ -84,9 +84,13 @@ module.exports = (app, dataset) => {
             }
 
             if (resultData.length > 0) {
-                return res.status(200).json(resultData);
+                const resultsWithoutId = resultData.map(d => {
+                    const { _id, ...datWithoutId } = d;
+                    return datWithoutId;
+                });
+                res.status(200).json(resultsWithoutId);
             } else {
-                return res.status(404).json({ message: '404, Data not found' });
+                res.status(404).json({ message: '404, Data not found' });
             }
         });
     });
@@ -167,40 +171,50 @@ module.exports = (app, dataset) => {
         // verificamos si se proporciona el parámetro year
         if (year) {
             // devolvemos los datos para el país y el año
-            dataset.findOne({ country: countryName, year: parseInt(year) }, { _id: 0 }, (err, riskData) => {
+            dataset.findOne({ country: countryName, year: parseInt(year) }, (err, riskData) => {
                 if (err) {
                     return res.status(500).json({ error: '500, Internal Server Error' });
                 }
                 if (riskData) {
-                    return res.status(200).json(riskData);
+                    delete riskData._id;
+                    res.status(200).json(riskData);
                 } else {
-                    return res.status(404).json({ message: '404, Data not found for the specified country and year' });
+                    res.status(404).json({ message: '404, Data not found for the specified country and year' });
                 }
             });
         } else {
             // verificamos si se proporciona el rango (from y to)
             if (from && to) {
                 // devolvemos los datos para el país dentro del rango
-                dataset.find({ country: countryName, year: { $gte: parseInt(from), $lte: parseInt(to) } }, { _id: 0 }, (err, riskData) => {
+                dataset.find({ country: countryName, year: { $gte: parseInt(from), $lte: parseInt(to) } }, (err, riskData) => {
                     if (err) {
                         return res.status(500).json({ error: '500, Internal Server Error' });
                     }
                     if (riskData.length > 0) {
-                        return res.status(200).json(riskData);
+                        const datosSinId = riskData.map(d => {
+                            delete d._id;
+                            return d;
+                        });
+                        res.status(200).json(datosSinId);
                     } else {
-                        return res.status(404).json({ message: '404, Data not found for the specified country and year range' });
+                        res.status(404).json({ message: '404, Data not found for the specified country and year range' });
                     }
                 });
             } else {
                 // devolvemos todos los datos para el país si no se proporciona el año ni el rango
-                dataset.find({ country: countryName }, { _id: 0 }, (err, riskData) => {
+                dataset.find({ country: countryName }, (err, riskData) => {
                     if (err) {
                         return res.status(500).json({ error: '500, Internal Server Error' });
                     }
                     if (riskData.length > 0) {
-                        return res.status(200).json(riskData);
+                        let resultData = riskData;
+                        const datosSinId = resultData.map(d => {
+                            delete d._id;
+                            return d;
+                        });
+                        res.status(200).json(datosSinId);
                     } else {
-                        return res.status(404).json({ message: '404, Country not found' });
+                        res.status(404).json({ message: '404, Country not found' });
                     }
                 });
             }
@@ -209,7 +223,7 @@ module.exports = (app, dataset) => {
 
     // RUTA RECURSO BASE Y AÑO
     // GET byId/byYear -- OK
-    app.get(API_BASE + "/:country/:year", { _id: 0 }, (req, res) => {
+    app.get(API_BASE + "/:country/:year", (req, res) => {
         const countryName = req.params.country;
         const year = parseInt(req.params.year);
 
@@ -219,9 +233,10 @@ module.exports = (app, dataset) => {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
             if (riskData) {
-                return res.status(200).json(riskData);
+                delete riskData._id;
+                res.status(200).json(riskData);
             } else {
-                return res.status(404).json({ message: '404, Data not found for the specified country and year' });
+                res.status(404).json({ message: '404, Data not found for the specified country and year' });
             }
         });
     });
