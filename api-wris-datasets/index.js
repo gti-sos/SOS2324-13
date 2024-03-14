@@ -328,7 +328,7 @@ module.exports = (app, dataset) => {
         const countryName = req.params.country;
         const yearParam = parseInt(req.params.year);
 
-        dataset.remove({ country: countryName, year: yearParam }, { multi: true }, (err, numRemoved) => {
+        dataset.remove({ country: countryName, year: yearParam }, (err, numRemoved) => {
             if (err) {
                 res.status(500).json({ error: '500, Internal Server Error' });
                 return;
