@@ -55,7 +55,7 @@ module.exports = (app, dataset) => {
         const { limit, offset, fields, ...searchParams } = req.query;
 
         // obtengo los datos del dataset
-        dataset.find(searchParams, (err, riskData) => {
+        dataset.find(searchParams, { _id: 0 }, (err, riskData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
@@ -167,7 +167,7 @@ module.exports = (app, dataset) => {
         // verificamos si se proporciona el parámetro year
         if (year) {
             // devolvemos los datos para el país y el año
-            dataset.findOne({ country: countryName, year: parseInt(year) }, (err, riskData) => {
+            dataset.findOne({ country: countryName, year: parseInt(year) }, { _id: 0 }, (err, riskData) => {
                 if (err) {
                     return res.status(500).json({ error: '500, Internal Server Error' });
                 }
@@ -181,7 +181,7 @@ module.exports = (app, dataset) => {
             // verificamos si se proporciona el rango (from y to)
             if (from && to) {
                 // devolvemos los datos para el país dentro del rango
-                dataset.find({ country: countryName, year: { $gte: parseInt(from), $lte: parseInt(to) } }, (err, riskData) => {
+                dataset.find({ country: countryName, year: { $gte: parseInt(from), $lte: parseInt(to) } }, { _id: 0 }, (err, riskData) => {
                     if (err) {
                         return res.status(500).json({ error: '500, Internal Server Error' });
                     }
@@ -193,7 +193,7 @@ module.exports = (app, dataset) => {
                 });
             } else {
                 // devolvemos todos los datos para el país si no se proporciona el año ni el rango
-                dataset.find({ country: countryName }, (err, riskData) => {
+                dataset.find({ country: countryName }, { _id: 0 }, (err, riskData) => {
                     if (err) {
                         return res.status(500).json({ error: '500, Internal Server Error' });
                     }
@@ -209,11 +209,11 @@ module.exports = (app, dataset) => {
 
     // RUTA RECURSO BASE Y AÑO
     // GET byId/byYear -- OK
-    app.get(API_BASE + "/:country/:year", (req, res) => {
+    app.get(API_BASE + "/:country/:year", { _id: 0 }, (req, res) => {
         const countryName = req.params.country;
         const year = parseInt(req.params.year);
 
-        // buscamos los datos específicos para el país y el año
+        // buscamos el dato específico para el país y el año
         dataset.findOne({ country: countryName, year }, (err, riskData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
