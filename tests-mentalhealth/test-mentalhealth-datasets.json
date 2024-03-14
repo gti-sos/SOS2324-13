@@ -511,11 +511,12 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}api/v1/mentalhealth-datasets/",
+					"raw": "{{SERVER}}/api/v1/mentalhealth-datasets/",
 					"host": [
-						"{{SERVER}}api"
+						"{{SERVER}}"
 					],
 					"path": [
+						"api",
 						"v1",
 						"mentalhealth-datasets",
 						""
