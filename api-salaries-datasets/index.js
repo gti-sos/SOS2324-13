@@ -206,6 +206,25 @@ module.exports = (app, salarieDB) => {
         });
     });
 
+
+// GET por Country
+app.get(API_BASE + '/country/:country', (req, res) => {
+    const country = req.params.country;
+
+    salarieDB.findOne({ country: country }, (err, salary) => {
+        if (err) {
+            return res.status(500).json({ error: '500, Internal Server Error' });
+        }
+
+        if (salary) {
+            return res.status(200).json(salary);
+        } else {
+            return res.status(404).json({ error: 'Resource not found for the specified country' });
+        }
+    });
+});
+
+
     // PUT por ID
     app.put(API_BASE + '/:id', (req, res) => {
         const id = req.params.id;
@@ -240,6 +259,42 @@ module.exports = (app, salarieDB) => {
             });
         });
     });
+
+    // PUT por Country
+app.put(API_BASE + '/country/:country', (req, res) => {
+    const country = req.params.country;
+    const updatedData = req.body;
+
+    // Validar que los datos sean válidos
+    if (!isValidData(updatedData)) {
+        return res.status(400).json({ error: '400, Bad Request - Invalid data format' });
+    }
+
+    // Verificar si el país existe
+    salarieDB.findOne({ country: country }, (err, existingData) => {
+        if (err) {
+            return res.status(500).json({ error: '500, Internal Server Error' });
+        }
+
+        if (!existingData) {
+            return res.status(404).json({ error: '404, Resource not found for the specified country' });
+        }
+
+        // Actualizar el recurso por el país
+        salarieDB.update({ country: country }, { $set: updatedData }, { multi: true }, (err, numReplaced) => {
+            if (err) {
+                return res.status(500).json({ error: '500, Internal Server Error' });
+            }
+
+            if (numReplaced > 0) {
+                return res.status(200).json({ message: 'Resources updated successfully' });
+            } else {
+                return res.status(500).json({ error: '500, Internal Server Error - Resources not updated' });
+            }
+        });
+    });
+});
+
 
     // DELETE por ID
     app.delete(API_BASE + '/:id', (req, res) => {
@@ -280,4 +335,76 @@ module.exports = (app, salarieDB) => {
             }
         });
     });
+
+
+    app.delete(API_BASE, (req, res) => {
+        // Lógica para eliminar todos los recursos
+        salarieDB.remove({}, { multi: true }, (err, numRemoved) => {
+            if (err) {
+                return res.status(500).json({ error: '500, Internal Server Error' });
+            }
+    
+            if (numRemoved > 0) {
+                return res.status(200).json({ message: 'All resources deleted successfully' });
+            } else {
+                return res.status(404).json({ error: '404, No resources found to delete' });
+            }
+        });
+    });
+
+
+    // POST -- OK
+app.post(API_BASE, (req, res) => {
+    // Pedimos el contenido (esperado)
+    const data = req.body;
+    const expectedFields = [
+        'year',
+        'timestamp',
+        'salary',
+        'country',
+        'primary_database',
+        'time_with_this_database',
+        'employment_state',
+        'job_title',
+        'manage_staff',
+        'time_in_current_job',
+        'other_people_on_your_team',
+        'magnitude_of_company',
+        'sector'
+    ];
+    const receivedFields = Object.keys(data);
+
+    const isValidData = expectedFields.every(field => receivedFields.includes(field));
+
+    // Verificamos si los datos son válidos
+    if (!isValidData) {
+        return res.status(400).json({ error: '400, Bad Request' });
+    } else {
+        // Verificamos si los datos ya existen (mismo trabajo y año)
+        salarieDB.findOne({ job_title: data.job_title, year: data.year }, (err, existingData) => {
+            if (err) {
+                console.error('Error al buscar datos existentes:', err);
+                return res.status(500).json({ error: '500, Internal Server Error' });
+            }
+
+            console.log('Datos existentes:', existingData);
+
+            if (existingData) {
+                console.log('Datos duplicados encontrados. Conflicto.');
+                return res.status(409).json({ error: '409, Conflict' });
+            }
+
+            // Insertamos los nuevos datos
+            salarieDB.insert(data, (err, newData) => {
+                if (err) {
+                    console.error('Error al insertar nuevos datos:', err);
+                    return res.status(500).json({ error: '500, Internal Server Error' });
+                }
+                return res.status(201).json({ message: '201, Created' });
+            });
+        });
+    }
+});
+
+
 };
