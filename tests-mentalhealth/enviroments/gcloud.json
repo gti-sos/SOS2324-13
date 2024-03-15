@@ -4,7 +4,7 @@
 	"values": [
 		{
 			"key": "SERVER",
-			"value": "https://sos2324-13.ew.r.appspot.com/",
+			"value": "https://sos2324-13.appspot.com",
 			"type": "default",
 			"enabled": true
 		}
