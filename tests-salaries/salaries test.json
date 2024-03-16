@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "044708b7-eb31-4bff-b42f-3f51b28dd933",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32946791"
+	},
+	"item": [
+		{
+			"name": "Load Initial Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/loadInitialData",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"salaries-datasets",
+						"loadInitialData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get todos los datos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"salaries-datasets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Añadir nuevos datos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"year\": 2024,\n    \"timestamp\": \"12/10/2020 8:22:42\",\n    \"salary\": 65000,\n    \"country\": \"Spain\",\n    \"primary_database\": \"Microsoft SQL Server\",\n    \"time_with_this_database\": 4,\n    \"employment_state\": \"Full time employee\",\n    \"job_title\": \"Developer: Business Intelligence (SSRS, PowerBI, etc)\",\n    \"manage_staff\": \"Yes\",\n    \"time_in_current_job\": 4,\n    \"other_people_on_your_team\": \"None\",\n    \"magnitude_of_company\": 2,\n    \"sector\": \"Private business\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"salaries-datasets",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete de datos por pais",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Pakistan",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Pakistan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete de datos por pais inexistente (404)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Pakistan",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Pakistan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar datos por país",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"year\": 2022,\r\n    \"timestamp\": \"2022-03-13T12:00:00\",\r\n    \"salary\": 75000,\r\n    \"country\": \"Spain\",\r\n    \"primary_database\": \"MySQL\",\r\n    \"time_with_this_database\": 3,\r\n    \"employment_state\": \"Full time employee\",\r\n    \"job_title\": \"Database Administrator\",\r\n    \"manage_staff\": \"No\",\r\n    \"time_in_current_job\": 2,\r\n    \"other_people_on_your_team\": \"None\",\r\n    \"magnitude_of_company\": 50,\r\n    \"sector\": \"Private business\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Spain",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Spain"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "400 - Bad request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"salary\": 65000\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/United States",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"United States"
+					]
+				},
+				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+			},
+			"response": []
+		},
+		{
+			"name": "Get por año y país",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/United States/year/2021",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"United States",
+						"year",
+						"2021"
+					]
+				},
+				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+			},
+			"response": []
+		},
+		{
+			"name": "Put por año y país",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"year\": 2021,\n        \"timestamp\": \"12/10/2020 8:22:42\",\n        \"salary\": 65000,\n        \"country\": \"Sweden\",\n        \"primary_database\": \"Microsoft SQL Server\",\n        \"time_with_this_database\": 4,\n        \"employment_state\": \"Full time employee\",\n        \"job_title\": \"Developer: Business Intelligence (SSRS, PowerBI, etc)\",\n        \"manage_staff\": \"Yes\",\n        \"time_in_current_job\": 4,\n        \"other_people_on_your_team\": \"None\",\n        \"magnitude_of_company\": 2,\n        \"sector\": \"Private business\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Spain/year/2022",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Spain",
+						"year",
+						"2022"
+					]
+				},
+				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete por año y país",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"_id\": \"C0WUzCGH9s0e91KJ\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Sweden/year/2021",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Sweden",
+						"year",
+						"2021"
+					]
+				},
+				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+			},
+			"response": []
+		},
+		{
+			"name": "404 Not found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/1235423452",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"1235423452"
+					]
+				},
+				"description": "Si intentamos buscar algun dato por una ID inexistente nos avisará de que no ha sido encontrado"
+			},
+			"response": []
+		},
+		{
+			"name": "405 Method not allowed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/United States",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets",
+						"United States"
+					]
+				},
+				"description": "Esto nos avisa de que el método que estamos intentando utilizar no está permitido"
+			},
+			"response": []
+		},
+		{
+			"name": "409 Conflict",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"year\": 2021,\r\n  \"timestamp\": \"12/10/2020 8:24:03\",\r\n  \"salary\": 98800,\r\n  \"country\": \"United States\",\r\n  \"primary_database\": \"Microsoft SQL Server\",\r\n  \"time_with_this_database\": 5,\r\n  \"employment_state\": \"Full time employee\",\r\n  \"job_title\": \"Developer: Business Intelligence (SSRS, PowerBI, etc)\",\r\n  \"manage_staff\": \"No\",\r\n  \"time_in_current_job\": 5,\r\n  \"other_people_on_your_team\": \"None\",\r\n  \"magnitude_of_company\": 50,\r\n  \"sector\": \"Private business\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"salaries-datasets",
+						""
+					]
+				},
+				"description": "Cuando queremos añadir datos ya existentes, nos avisará de que hay un conflicto ya que estos ya se encuentran en nuestros datos"
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar todos los datos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://sos2324-13.ew.r.appspot.com/api/v1/salaries-datasets",
+					"protocol": "https",
+					"host": [
+						"sos2324-13",
+						"ew",
+						"r",
+						"appspot",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"salaries-datasets"
+					]
+				},
+				"description": "Eliminar todos los datos que poseemos en nuestro csv dejándolo vacío"
+			},
+			"response": []
+		}
+	]
+}
