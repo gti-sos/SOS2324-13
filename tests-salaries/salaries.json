@@ -1,7 +1,8 @@
 {
 	"info": {
 		"_postman_id": "044708b7-eb31-4bff-b42f-3f51b28dd933",
-		"name": "Tests",
+		"name": "Aaron López Leal test",
+		"description": "Datasets sobre diferentes salarios variando en años, paises, sector, etc.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32946791"
 	},
@@ -37,7 +38,8 @@
 						"salaries-datasets",
 						"loadInitialData"
 					]
-				}
+				},
+				"description": "Cargar los datos iniciales de nuestro CSV"
 			},
 			"response": []
 		},
@@ -72,7 +74,45 @@
 						"salaries-datasets",
 						""
 					]
+				},
+				"description": "Ver todos los datos introducidos"
+			},
+			"response": []
+		},
+		{
+			"name": "Get todos los datos por país",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/country/Sweden",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"",
+						"api",
+						"v1",
+						"salaries-datasets",
+						"country",
+						"Sweden"
+					]
+				},
+				"description": "Ver todos los datos introducidos"
 			},
 			"response": []
 		},
@@ -116,7 +156,8 @@
 						"salaries-datasets",
 						""
 					]
-				}
+				},
+				"description": "Añadir un dato al que se le asginara una nueva ID"
 			},
 			"response": []
 		},
@@ -151,7 +192,8 @@
 						"country",
 						"Pakistan"
 					]
-				}
+				},
+				"description": "Eliminar datos de nuestro archivo proporcionando su país"
 			},
 			"response": []
 		},
@@ -186,7 +228,8 @@
 						"country",
 						"Pakistan"
 					]
-				}
+				},
+				"description": "Error al intentar borrar unos datos de un país no registrado"
 			},
 			"response": []
 		},
@@ -230,7 +273,8 @@
 						"country",
 						"Spain"
 					]
-				}
+				},
+				"description": "Actualizar los datos indicando el país"
 			},
 			"response": []
 		},
@@ -326,7 +370,7 @@
 						"2021"
 					]
 				},
-				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+				"description": "Obtener los datos indicando el país y el año deseados"
 			},
 			"response": []
 		},
@@ -373,7 +417,7 @@
 						"2022"
 					]
 				},
-				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+				"description": "Actualizar los datos indicando el país y el año deseados"
 			},
 			"response": []
 		},
@@ -420,7 +464,7 @@
 						"2021"
 					]
 				},
-				"description": "Si no hay datos o introducimos un valor incorrecto, nos responderá con este recurso"
+				"description": "Eliminar los datos de un país y año específicos"
 			},
 			"response": []
 		},
