@@ -2,6 +2,7 @@
 let express = require("express");
 let bodyParser = require("body-parser");
 let dataStore = require("nedb"); 
+
 let riskData = new dataStore();
 let dbMental = new dataStore();
 let salarieDB = new dataStore();
