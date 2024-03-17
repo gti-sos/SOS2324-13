@@ -19,5 +19,6 @@
     "test-salaries": "npx newman run ./tests-salaries/salaries.json -e ./tests-salaries/enviroments/gcloud.json"
   },
   "author": "rubromgui",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "type" : "module"
 }
