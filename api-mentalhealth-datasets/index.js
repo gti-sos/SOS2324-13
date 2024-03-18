@@ -1,3 +1,5 @@
+const { json } = require("body-parser");
+
 const API_BASE = '/api/v1/mentalhealth-datasets';
 
 
@@ -31,7 +33,7 @@ module.exports = (app, dbMental) => {
             const fromYear = parseInt(from);
             const toYear = parseInt(to);
             if (isNaN(fromYear) || isNaN(toYear)) {
-                return res.status(400).send("Invalid year format. Please provide valid year values.");
+                return res.sendStatus(400,"Invalid year format. Please provide valid year values.");
             }
             // Si los años son válidos, construye la consulta para filtrar por el rango de años
             queryParameters.year = { $gte: fromYear, $lte: toYear };
@@ -59,7 +61,7 @@ module.exports = (app, dbMental) => {
                     res.sendStatus(500);
                 } else {
                     if (count === 0) {
-                        res.status(200).json([]);
+                        res.sendStatus(404,"Data not found");
                     } else {
                         dbMental.find({}).skip(offset).limit(limit).exec((err, data) => {
                             if (err) {
@@ -71,7 +73,7 @@ module.exports = (app, dbMental) => {
                                     return datWithoutId;
                                 });
 
-                                res.status(200).json(resultsWithoutId);
+                                res.send(JSON.stringify(resultsWithoutId));
                             }
                         });
                     }
@@ -81,7 +83,7 @@ module.exports = (app, dbMental) => {
             dbMental.find(query).skip(offset).limit(limit).exec((err, data) => {
                 if (err) {
 
-                    res.status(500).send("Internal Server Error");
+                    res.sendStatus(500,"Internal Server Error");
                     return;
                 }
                 if (data.length > 0) {
@@ -89,9 +91,9 @@ module.exports = (app, dbMental) => {
                         const { _id, ...formatted } = d;
                         return formatted;
                     });
-                    res.status(200).json(formattedData);
+                    res.send(JSON.stringify(formattedData));
                 } else {
-                    res.status(404).send("Not Found");
+                    res.sendStatus(404,"Not Found");
                 }
             });
         }
@@ -102,7 +104,7 @@ module.exports = (app, dbMental) => {
     app.get(API_BASE + "/loadInitialData", (req, res) => {
         dbMental.find({}, (err, datosMental) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
+                res.sendStatus(500,'Internal Server Error');
                 return;
             }
             if (datosMental.length === 0) {
@@ -119,13 +121,13 @@ module.exports = (app, dbMental) => {
                 { country: "Afghanistan", code: "AFG", year: 2000, schizophrenia: 0.161621, bipolar_disorder: 0.700015, eating_disorder: 0.086021, anxiety_disorder: 4.827047, drug_use_disorder: 1.788395, depression: 4.11861, alcoholism: 0.662479 }];
                 dbMental.insert(initialData, (err, newDocs) => {
                     if (err) {
-                        res.status(500).json({ error: 'Internal Server Error' });
+                        res.sendStatus(500,'Internal Server Error');;
                         return;
                     }
-                    res.status(201).json({ message: 'Created initial data,201' });
+                    res.sendStatus(201,'Created initial data');;
                 });
             } else {
-                res.status(409).json({ message: 'Data already exists.409' });
+                res.sendStatus(409,'Data already exists');;
             }
         });
     });
@@ -138,7 +140,7 @@ module.exports = (app, dbMental) => {
         const countryName = req.params.country;
         dbMental.find({ country: countryName }, (err, datosMental) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
+                res.sendStatus(500,'Internal Server Error');;
                 return;
             }
             if (datosMental.length > 0) {
@@ -147,9 +149,9 @@ module.exports = (app, dbMental) => {
                     delete doc._id;
                     return doc;
                 });
-                res.status(200).json(datosSinId);
+                res.sendStatus(JSON.stringify(datosSinId));
             } else {
-                res.status(404).json({ message: 'Country not found, 404' });
+                res.sendStatus(404,'Data not found');;
             }
         });
     });
@@ -178,21 +180,21 @@ module.exports = (app, dbMental) => {
 
         // Verificar si el año es válido
         if (isNaN(year)) {
-            res.status(400).json({ error: 'Invalid year' });
+            res.sendStatus(400,'Invalid year');;
             return;
         }
 
         // Aquí se construye el filtro para buscar por país y año específico
         dbMental.findOne({ country: countryName, year: year }, (err, datosMental) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
+                res.sendStatus(500,'Internal Server Error');;
                 return;
             }
             if (datosMental) {
                 delete datosMental._id;
-                res.status(200).json(datosMental); // Devuelve un solo objeto
+                res.sendStatus(JSON.stringify(datosMental)); // Devuelve un solo objeto
             } else {
-                res.status(404).json({ message: 'Data not found for the specified country and year,404' });
+                res.sendStatus(404,'Data not found');;
             }
         });
     });
@@ -208,25 +210,25 @@ module.exports = (app, dbMental) => {
 
         // Verificar si los datos son válidos
         if (!isValidData) {
-            return res.status(400).send("Bad Request,400");
+            res.sendStatus(400,'Bad request');;
         } else {
 
             // Verificar si los datos ya existen (mismo país y año)
             dbMental.findOne({ country: data.country, year: data.year }, (err, existingData) => {
                 if (err) {
-                    return res.status(500).json({ error: 'Internal Server Error' });
+                    res.sendStatus(500,'Internal Server Error');
                 }
                 if (existingData) {
-                    return res.status(409).send("Conflict, 409");
+                    res.sendStatus(409,'Conflict');
                 }
                 // Eliminar el campo _id del documento antes de insertarlo
                 delete data._id;
                 // Insertar nuevos datos
                 dbMental.insert(data, (err, newData) => {
                     if (err) {
-                        return res.status(500).json({ error: 'Internal Server Error' });
+                        res.sendStatus(500,'Internal Server Error');
                     }
-                    return res.status(201).send("Created,201");
+                    res.sendStatus(201,'Created');
                 });
             });
         }
@@ -235,12 +237,12 @@ module.exports = (app, dbMental) => {
 
     //POST PARA PAIS CONCRETO
     app.post(API_BASE + "/:country", (req, res) => {
-        res.status(405).json({ error: 'Method not allowed,405' });
+        res.sendStatus(405,'Method not allowed');
     })
 
     // PUT GENERAL - Método no permitido
     app.put(API_BASE + "/", (req, res) => {
-        res.status(405).json({ error: 'Method not allowed,405' });
+        res.sendStatus(405,'Method not allowed');
     })
     // PUT para actualizar datos de un país específico
     app.put(API_BASE + "/:country", (req, res) => {
@@ -253,7 +255,7 @@ module.exports = (app, dbMental) => {
 
         // Verificar si los datos son válidos
         if (!isValidData) {
-            return res.status(400).send("Bad Request,400");
+            res.sendStatus(400,'Bad request');
         } else {
 
 
@@ -261,19 +263,19 @@ module.exports = (app, dbMental) => {
             delete newData._id;
             // Verificar que el ID en el cuerpo coincida con el ID en la URL
             if (newData.country && newData.country !== countryName) {
-                res.status(400).json({ error: 'Mismatched ID in the request body,400' });
-                return;
+                res.sendStatus(400,'Mismatched id');;
+                
             }
 
             dbMental.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
                 if (err) {
-                    res.status(500).json({ error: 'Internal Server Error' });
-                    return;
+                    res.sendStatus(500,'Internal server error');
+                    
                 }
                 if (numUpdated > 0) {
-                    res.status(200).json({ message: 'Updated,200' });
+                    res.sendStatus(200,'Updated');
                 } else {
-                    res.status(404).json({ message: 'Country not found,404' });
+                    res.sendStatus(404,'Country not found');
                 }
             });
         }
@@ -291,17 +293,17 @@ module.exports = (app, dbMental) => {
         const isValidData = expectedFields.every(field => field in newData);
 
         if (!isValidData) {
-            return res.status(400).json({ error: 'Missing or invalid fields in the request body,400' });
+            res.sendStatus(400,'Missing or invaling data in body');
         }
 
         // Verificar si hay un ID de país en la solicitud y si coincide con el ID en la URL
         if (newData.country && newData.country !== countryName) {
-            return res.status(400).json({ error: 'Mismatched country ID in the request body,400' });
+            res.sendStatus(400,'Mismatched id');
         }
 
         // Verificar si hay un año en la solicitud y si coincide con el año en la URL
         if (newData.year && newData.year !== year) {
-            return res.status(400).json({ error: 'Mismatched year in the request body,400' });
+            res.sendStatus(400,"Mismatched year");
         }
 
         // Eliminar el campo _id del objeto newData
@@ -309,12 +311,12 @@ module.exports = (app, dbMental) => {
         // Actualizar los datos en la base de datos para el país y el año específicos
         dbMental.update({ country: countryName, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
             if (err) {
-                return res.status(500).json({ error: 'Internal Server Error' });
+                res.sendStatus(500,'Internal sever error');
             }
             if (numUpdated > 0) {
-                return res.status(200).json({ message: 'Updated' });
+                res.sendStatus(200,'Updated');
             } else {
-                return res.status(404).json({ message: 'Country or year not found,404' });
+                res.sendStatus(404,'Country not found');
             }
         });
     });
@@ -326,10 +328,9 @@ module.exports = (app, dbMental) => {
     app.delete(API_BASE, (req, res) => {
         dbMental.remove({}, { multi: true }, (err, numRemoved) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
+                res.sendStatus(500,'Internal server error');
             }
-            res.status(200).json({ message: 'Deleted,200' });
+            res.sendStatus(200,'Deleted');
         });
     });
 
@@ -338,13 +339,12 @@ module.exports = (app, dbMental) => {
         const countryName = req.params.country;
         dbMental.remove({ country: countryName }, { multi: true }, (err, numRemoved) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
+                res.sendStatus(500,'Internal server error');
             }
             if (numRemoved > 0) {
-                res.status(200).json({ message: 'Deleted.200' });
+                res.sendStatus(200,'Deleted');
             } else {
-                res.status(404).json({ message: 'Country not found,404' });
+                res.sendStatus(404,'Country not found');
             }
         });
     });
@@ -358,13 +358,12 @@ module.exports = (app, dbMental) => {
 
         dbMental.remove({ country: countryName, year: year }, { multi: true }, (err, numRemoved) => {
             if (err) {
-                res.status(500).json({ error: 'Internal Server Error' });
-                return;
+                res.sendStatus(500,'Internal server error');
             }
             if (numRemoved > 0) {
-                res.status(200).json({ message: 'Deleted,200' });
+                res.sendStatus(200,'Deleted');
             } else {
-                res.status(404).json({ message: 'Country or year not found,404' });
+                res.sendStatus(404,'Country or year not found');
             }
         });
     });
