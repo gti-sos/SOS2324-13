@@ -6,7 +6,7 @@ module.exports = (app, dataset) => {
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
         res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
-    });
+    }); 
 
     // RUTA "/loadInitialData"
     // GET -- OK
