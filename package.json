@@ -14,8 +14,9 @@
   "scripts": {
     "start": "node index",
     "test": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/gcloud.json && npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/gcloud.json",
-    "test-wris-datasets": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/local.json",
-    "test-mentalhealth-datasets": "npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/local.json"
+    "test-wris-datasets": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/gcloud.json",
+    "test-mentalhealth-datasets": "npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/gcloud.json",
+    "test-salaries": "npx newman run ./tests-salaries/salaries.json -e ./tests-salaries/enviroments/gcloud.json"
   },
   "author": "rubromgui",
   "license": "GPL-3.0"

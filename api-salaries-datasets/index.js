@@ -42,7 +42,7 @@
     // RUTA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
-        res.redirect('https://documenter.getpostman.com/view/32946791/2sA2xiVrAy');
+        res.redirect('https://documenter.getpostman.com/view/32946791/2sA2xnxA7H');
     });
 
     // POST PARA PAIS CONCRETO
@@ -137,6 +137,26 @@
             }
         });
     });
+
+    // GET por país y año
+app.get(API_BASE + '/country/:country/year/:year', (req, res) => {
+    const country = req.params.country;
+    const year = parseInt(req.params.year);
+
+    // Buscar datos por país y año en la base de datos
+    salarieDB.find({ country: country, year: year }, (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (data.length > 0) {
+            return res.status(200).json(data);
+        } else {
+            return res.status(404).json({ error: 'Data not found for the specified country and year' });
+        }
+    });
+});
+
 
     // Ruta para búsqueda por campos con paginación
     app.get(API_BASE + "/", (req, res) => {
@@ -298,18 +318,19 @@ app.post(API_BASE, (req, res) => {
         }
     });
 
-    // PUT para actualizar datos por ID
-app.put(API_BASE + '/:id', (req, res) => {
-    const id = req.params.id;
+    // PUT por país y año
+app.put(API_BASE + '/country/:country/year/:year', (req, res) => {
+    const country = req.params.country;
+    const year = parseInt(req.params.year);
     const newData = req.body;
 
-    // Verificar si el ID es válido
-    if (!salarieDB.isValidId(id)) {
-        return res.status(400).json({ error: 'Invalid ID format' });
+    // Verificar si los datos son válidos
+    if (!isValidData(newData)) {
+        return res.status(400).json({ error: 'Bad Request - Invalid data format' });
     }
 
     // Actualizar datos en la base de datos
-    salarieDB.update({ _id: id }, { $set: newData }, {}, (err, numUpdated) => {
+    salarieDB.update({ country: country, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
         if (err) {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
@@ -318,10 +339,12 @@ app.put(API_BASE + '/:id', (req, res) => {
         if (numUpdated > 0) {
             return res.status(200).json({ message: 'Data updated successfully' });
         } else {
-            return res.status(400).json({ error: 'ID not found, Bad Request' });
+            return res.status(404).json({ error: 'Data not found for the specified country and year' });
         }
     });
 });
+
+
 
     // DELETE para eliminar todos los datos
     app.delete(API_BASE, (req, res) => {
@@ -370,6 +393,26 @@ app.put(API_BASE + '/:id', (req, res) => {
         }
         });
     });
+
+    //DELETE por país y año
+app.delete(API_BASE + '/country/:country/year/:year', (req, res) => {
+    const country = req.params.country;
+    const year = parseInt(req.params.year);
+
+    // Eliminar datos por país y año en la base de datos
+    salarieDB.remove({ country: country, year: year }, { multi: true }, (err, numRemoved) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (numRemoved > 0) {
+            return res.status(200).json({ message: 'Data for ' + country + ' in year ' + year + ' deleted successfully' });
+        } else {
+            return res.status(404).json({ error: 'Data not found for the specified country and year' });
+        }
+    });
+});
+
 
 
 };

@@ -6,12 +6,12 @@ module.exports = (app, dataset) => {
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
         res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
-    });
+    }); 
 
     // RUTA "/loadInitialData"
     // GET -- OK
     app.get(API_BASE + "/loadInitialData", (req, res) => {
-        dataset.find({}, (err, riskData) => { 
+        dataset.find({}, (err, riskData) => {
             if (err) {
                 res.status(500).json({ error: '500, Internal Server Error' });
                 return;
