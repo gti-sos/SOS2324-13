@@ -33,7 +33,7 @@ module.exports = (app, dbMental) => {
             const fromYear = parseInt(from);
             const toYear = parseInt(to);
             if (isNaN(fromYear) || isNaN(toYear)) {
-                return res.status(400).send("Invalid year format. Please provide valid year values.");
+                return res.status(400).json({ error: "Invalid year format. Please provide valid year values." });
             }
             // Si los años son válidos, construye la consulta para filtrar por el rango de años
             queryParameters.year = { $gte: fromYear, $lte: toYear };
@@ -58,7 +58,7 @@ module.exports = (app, dbMental) => {
         if (!hasSearchParameters) {
             dbMental.count({}, (err, count) => {
                 if (err) {
-                    res.sendStatus(500);
+                    return res.status(500).json({ error: "Internal Server Error" });
                 } else {
                     if (count === 0) {
                         res.status(200).json([]);
@@ -66,7 +66,7 @@ module.exports = (app, dbMental) => {
                         dbMental.find({}).skip(offset).limit(limit).exec((err, data) => {
                             if (err) {
 
-                                res.sendStatus(500);
+                                return res.status(500).json({ error: "Internal Server Error" });
                             } else {
                                 const resultsWithoutId = data.map(d => {
                                     const { _id, ...datWithoutId } = d;
@@ -83,7 +83,7 @@ module.exports = (app, dbMental) => {
             dbMental.find(query).skip(offset).limit(limit).exec((err, data) => {
                 if (err) {
 
-                    res.status(500).send("Internal Server Error");
+                    return res.status(500).json({ error: "Internal Server Error" });
                     return;
                 }
                 if (data.length > 0) {
@@ -93,7 +93,7 @@ module.exports = (app, dbMental) => {
                     });
                     res.status(200).json(formattedData)
                 } else {
-                    res.status(404).send("Not Found");
+                    return res.status(404).json({ error: "Not found" });
                 }
             });
         }
@@ -211,7 +211,7 @@ module.exports = (app, dbMental) => {
 
         // Verificar si los datos son válidos
         if (!isValidData) {
-            return res.status(400).send("Bad Request,400");
+            return res.status(400).json({ error: "Bad requesst" });
         } else {
 
             // Verificar si los datos ya existen (mismo país y año)
@@ -220,7 +220,7 @@ module.exports = (app, dbMental) => {
                     return res.status(500).json({ error: 'Internal Server Error' })
                 }
                 if (existingData) {
-                    return res.status(409).send("Conflict, 409");
+                    return res.status(409).json({ error: "Conflict" });
                 }
                 // Eliminar el campo _id del documento antes de insertarlo
                 delete data._id;
@@ -229,7 +229,7 @@ module.exports = (app, dbMental) => {
                     if (err) {
                         return res.status(500).json({ error: 'Internal Server Error' });
                     }
-                    return res.status(201).send("Created,201");
+                    return res.status(201).json({ message: "Created" });
                 });
             });
         }
@@ -256,7 +256,7 @@ module.exports = (app, dbMental) => {
 
         // Verificar si los datos son válidos
         if (!isValidData) {
-            return res.status(400).send("Bad Request,400");
+            return res.status(400).json({ error: "Bad request" });
         } else {
 
 
