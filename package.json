@@ -18,6 +18,6 @@
     "test-mentalhealth-datasets": "npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/local.json",
     "test-salaries": "npx newman run ./tests-salaries/salaries.json -e ./tests-salaries/enviroments/local.json"
   },
-  "author": "rubromgui",
+  "author": "rubromgui ",
   "license": "GPL-3.0"
 }
