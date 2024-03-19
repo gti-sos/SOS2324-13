@@ -27,12 +27,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/loadInitialData",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/loadInitialData",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -603,13 +602,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/?country=United States&limit=1",
-					"protocol": "http",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/?country=United States&limit=1",
 					"host": [
 						"{{SERVER}}"
 					],
-					"port": "10000",
 					"path": [
+						"",
 						"api",
 						"v1",
 						"salaries-datasets",
