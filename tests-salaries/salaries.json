@@ -603,10 +603,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:10000/api/v1/salaries-datasets/?country=United States&limit=1",
+					"raw": "{{SERVER}}//api/v1/salaries-datasets/?country=United States&limit=1",
 					"protocol": "http",
 					"host": [
-						"localhost"
+						"{{SERVER}}"
 					],
 					"port": "10000",
 					"path": [
