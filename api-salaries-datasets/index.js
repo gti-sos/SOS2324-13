@@ -147,8 +147,7 @@ app.get(API_BASE + '/country/:country/year/:year', (req, res) => {
 
 // GET -- OK
 app.get(API_BASE, (req, res) => {
-    // EN CASO DE PONER ?limit=xx o ?offset=yy o ?fields=...,... 
-    // los encuentra directamente en la peticion (forma dinámica)
+  
     const { limit, offset, fields, ...searchParams } = req.query;
 
     // obtengo los datos del dataset
@@ -156,17 +155,9 @@ app.get(API_BASE, (req, res) => {
         if (err) {
             return res.status(500).json({ error: '500, Internal Server Error' });
         }
-
-        // aplico limit y offset
-        let resultData = response;
-        if (offset) {
-            resultData = resultData.slice(parseInt(offset));
-        }
-        if (limit) {
-            resultData = resultData.slice(0, parseInt(limit));
-        }
         
-console.log(resultData)
+        let resultData = response;
+        console.log(resultData)
         // aplico la vista personalizada
         if (fields) {
             const selectedFields = fields.split(',');
@@ -180,6 +171,18 @@ console.log(resultData)
                 return selectedData;
             });
         }
+
+        // aplico limit y offset
+        
+        if (offset) {
+            resultData = resultData.slice(parseInt(offset));
+        }
+        console.log(resultData)
+        if (limit) {
+            resultData = resultData.slice(0, parseInt(limit));
+        }
+    console.log(resultData)
+        
 
         if (resultData.length > 0) {
             const resultsWithoutId = resultData.map(d => {
