@@ -62,12 +62,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -98,12 +97,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/country/Sweden",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Sweden",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -144,12 +142,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -566,12 +563,11 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}//api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -607,7 +603,6 @@
 						"{{SERVER}}"
 					],
 					"path": [
-						"",
 						"api",
 						"v1",
 						"salaries-datasets",
@@ -658,14 +653,9 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://sos2324-13.ew.r.appspot.com/api/v1/salaries-datasets",
-					"protocol": "https",
+					"raw": "{{SERVER}}/api/v1/salaries-datasets",
 					"host": [
-						"sos2324-13",
-						"ew",
-						"r",
-						"appspot",
-						"com"
+						"{{SERVER}}"
 					],
 					"path": [
 						"api",

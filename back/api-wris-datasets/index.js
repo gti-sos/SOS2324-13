@@ -1,12 +1,12 @@
 const API_BASE = '/api/v1/wris-datasets';
 
-module.exports = (app, dataset) => {
+function loadWRIApi(app, dataset) {
 
     // PAGINA "/DOCS"
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
         res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
-    }); 
+    });
 
     // RUTA "/loadInitialData"
     // GET -- OK
@@ -356,3 +356,5 @@ module.exports = (app, dataset) => {
         });
     });
 };
+
+export { loadWRIApi };

@@ -5,8 +5,7 @@
     "ejs": "^3.1.9",
     "express": "^4.18.3",
     "nedb": "^1.8.0",
-    "newman": "^6.1.1",
-    "svelte": "^4.2.12"
+    "newman": "^6.1.1"
   },
   "name": "sos2324-13",
   "description": "Version inicial",
@@ -14,11 +13,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/gcloud.json && npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/gcloud.json && npx newman run ./tests-salaries/salaries.json -e ./tests-salaries/enviroments/gcloud.json",
-    "test-wris-datasets": "npx newman run ./tests-wris/api-wris.json -e ./tests-wris/environments/local.json",
-    "test-mentalhealth-datasets": "npx newman run ./tests-mentalhealth/test-mentalhealth-datasets.json -e ./tests-mentalhealth/enviroments/local.json",
-    "test-salaries": "npx newman run ./tests-salaries/salaries.json -e ./tests-salaries/enviroments/local.json"
+    "test": "npm run test-wris-datasets && npm run test-mentalhealth-datasets && npm run test-salaries",
+    "test-wris-datasets": "npx newman run ./tests/api-wris.json -e ./tests/environments-wr/gcloud.json",
+    "test-mentalhealth-datasets": "npx newman run ./tests/api-mentalhealth.json -e ./tests/environments-mh/gcloud.json",
+    "test-salaries": "npx newman run ./tests/api-salaries.json -e ./tests/environments-sa/gcloud.json"
   },
   "author": "rubromgui ",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "type": "module"
 }

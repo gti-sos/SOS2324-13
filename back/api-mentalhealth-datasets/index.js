@@ -1,12 +1,7 @@
-const { json } = require("body-parser");
-
 const API_BASE = '/api/v1/mentalhealth-datasets';
 
-
-
-
 // Datos de ejemplo
-module.exports = (app, dbMental) => {
+function loadMentalApi(app, dbMental) {
 
 
     // Ruta para redirigir al portal de documentación de Postman
@@ -192,7 +187,7 @@ module.exports = (app, dbMental) => {
             }
             if (datosMental) {
                 delete datosMental._id;
-               
+
                 res.status(200).json(datosMental); // Devuelve un solo objeto
             } else {
                 res.status(404).json({ message: 'Data not found for the specified country and year,404' });
@@ -266,14 +261,14 @@ module.exports = (app, dbMental) => {
             if (newData.country && newData.country !== countryName) {
                 res.status(400).json({ error: 'Mismatched ID in the request body,400' });
                 return;
-                
+
             }
 
             dbMental.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
                 if (err) {
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
-                    
+
                 }
                 if (numUpdated > 0) {
                     res.status(200).json({ message: 'Updated,200' });
@@ -373,11 +368,6 @@ module.exports = (app, dbMental) => {
             }
         });
     });
+};
 
-
-
-
-
-
-}
-
+export { loadMentalApi };

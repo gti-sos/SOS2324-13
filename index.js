@@ -1,29 +1,31 @@
 //CODIGO GENERAL DEL SERVIDOR
-let express = require("express");
-let bodyParser = require("body-parser");
-let dataStore = require("nedb"); 
+import express from "express";
+import bodyParser from "body-parser";
+import { loadWRIApi } from "./back/api-wris-datasets/index.js";
+import { loadMentalApi } from "./back/api-mentalhealth-datasets/index.js";
+import { loadSalarieApi } from "./back/api-salaries-datasets/index.js";
+import dataStore from "nedb";
+import {handler} from "./front/build/handler.js";
 
-let riskData = new dataStore();
+// Configuracion del servidor
+let dbRisk = new dataStore();
 let dbMental = new dataStore();
-let salarieDB = new dataStore();
-
-let wris_datasetsAPI = require("./api-wris-datasets");
-let mentalhealth_datasetsAPI = require("./api-mentalhealth-datasets");
-let salaries_datasetsAPI = require("./api-salaries-datasets")
- 
-//inicio del servidor
+let dbSalarie = new dataStore();
 let app = express();
 // Configuracion del puerto
 const PORT = (process.env.PORT || 10000);
-
 app.use(bodyParser.json());
 
-wris_datasetsAPI(app, riskData);
-mentalhealth_datasetsAPI(app,dbMental);
-salaries_datasetsAPI(app ,salarieDB )
+// Cargar las functions de las APIs
+loadWRIApi(app, dbRisk);
+loadMentalApi(app, dbMental);
+loadSalarieApi(app, dbSalarie);
 
-app.listen(PORT);
-console.log(`Server listening on port ${PORT}.`);
+// Cargamos el handler
+app.use(handler);
 
-// Ruta raíz "/"
-app.use("/", express.static("./home"));
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}.`);
+});
+
+console.log(`Server initializing...`);
