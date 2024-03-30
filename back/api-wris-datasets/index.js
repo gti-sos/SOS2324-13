@@ -296,7 +296,9 @@ function loadWRIApi(app, dataset) {
             'susceptibility',
             'lack_of_coping_capability',
             'lack_of_adaptive_capacity',
+            'year',
             'exposure_category',
+            'wri_category',
             'vulnerability_category',
             'susceptibility_category'
         ];

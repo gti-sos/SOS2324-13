@@ -6,6 +6,7 @@ import { loadMentalApi } from "./back/api-mentalhealth-datasets/index.js";
 import { loadSalarieApi } from "./back/api-salaries-datasets/index.js";
 import dataStore from "nedb";
 import {handler} from "./front/build/handler.js";
+import cors from "cors";
 
 // Configuracion del servidor
 let dbRisk = new dataStore();
@@ -14,6 +15,7 @@ let dbSalarie = new dataStore();
 let app = express();
 // Configuracion del puerto
 const PORT = (process.env.PORT || 10000);
+app.use(cors());
 app.use(bodyParser.json());
 
 // Cargar las functions de las APIs
