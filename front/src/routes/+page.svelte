@@ -1,4 +1,3 @@
-El nombre de los componentes del equipo y el nombre de su fuente de datos (que debe coincidir con el nombre de recurso de su API).
 <h3>Equipo:</h3>
 <ul>
     <li>

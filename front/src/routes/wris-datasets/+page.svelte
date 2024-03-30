@@ -160,10 +160,10 @@
 <table>
     <thead>
         <tr>
-            <th> Country </th>
-            <th> WRI </th>
-            <th> Exposure </th>
-            <th> Vulnerability </th>
+            <th> País </th>
+            <th> Índice de Riesgo </th>
+            <th> Exposición </th>
+            <th> Vulnerabilidad </th>
         </tr>
     </thead>
     <tbody>
@@ -182,10 +182,10 @@
             </td>
         </tr>
         <tr>
-            <th> Susceptibility </th>
-            <th> Lack of coping capability </th>
-            <th> Lack of adaptive capacity </th>
-            <th> Year </th>
+            <th> Susceptibilidad </th>
+            <th> Falta de capacidad de afrontamiento </th>
+            <th> Falta de capacidad adaptativa </th>
+            <th> Año </th>
         </tr>
         <tr>
             <td>
@@ -202,10 +202,10 @@
             </td>
         </tr>
         <tr>
-            <th> Exposure Category </th>
-            <th> WRI Category </th>
-            <th> Vulnerability Category </th>
-            <th> Susceptibility Category </th>
+            <th> Categoría de Exposición </th>
+            <th> Categoría del Índice de Riesgo </th>
+            <th> Categoría de Vulnerabilidad </th>
+            <th> Categoría de Susceptibilidad </th>
         </tr>
         <tr>
             <td>
