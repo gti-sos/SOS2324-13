@@ -279,7 +279,7 @@ function loadWRIApi(app, dataset) {
         const yearParam = parseInt(req.params.year);
         const newData = req.body;
 
-        // verificamos que el país y el año coincidan con la URL y el cuerpo del PUT
+        // Verificamos que el país y el año coincidan con la URL y el cuerpo del PUT
         if (newData.country && newData.country !== countryName) {
             return res.status(400).json({ error: '400, Bad Request: Country mismatch' });
         }
@@ -287,7 +287,7 @@ function loadWRIApi(app, dataset) {
             return res.status(400).json({ error: '400, Bad Request: Year mismatch' });
         }
 
-        // verificamos que todos los campos necesarios estan y son correctos
+        // Verificamos que todos los campos necesarios estén presentes y sean del tipo correcto
         const expectedFields = [
             'country',
             'wri',
@@ -302,14 +302,31 @@ function loadWRIApi(app, dataset) {
             'vulnerability_category',
             'susceptibility_category'
         ];
-        const receivedFields = Object.keys(newData);
-        const isValidData = expectedFields.every(field => receivedFields.includes(field));
 
-        if (!isValidData) {
-            return res.status(400).json({ error: '400, Bad Request: Missing or incorrect fields' });
+        // Validamos cada campo
+        for (const field of expectedFields) {
+            // Verificar si el campo está presente
+            if (!newData[field]) {
+                return res.status(400).json({ error: `400, Bad Request: Field '${field}' is missing` });
+            }
+
+            // Verificar el tipo de campo según los requisitos
+            if (field === 'year') {
+                if (!Number.isInteger(newData[field])) {
+                    return res.status(400).json({ error: `400, Bad Request: Field 'year' must be an integer` });
+                }
+            } else if (['wri', 'exposure', 'vulnerability', 'susceptibility', 'lack_of_coping_capability', 'lack_of_adaptive_capacity'].includes(field)) {
+                if (typeof newData[field] !== 'number') {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
+                }
+            } else {
+                if (typeof newData[field] !== 'string') {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a string` });
+                }
+            }
         }
 
-        // actualizamos los datos en la base de datos
+        // Actualizamos los datos en la base de datos
         dataset.update({ country: countryName, year: yearParam }, { $set: newData }, { multi: false }, (err, numUpdated) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
