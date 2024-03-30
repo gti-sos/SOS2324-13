@@ -10,7 +10,7 @@
 		},
 		{
 			"key": "wrisAPI",
-			"value": "/api/v1/wris-datasets",
+			"value": "/api/v2/wris-datasets",
 			"type": "default",
 			"enabled": true
 		},

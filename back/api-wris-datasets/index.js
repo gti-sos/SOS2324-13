@@ -1,8 +1,14 @@
-const API_BASE = '/api/v1/wris-datasets';
+const API_BASE = '/api/v2/wris-datasets';
 
 function loadWRIApi(app, dataset) {
 
-    // PAGINA "/DOCS"
+    // PAGINA "/DOCS" v1
+    // GET -- OK
+    app.get('/api/v1/wris-datasets/docs', (req, res) => {
+        res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
+    });
+
+    // PAGINA "/DOCS" v2
     // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
         res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');

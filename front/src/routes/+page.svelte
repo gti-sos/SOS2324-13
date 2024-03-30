@@ -27,7 +27,7 @@
 <h3>APIs:</h3>
 <ul>
     <li>
-        <a href="/api/v1/wris-datasets">api-wris-datasets (desarrollada por Rubén Romero Guisado)</a>
+        <a href="/api/v2/wris-datasets">api-wris-datasets (desarrollada por Rubén Romero Guisado)</a>
     </li>
     <li>
         TO-DO
@@ -40,7 +40,10 @@
 <h3>Documentacion en POSTMAN:</h3>
 <ul>
     <li>
-        <a href="https://documenter.getpostman.com/view/32976490/2sA2xh3YgN">Documentacion api-wris-datasets (desarrollada por Rubén Romero Guisado)</a>
+        <a href="https://documenter.getpostman.com/view/32976490/2sA2xh3YgN">Documentacion api-wris-datasets v1 (desarrollada por Rubén Romero Guisado)</a>
+    </li>
+    <li>
+        <a href="https://documenter.getpostman.com/view/32976490/2sA2xh3YgN">Documentacion api-wris-datasets v2 (desarrollada por Rubén Romero Guisado)</a>
     </li>
     <li>
         TO-DO

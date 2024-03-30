@@ -8,5 +8,6 @@
 - **URL**: [https://sos2324-13.appspot.com](https://sos2324-13.appspot.com)
 -  **APIs**:
     - RRG: [https://sos2324-13.appspot.com/api/v1/wris-datasets/docs](https://sos2324-13.appspot.com/api/v1/wris-datasets/docs) (developed by Ruben Romero Guisado)
+    - RRG: [https://sos2324-13.appspot.com/api/v2/wris-datasets/docs](https://sos2324-13.appspot.com/api/v2/wris-datasets/docs) (developed by Ruben Romero Guisado)
     - ALB: [https://sos2324-13.appspot.com/api/v1/mentalhealth-datasets/docs](https://sos2324-13.appspot.com/api/v1/mentalhealth-datasets/docs) (developed by Antonio Lopez Barrios)
     - ALL: [https://sos2324-13.appspot.com//api/v1/salaries-datasets/docs](https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs) (developed by Aaron López Leal)
