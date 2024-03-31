@@ -48,7 +48,7 @@
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
-                confirmation = "Datos obtenidos correctamente";
+                confirmation = "Datos obtenidos";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes";
