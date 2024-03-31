@@ -133,6 +133,44 @@
     {/if}
 </div>
 
+<table>
+    <thead>
+        <tr>
+            <th> Año </th>
+            <th> Timestamp </th>
+            <th> Salario </th>
+            <th> País </th>
+            <th> Base de datos primaria </th>
+            <th> Tiempo con esta base de datos </th>
+            <th> Estado de empleo </th>
+            <th> Título del trabajo </th>
+            <th> Gestionar personal </th>
+            <th> Tiempo en el trabajo actual </th>
+            <th> Otras personas en tu equipo </th>
+            <th> Magnitud de la empresa </th>
+            <th> Sector </th>
+        </tr>
+    </thead>
+    <!-- Inputs para agregar nuevos datos -->
+    <tbody>
+        <tr>
+            <td><input bind:value={newData.year} /></td>
+            <td><input bind:value={newData.timestamp} /></td>
+            <td><input bind:value={newData.salary} /></td>
+            <td><input bind:value={newData.country} /></td>
+            <td><input bind:value={newData.primary_database} /></td>
+            <td><input bind:value={newData.time_with_this_database} /></td>
+            <td><input bind:value={newData.employment_state} /></td>
+            <td><input bind:value={newData.job_title} /></td>
+            <td><input bind:value={newData.manage_staff} /></td>
+            <td><input bind:value={newData.time_in_current_job} /></td>
+            <td><input bind:value={newData.other_people_on_your_team} /></td>
+            <td><input bind:value={newData.magnitude_of_company} /></td>
+            <td><input bind:value={newData.sector} /></td>
+        </tr>
+    </tbody>
+</table>
+
 <style>
     .container {
         font-family: Arial, sans-serif;
@@ -145,7 +183,7 @@
     }
 
     button {
-        background-color: #4CAF50;
+        background-color: yellow;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -171,6 +209,6 @@
     }
 
     .confirmation {
-        color: green;
+        color: yellow;
     }
 </style>
