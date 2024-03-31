@@ -162,3 +162,65 @@
         <div>Error: {errorMsg }</div>
     {/if}
 </div>
+
+<table>
+    <thead>
+        <tr>
+            <th> País </th>
+            <th> Código </th>
+            <th> Esquizofrenia </th>
+            <th> Desorden bipolar </th>
+            <th> Desorden de comida </th>
+            <th> Desorden de ansiedad </th>
+            <th> Desorden de uso de drogas </th>
+            <th> Depresion </th>
+            <th> Alcoholismo</th>
+            <th> Año </th>  
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <input bind:value={newData.country} />
+            </td>
+            <td>
+                <input bind:value={newData.wri} />
+            </td>
+            <td>
+                <input bind:value={newData.exposure} />
+            </td>
+            <td>
+                <input bind:value={newData.vulnerability} />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input bind:value={newData.susceptibility} />
+            </td>
+            <td>
+                <input bind:value={newData.lack_of_coping_capability} />
+            </td>
+            <td>
+                <input bind:value={newData.lack_of_adaptive_capacity} />
+            </td>
+            <td>
+                <input bind:value={newData.year} />
+            </td>
+        </tr>
+       
+        <tr>
+            <td>
+                <input bind:value={newData.exposure_category} />
+            </td>
+            <td>
+                <input bind:value={newData.wri_category} />
+            </td>
+            <td>
+                <input bind:value={newData.vulnerability_category} />
+            </td>
+            <td>
+                <input bind:value={newData.susceptibility_category} />
+            </td>
+        </tr>
+    </tbody>
+</table>
