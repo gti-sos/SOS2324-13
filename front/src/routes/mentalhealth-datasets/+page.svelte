@@ -43,19 +43,22 @@
     }
 
     async function getData() {
-        try {
-            const response = await fetch(API, { method: "GET" });
-            const status = response.status;
-            if (status === 200) {
-                dataset = await response.json();
-                confirmation = "Datos obtenidos correctamente";
-            } else {
-                errorMsg = `Error ${status}: No hay datos disponibles`;
-            }
-        } catch (error) {
-            errorMsg = error.message;
+    try {
+        const response = await fetch(API, { method: "GET" });
+        const status = response.status;
+        if (status === 200) {
+            dataset = await response.json();
+            confirmation = "Datos obtenidos correctamente";
+        } else if (status === 404) {
+            confirmation = "No hay datos disponibles";
+        } else {
+            errorMsg = `Error ${status}: Error al obtener los datos`;
         }
+    } catch (error) {
+        errorMsg = error.message;
     }
+}
+
 
     async function createData() {
         try {
