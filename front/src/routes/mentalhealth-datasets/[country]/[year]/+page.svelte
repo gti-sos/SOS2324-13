@@ -110,4 +110,4 @@
     </tbody>
 </table>
 
-<button on:click={updateData}>Actualizar dato</button>
+<button on:click={updateData}>Actualizar dato </button>
