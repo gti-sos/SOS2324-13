@@ -10,7 +10,7 @@
     let country = $page.params.country;
     let year = $page.params.year;
 
-    // Definir los datos cargados como un objeto reactiva
+    // Definir los datos cargados
     let loadedData = {
         country: "",
         code: "",
@@ -46,27 +46,9 @@
         }
     }
 
-    // Función para validar los datos antes de la actualización
-    function validateData() {
-        for (let key in loadedData) {
-            if (loadedData[key] === "") {
-                errorMessage = "Todos los campos deben ser completados"; // Mostrar mensaje de error si algún campo está vacío
-                return false;
-            }
-        }
-        return true;
-    }
-
     // Función para actualizar los datos
     async function updateData() {
         try {
-            // Limpiar el mensaje de error anterior
-            errorMessage = "";
-
-            // Validar los datos antes de la actualización
-            if (!validateData()) {
-                return;
-            }
             let response = await fetch(API + "/" + country + "/" + year, {
                 method: "PUT",
                 headers: {
@@ -79,6 +61,10 @@
             if (response.ok) {
                 fetchData(); // Recargar los datos después de la actualización
                 confirmationMessage = "Datos actualizados correctamente"; // Actualizar el mensaje de confirmación
+            } else if (response.status === 404) {
+                console.log("No existe un dato para este país y año");
+            } else if (response.status === 400) {
+                console.log("Campos incompletos o incorrectos");
             } else {
                 console.log(`Error ${response.status}`);
             }
