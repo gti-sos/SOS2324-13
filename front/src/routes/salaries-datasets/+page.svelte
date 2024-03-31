@@ -116,13 +116,11 @@
     <button on:click={createData}>Crear nuevo dato</button>
     <button on:click={deleteAllData}>Eliminar todos los datos</button>
 
-    <ul>
+    <ul class="data-list">
         {#each dataset as data}
-            <li>
-                <div class="data-item">
-                    <span>{data.year}, {data.timestamp}, {data.salary}, {data.country}, {data.primary_database}, {data.time_with_this_database}, {data.employment_state}, {data.job_title}, {data.manage_staff}, {data.time_in_current_job}, {data.other_people_on_your_team}, {data.magnitude_of_company}, {data.sector}</span>
-                    <button on:click={() => deleteData(data.year, data.country)}>Eliminar</button>
-                </div>
+            <li class="data-item">
+                <span>{data.year}, {data.timestamp}, {data.salary}, {data.country}, {data.primary_database}, {data.time_with_this_database}, {data.employment_state}, {data.job_title}, {data.manage_staff}, {data.time_in_current_job}, {data.other_people_on_your_team}, {data.magnitude_of_company}, {data.sector}</span>
+                <button on:click={() => deleteData(data.year, data.country)}>Eliminar</button>
             </li>
         {/each}
     </ul>
@@ -156,19 +154,16 @@
         margin-right: 10px;
     }
 
-    ul {
+    .data-list {
         list-style-type: none;
         padding: 0;
     }
 
-    li {
-        margin-bottom: 10px;
-    }
-
     .data-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        margin-bottom: 10px;
+        background-color: #f2f2f2; /* Tono grisáceo leve en el fondo */
+        padding: 10px;
+        border-radius: 4px;
     }
 
     .error {
