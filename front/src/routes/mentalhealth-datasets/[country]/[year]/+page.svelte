@@ -10,12 +10,9 @@
     let country = $page.params.country;
     let year = $page.params.year;
 
-    onMount(() => {
-        fetchData();
-    });
-
+    // Definir los datos cargados como un objeto reactiva
     let loadedData = {
-        country: country,
+        country: "",
         code: "",
         schizophrenia: 0,
         bipolar_disorder: 0,
@@ -24,78 +21,60 @@
         drug_use_disorder: 0,
         depression: 0,
         alcoholism: 0,
-        year: year,
+        year: ""
     };
 
-    let errorMsg = "";
-    let confirmation = "";
-
+    // Función para cargar los datos del país y año específicos
     async function fetchData() {
         try {
-            let response = await fetch(API + "/" + country + "/" + year, {
+            let response = await fetch(`${API}/${country}/${year}`, {
                 method: "GET",
             });
 
             let data = await response.json();
-            console.log(data);
-            let status = await response.status;
-            if (status === 200) {
+
+            // Verificar si se encontraron datos para el país y año especificados
+            if (response.ok) {
                 loadedData = data;
-                confirmation = "Operación completada correctamente";
-                errorMsg = "";
-            } else if (status === 404) {
-                errorMsg = "No hay datos disponibles";
-                confirmation = "";
+            } else if (response.status === 404) {
+                console.log("No hay datos disponibles");
             }
         } catch (e) {
-            errorMsg = e;
+            console.error(e);
         }
     }
 
+    // Función para actualizar los datos
     async function updateData() {
         try {
-            let newData = {
-                country: loadedData.country,
-                schizophrenia: loadedData.schizophrenia,
-                bipolar_disorder: loadedData.bipolar_disorder,
-                eating_disorder: loadedData.eating_disorder,
-                anxiety_disorder: loadedData.anxiety_disorder,
-                drug_use_disorder: loadedData.drug_use_disorder,
-                depression: loadedData.depression,
-                alcoholism: loadedData.alcoholism,
-                year: loadedData.year,
-            };
-
-            let response = await fetch(API + "/" + country + "/" + year, {
+            let response = await fetch(`${API}/${country}/${year}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newData),
+                body: JSON.stringify(loadedData),
             });
 
-            let status = await response.status;
-            console.log(`Código de estado: ${status}`);
-            if (status === 200) {
-                fetchData();
-                errorMsg = "";
-                confirmation = "Operación completada correctamente";
+            // Verificar el estado de la respuesta
+            if (response.ok) {
+                fetchData(); // Recargar los datos después de la actualización
+                console.log("Operación completada correctamente");
+            } else if (response.status === 404) {
+                console.log("No existe un dato para este país y año");
+            } else if (response.status === 400) {
+                console.log("Campos incompletos o incorrectos");
             } else {
-                if (status === 404) {
-                    errorMsg = "No existe un dato para este país y año";
-                    confirmation = "";
-                } else if (status === 400) {
-                    errorMsg = "Campos incompletos o incorrectos";
-                    confirmation = "";
-                } else {
-                    errorMsg = `Error ${status}`;
-                    confirmation = "";
-                }
+                console.log(`Error ${response.status}`);
             }
         } catch (e) {
-            errorMsg = e;
+            console.error(e);
         }
     }
+
+    // Cargar los datos al montar el componente
+    onMount(() => {
+        fetchData();
+    });
 </script>
 
 <p>Detalles del dato del país: {country} para el año {year}.</p>
@@ -132,11 +111,3 @@
 </table>
 
 <button on:click={updateData}>Actualizar dato</button>
-
-{#if confirmation != ""}
-    <p>{confirmation}</p>
-{/if}
-
-{#if errorMsg != ""}
-    <p>ERROR: {errorMsg}</p>
-{/if}
