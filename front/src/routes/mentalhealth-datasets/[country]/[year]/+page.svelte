@@ -10,7 +10,7 @@
     let country = $page.params.country;
     let year = $page.params.year;
 
-    // Definir los datos cargados como un objeto reactiva
+    // Definir los datos cargados
     let loadedData = {
         country: "",
         code: "",
