@@ -72,7 +72,7 @@
             const status = response.status;
             if (status === 201) {
                 getData();
-                confirmation = "Nuevo dato creado";
+                confirmation = "Nuevo dato creado ";
             } else {
                 errorMsg = `Error ${status}: No se pudo crear el dato`;
             }
