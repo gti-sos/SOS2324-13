@@ -45,15 +45,18 @@
     async function getData() {
     try {
         const response = await fetch(API, { method: "GET" });
-        const status = response.status;
-        if (status === 200) {
-            dataset = await response.json();
-            confirmation = "Datos obtenidos correctamente";
-        } else if (status === 404) {
-            confirmation = "No hay datos disponibles";
-        } else {
-            errorMsg = `Error ${status}: Error al obtener los datos`;
-        }
+        let data = await response.json();
+            console.log(data);
+            let status = await response.status;
+            if (status == 200) {
+                dataset = data;
+                confirmation = "Datos obetinidos correctamente";
+                errorMsg = "";
+            } else if (status == 404) {
+                errorMsg = "No hay datos existentes";
+                confirmation = "";
+                dataset = [];
+            }
     } catch (error) {
         errorMsg = error.message;
     }
