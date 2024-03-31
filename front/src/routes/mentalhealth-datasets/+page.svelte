@@ -43,25 +43,24 @@
     }
 
     async function getData() {
-    try {
-        const response = await fetch(API, { method: "GET" });
-        let data = await response.json();
+        try {
+            const response = await fetch(API, { method: "GET" });
+            let data = await response.json();
             console.log(data);
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
-                confirmation = "Datos obetinidos correctamente";
+                confirmation = "Datos obtenidos correctamente";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes";
                 confirmation = "";
                 dataset = [];
             }
-    } catch (error) {
-        errorMsg = error.message;
+        } catch (error) {
+            errorMsg = error.message;
+        }
     }
-}
-
 
     async function createData() {
         try {
@@ -98,45 +97,132 @@
     }
 
     async function deleteData(country, year) {
-    try {
-        const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
-        const status = response.status;
-        if (status === 200) {
-            // Eliminar el dato del conjunto de datos local
-            dataset = dataset.filter(data => data.country !== country || data.year !== year);
-            confirmation = "Dato eliminado correctamente";
-        } else if (status === 404) {
-            errorMsg = `Error ${status}: No se encontró el dato a eliminar`;
-        } else {
-            errorMsg = `Error ${status}: No se pudo eliminar el dato`;
+        try {
+            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
+            const status = response.status;
+            if (status === 200) {
+                // Eliminar el dato del conjunto de datos local
+                dataset = dataset.filter(data => data.country !== country || data.year !== year);
+                confirmation = "Dato eliminado correctamente";
+            } else if (status === 404) {
+                errorMsg = `Error ${status}: No se encontró el dato a eliminar`;
+            } else {
+                errorMsg = `Error ${status}: No se pudo eliminar el dato`;
+            }
+        } catch (error) {
+            errorMsg = error.message;
         }
-    } catch (error) {
-        errorMsg = error.message;
     }
-}
 </script>
 
 <div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .confirmation {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+
+    <h1>Mental Health Datasets</h1>
+
     <table>
+        <thead>
+            <tr>
+                <th> País </th>
+                <th> Código </th>
+                <th> Esquizofrenia </th>
+                <th> Trastorno bipolar </th>
+                <th> Trastorno alimentario </th>
+                <th> Trastorno de ansiedad </th>
+                <th> Trastorno por consumo de drogas </th>
+                <th> Depresión </th>
+                <th> Alcoholismo </th>
+                <th> Año </th>
+            </tr>
+        </thead>
         <!-- Inputs para agregar nuevos datos -->
         <tbody>
             <tr>
-                <td><input bind:value={newData.country} /> <!-- country --></td>
-                <td><input bind:value={newData.code} /> <!-- code --></td>
-                <td><input bind:value={newData.schizophrenia} /> <!-- schizophrenia --></td>
-                <td><input bind:value={newData.bipolar_disorder} /> <!-- bipolar_disorder --></td>
-                <td><input bind:value={newData.eating_disorder} /> <!-- eating_disorder --></td>
-                <td><input bind:value={newData.anxiety_disorder} /> <!-- anxiety_disorder --></td>
-                <td><input bind:value={newData.drug_use_disorder} /> <!-- drug_use_disorder --></td>
-                <td><input bind:value={newData.depression} /> <!-- depression --></td>
-                <td><input bind:value={newData.alcoholism} /> <!-- alcoholism --></td>
-                <td><input bind:value={newData.year} /> <!-- year --></td>
+                <td><input bind:value={newData.country} /></td>
+                <td><input bind:value={newData.code} /></td>
+                <td><input bind:value={newData.schizophrenia} /></td>
+                <td><input bind:value={newData.bipolar_disorder} /></td>
+                <td><input bind:value={newData.eating_disorder} /></td>
+                <td><input bind:value={newData.anxiety_disorder} /></td>
+                <td><input bind:value={newData.drug_use_disorder} /></td>
+                <td><input bind:value={newData.depression} /></td>
+                <td><input bind:value={newData.alcoholism} /></td>
+                <td><input bind:value={newData.year} /></td>
             </tr>
         </tbody>
     </table>
 
     <ul>
-        
         {#each dataset as data}
             <li>
                 <a href="/mentalhealth-datasets/{data.country}/{data.year}">{data.country}</a>
@@ -151,15 +237,14 @@
         <button on:click={loadData}>Cargar datos</button>
         <button on:click={getData}>Obtener todos los datos</button>
         <button on:click={createData}>Crear un nuevo dato</button>
-        <button on:click={deleteAllData}>Eliminar todos los datos </button>
+        <button on:click={deleteAllData}>Eliminar todos los datos</button>
     </div>
 
     <!-- Sección para mostrar mensajes -->
     {#if confirmation != ""}
-        <div>{confirmation}</div>
+        <div class="Mensaje confirmacion">{confirmation}</div>
     {/if}
     {#if errorMsg != ""}
-        <div>Error: {errorMsg }</div>
+        <div class="Mensaje error">Error: {errorMsg}</div>
     {/if}
 </div>
-
