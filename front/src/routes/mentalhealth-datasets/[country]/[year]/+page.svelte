@@ -32,7 +32,7 @@
 
     async function fetchData() {
         try {
-            let response = await fetch(`${API}/${country}/${year}`, {
+            let response = await fetch(API + "/" + country + "/" + year, {
                 method: "GET",
             });
 
@@ -66,7 +66,7 @@
                 year: loadedData.year,
             };
 
-            let response = await fetch(`${API}/${country}/${year}`, {
+            let response = await fetch(API + "/" + country + "/" + year, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
