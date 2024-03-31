@@ -94,7 +94,7 @@
 
     async function deleteData(country, year) {
         try {
-            const response = await fetch(API + `/${country}/${year}`, { method: "DELETE" });
+            const response = await fetch(API + API + "/" + country + "/" + year, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
                 getData();
@@ -142,7 +142,7 @@
         <button on:click={loadData}>Cargar datos</button>
         <button on:click={getData}>Obtener todos los datos</button>
         <button on:click={createData}>Crear un nuevo dato</button>
-        <button on:click={deleteAllData}>Eliminar todos los datos</button>
+        <button on:click={deleteAllData}>Eliminar todos los datos </button>
     </div>
 
     <!-- Sección para mostrar mensajes -->
