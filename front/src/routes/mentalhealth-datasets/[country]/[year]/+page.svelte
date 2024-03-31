@@ -1,56 +1,49 @@
 <script>
-    import { page } from "$app/stores";
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
+    import { page } from "$app/stores";
 
-    // URL base de la API
-    let API = "/api/v2/datos-salud-mental";
+    let API = "/api/v1/mentalhealth-datasets";
 
-    // Si estamos en entorno de desarrollo, cambiar la URL base
     if (dev) API = "http://localhost:10000" + API;
 
-    // Variables para almacenar el país y el año
-    let pais = $page.params.pais;
-    let año = $page.params.año;
+    let country = $page.params.country;
+    let year = $page.params.year;
 
-    // Al cargar el componente, obtener los datos
     onMount(() => {
-        obtenerDatos();
+        fetchData();
     });
 
-    // Datos iniciales cargados para mostrar en la tabla
-    let datosCargados = {
-        pais: pais,
-        codigo: "",
-        esquizofrenia: 0,
-        trastorno_bipolar: 0,
-        trastorno_alimentario: 0,
-        trastorno_ansiedad: 0,
-        trastorno_consumo_drogas: 0,
-        depresion: 0,
-        alcoholismo: 0,
-        año: año,
+    let loadedData = {
+        country: country,
+        code: "",
+        schizophrenia: 0,
+        bipolar_disorder: 0,
+        eating_disorder: 0,
+        anxiety_disorder: 0,
+        drug_use_disorder: 0,
+        depression: 0,
+        alcoholism: 0,
+        year: year,
     };
 
     let errorMsg = "";
     let confirmation = "";
 
-    // Función para obtener los datos del país y año especificados
-    async function obtenerDatos() {
+    async function fetchData() {
         try {
-            let response = await fetch(API + "/" + pais + "/" + año, {
+            let response = await fetch(`${API}/${country}/${year}`, {
                 method: "GET",
             });
 
-            // Obtener los datos de la respuesta
             let data = await response.json();
             console.log(data);
             let status = await response.status;
-            if (status == 200) {
-                datosCargados = data;
-                confirmation = "Acción realizada correctamente";
+            if (status === 200) {
+                loadedData = data;
+                confirmation = "Operación completada correctamente";
                 errorMsg = "";
-            } else if (status == 404) {
+            } else if (status === 404) {
                 errorMsg = "No hay datos disponibles";
                 confirmation = "";
             }
@@ -59,22 +52,21 @@
         }
     }
 
-    // Función para actualizar los datos mediante el método PUT
-    async function actualizarDatos() {
+    async function updateData() {
         try {
             let newData = {
-                pais: datosCargados.pais,
-                esquizofrenia: datosCargados.esquizofrenia,
-                trastorno_bipolar: datosCargados.trastorno_bipolar,
-                trastorno_alimentario: datosCargados.trastorno_alimentario,
-                trastorno_ansiedad: datosCargados.trastorno_ansiedad,
-                trastorno_consumo_drogas: datosCargados.trastorno_consumo_drogas,
-                depresion: datosCargados.depresion,
-                alcoholismo: datosCargados.alcoholismo,
-                año: datosCargados.año,
+                country: loadedData.country,
+                schizophrenia: loadedData.schizophrenia,
+                bipolar_disorder: loadedData.bipolar_disorder,
+                eating_disorder: loadedData.eating_disorder,
+                anxiety_disorder: loadedData.anxiety_disorder,
+                drug_use_disorder: loadedData.drug_use_disorder,
+                depression: loadedData.depression,
+                alcoholism: loadedData.alcoholism,
+                year: loadedData.year,
             };
 
-            let response = await fetch(API + "/" + pais + "/" + año, {
+            let response = await fetch(`${API}/${country}/${year}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,22 +74,21 @@
                 body: JSON.stringify(newData),
             });
 
-            // Obtener el estado de la respuesta
             let status = await response.status;
             console.log(`Código de estado: ${status}`);
-            if (status == 200) {
-                obtenerDatos();
+            if (status === 200) {
+                fetchData();
                 errorMsg = "";
-                confirmation = "Acción realizada correctamente";
+                confirmation = "Operación completada correctamente";
             } else {
-                if (status == 404) {
+                if (status === 404) {
                     errorMsg = "No existe un dato para este país y año";
                     confirmation = "";
-                } else if (status == 400) {
-                    errorMsg = "No se han completado los campos de manera correcta";
+                } else if (status === 400) {
+                    errorMsg = "Campos incompletos o incorrectos";
                     confirmation = "";
                 } else {
-                    errorMsg = "Error " + status;
+                    errorMsg = `Error ${status}`;
                     confirmation = "";
                 }
             }
@@ -107,7 +98,8 @@
     }
 </script>
 
-Detalles del dato del país: {pais} para el año {año}.
+<p>Detalles del dato del país: {country} para el año {year}.</p>
+
 <table>
     <thead>
         <tr>
@@ -125,48 +117,26 @@ Detalles del dato del país: {pais} para el año {año}.
     </thead>
     <tbody>
         <tr>
-            <td>
-                <input bind:value={datosCargados.pais} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.codigo} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.esquizofrenia} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.trastorno_bipolar} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.trastorno_alimentario} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.trastorno_ansiedad} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.trastorno_consumo_drogas} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.depresion} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.alcoholismo} />
-            </td>
-            <td>
-                <input bind:value={datosCargados.año} />
-            </td>
+            <td><input bind:value={loadedData.country} /></td>
+            <td><input bind:value={loadedData.code} /></td>
+            <td><input bind:value={loadedData.schizophrenia} /></td>
+            <td><input bind:value={loadedData.bipolar_disorder} /></td>
+            <td><input bind:value={loadedData.eating_disorder} /></td>
+            <td><input bind:value={loadedData.anxiety_disorder} /></td>
+            <td><input bind:value={loadedData.drug_use_disorder} /></td>
+            <td><input bind:value={loadedData.depression} /></td>
+            <td><input bind:value={loadedData.alcoholism} /></td>
+            <td><input bind:value={loadedData.year} /></td>
         </tr>
     </tbody>
 </table>
 
-<button on:click={actualizarDatos}>Actualizar el dato</button>
+<button on:click={updateData}>Actualizar dato</button>
 
 {#if confirmation != ""}
-    <hr />
-    {confirmation}
+    <p>{confirmation}</p>
 {/if}
 
 {#if errorMsg != ""}
-    <hr />
-    ERROR: {errorMsg}
+    <p>ERROR: {errorMsg}</p>
 {/if}
