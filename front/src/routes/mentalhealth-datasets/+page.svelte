@@ -33,7 +33,6 @@
             const response = await fetch(API + "/loadInitialData", { method: "GET" });
             const status = response.status;
             if (status === 201) {
-                getData();
                 confirmation = "Datos cargados correctamente";
             } else {
                 errorMsg = `Error ${status}: Los datos ya han sido cargados`;
@@ -97,7 +96,6 @@
             const response = await fetch(API + API + "/" + country + "/" + year, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
-                getData();
                 confirmation = "Dato eliminado correctamente";
             } else {
                 errorMsg = `Error ${status}: No se pudo eliminar el dato`;
@@ -128,7 +126,7 @@
     </table>
 
     <ul>
-        <!-- Lista para mostrar los datos existentes -->
+        
         {#each dataset as data}
             <li>
                 <a href="/mentalhealth-datasets/{data.country}/{data.year}">{data.country}</a>
