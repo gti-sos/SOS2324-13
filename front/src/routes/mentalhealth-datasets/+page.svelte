@@ -9,7 +9,7 @@
 
     let dataset = [];
     let newData = {
-        country: "country",
+        country: "country ",
         code: "code",
         schizophrenia: 0,
         bipolar_disorder: 0,
