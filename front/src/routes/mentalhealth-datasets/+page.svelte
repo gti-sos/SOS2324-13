@@ -92,18 +92,22 @@
     }
 
     async function deleteData(country, year) {
-        try {
-            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
-            const status = response.status;
-            if (status === 200) {
-                confirmation = "Dato eliminado correctamente";
-            } else {
-                errorMsg = `Error ${status}: No se pudo eliminar el dato`;
-            }
-        } catch (error) {
-            errorMsg = error.message;
+    try {
+        const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
+        const status = response.status;
+        if (status === 200) {
+            // Eliminar el dato del conjunto de datos local
+            dataset = dataset.filter(data => data.country !== country || data.year !== year);
+            confirmation = "Dato eliminado correctamente";
+        } else if (status === 404) {
+            errorMsg = `Error ${status}: No se encontró el dato a eliminar`;
+        } else {
+            errorMsg = `Error ${status}: No se pudo eliminar el dato`;
         }
+    } catch (error) {
+        errorMsg = error.message;
     }
+}
 </script>
 
 <div>

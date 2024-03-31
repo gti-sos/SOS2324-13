@@ -24,10 +24,12 @@
         year: ""
     };
 
+    let confirmationMessage = ""; // Mensaje de confirmación
+
     // Función para cargar los datos del país y año específicos
     async function fetchData() {
         try {
-            let response = await fetch(`${API}/${country}/${year}`, {
+            let response = await fetch(API + "/" + country + "/" + year, {
                 method: "GET",
             });
 
@@ -47,7 +49,7 @@
     // Función para actualizar los datos
     async function updateData() {
         try {
-            let response = await fetch(`${API}/${country}/${year}`, {
+            let response = await fetch(API + "/" + country + "/" + year, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -58,7 +60,7 @@
             // Verificar el estado de la respuesta
             if (response.ok) {
                 fetchData(); // Recargar los datos después de la actualización
-                console.log("Operación completada correctamente");
+                confirmationMessage = "Datos actualizados correctamente"; // Actualizar el mensaje de confirmación
             } else if (response.status === 404) {
                 console.log("No existe un dato para este país y año");
             } else if (response.status === 400) {
@@ -111,3 +113,7 @@
 </table>
 
 <button on:click={updateData}>Actualizar dato </button>
+
+{#if confirmationMessage}
+    <p>{confirmationMessage}</p>
+{/if}
