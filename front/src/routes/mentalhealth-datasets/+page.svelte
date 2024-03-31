@@ -121,16 +121,16 @@
         <!-- Inputs para agregar nuevos datos -->
         <tbody>
             <tr>
-                <td><input bind:value={newData.country} /></td>
-                <td><input bind:value={newData.code} /></td>
-                <td><input bind:value={newData.schizophrenia} /></td>
-                <td><input bind:value={newData.bipolar_disorder} /></td>
-                <td><input bind:value={newData.eating_disorder} /></td>
-                <td><input bind:value={newData.anxiety_disorder} /></td>
-                <td><input bind:value={newData.drug_use_disorder} /></td>
-                <td><input bind:value={newData.depression} /></td>
-                <td><input bind:value={newData.alcoholism} /></td>
-                <td><input bind:value={newData.year} /></td>
+                <td><input bind:value={newData.country} /> <!-- country --></td>
+                <td><input bind:value={newData.code} /> <!-- code --></td>
+                <td><input bind:value={newData.schizophrenia} /> <!-- schizophrenia --></td>
+                <td><input bind:value={newData.bipolar_disorder} /> <!-- bipolar_disorder --></td>
+                <td><input bind:value={newData.eating_disorder} /> <!-- eating_disorder --></td>
+                <td><input bind:value={newData.anxiety_disorder} /> <!-- anxiety_disorder --></td>
+                <td><input bind:value={newData.drug_use_disorder} /> <!-- drug_use_disorder --></td>
+                <td><input bind:value={newData.depression} /> <!-- depression --></td>
+                <td><input bind:value={newData.alcoholism} /> <!-- alcoholism --></td>
+                <td><input bind:value={newData.year} /> <!-- year --></td>
             </tr>
         </tbody>
     </table>
@@ -163,64 +163,3 @@
     {/if}
 </div>
 
-<table>
-    <thead>
-        <tr>
-            <th> País </th>
-            <th> Código </th>
-            <th> Esquizofrenia </th>
-            <th> Desorden bipolar </th>
-            <th> Desorden de comida </th>
-            <th> Desorden de ansiedad </th>
-            <th> Desorden de uso de drogas </th>
-            <th> Depresion </th>
-            <th> Alcoholismo</th>
-            <th> Año </th>  
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <input bind:value={newData.country} />
-            </td>
-            <td>
-                <input bind:value={newData.wri} />
-            </td>
-            <td>
-                <input bind:value={newData.exposure} />
-            </td>
-            <td>
-                <input bind:value={newData.vulnerability} />
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input bind:value={newData.susceptibility} />
-            </td>
-            <td>
-                <input bind:value={newData.lack_of_coping_capability} />
-            </td>
-            <td>
-                <input bind:value={newData.lack_of_adaptive_capacity} />
-            </td>
-            <td>
-                <input bind:value={newData.year} />
-            </td>
-        </tr>
-       
-        <tr>
-            <td>
-                <input bind:value={newData.exposure_category} />
-            </td>
-            <td>
-                <input bind:value={newData.wri_category} />
-            </td>
-            <td>
-                <input bind:value={newData.vulnerability_category} />
-            </td>
-            <td>
-                <input bind:value={newData.susceptibility_category} />
-            </td>
-        </tr>
-    </tbody>
-</table>
