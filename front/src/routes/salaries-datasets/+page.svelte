@@ -8,18 +8,16 @@
 
     let dataset = [];
     let newData = {
-        country: "",
-        code: "",
-        salary: 0,
-        primary_database: "",
-        time_with_this_database: 0,
-        employment_state: "",
-        job_title: "",
-        manage_staff: "",
-        time_in_current_job: 0,
-        other_people_on_your_team: 0,
-        magnitude_of_company: "",
-        sector: ""
+        country: "country ",
+        code: "code",
+        schizophrenia: 0,
+        bipolar_disorder: 0,
+        eating_disorder: 0,
+        anxiety_disorder: 0,
+        drug_use_disorder: 0,
+        depression: 0,
+        alcoholism: 0,
+        year: 0,
     };
 
     let errorMsg = "";
@@ -50,7 +48,7 @@
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
-                confirmation = "Datos obtenidos correctamente";
+                confirmation = "Datos obtenidos";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes";
@@ -72,7 +70,7 @@
             const status = response.status;
             if (status === 201) {
                 getData();
-                confirmation = "Nuevo dato creado ";
+                confirmation = "Nuevo dato creado";
             } else {
                 errorMsg = `Error ${status}: No se pudo crear el dato`;
             }
