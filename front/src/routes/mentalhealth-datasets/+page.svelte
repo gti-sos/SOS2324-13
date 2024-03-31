@@ -149,6 +149,6 @@
         <div>{confirmation}</div>
     {/if}
     {#if errorMsg != ""}
-        <div>Error: {errorMsg}</div>
+        <div>Error: {errorMsg }</div>
     {/if}
 </div>
