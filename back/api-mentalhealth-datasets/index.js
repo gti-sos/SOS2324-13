@@ -1,23 +1,14 @@
-const API_BASE = '/api/v2/mentalhealth-datasets';
+const API_BASE = '/api/v1/mentalhealth-datasets';
 
 // Datos de ejemplo
 function loadMentalApi(app, dbMental) {
 
 
-    // Ruta para redirigir al portal de documentación de Postman v1
+    // Ruta para redirigir al portal de documentación de Postman
     app.get('/api/v1/mentalhealth-datasets/docs', (req, res) => {
         // Redirigir al portal de documentación de Postman
         res.redirect('https://documenter.getpostman.com/view/32965348/2sA2xh1rtd');
     });
-
-
-    // PAGINA "/DOCS" v2
-    // GET -- OK
-    app.get(API_BASE + '/docs', (req, res) => {
-        res.redirect();
-    });
-
-
 
 
 
@@ -272,28 +263,6 @@ function loadMentalApi(app, dbMental) {
                 return;
 
             }
-            // Validamos cada campo
-        for (const field of expectedFields) {
-            // Verificar si el campo está presente
-            if (!newData[field]) {
-                return res.status(400).json({ error: `400, Bad Request: Field '${field}' is missing` });
-            }
-
-            // Verificar el tipo de campo según los requisitos
-            if (field === 'year') {
-                if (!Number.isInteger(newData[field])) {
-                    return res.status(400).json({ error: `400, Bad Request: Field 'year' must be an integer` });
-                }
-            } else if (['schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'].includes(field)) {
-                if (typeof newData[field] !== 'number') {
-                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
-                }
-            } else {
-                if (typeof newData[field] !== 'string') {
-                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a string` });
-                }
-            }
-        }
 
             dbMental.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
                 if (err) {
