@@ -92,7 +92,7 @@
 
     async function deleteData(country, year) {
         try {
-            const response = await fetch(API + "/country/" + country + "/year/" + year, { method: "DELETE" });
+            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
                 // Eliminar el dato del conjunto de datos local
