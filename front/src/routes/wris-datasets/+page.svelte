@@ -154,98 +154,167 @@
             errorMsg = e;
         }
     }
-
 </script>
 
-<table>
-    <thead>
-        <tr>
-            <th> País </th>
-            <th> Índice de Riesgo </th>
-            <th> Exposición </th>
-            <th> Vulnerabilidad </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <input bind:value={newData.country} />
-            </td>
-            <td>
-                <input bind:value={newData.wri} />
-            </td>
-            <td>
-                <input bind:value={newData.exposure} />
-            </td>
-            <td>
-                <input bind:value={newData.vulnerability} />
-            </td>
-        </tr>
-        <tr>
-            <th> Susceptibilidad </th>
-            <th> Falta de capacidad de afrontamiento </th>
-            <th> Falta de capacidad adaptativa </th>
-            <th> Año </th>
-        </tr>
-        <tr>
-            <td>
-                <input bind:value={newData.susceptibility} />
-            </td>
-            <td>
-                <input bind:value={newData.lack_of_coping_capability} />
-            </td>
-            <td>
-                <input bind:value={newData.lack_of_adaptive_capacity} />
-            </td>
-            <td>
-                <input bind:value={newData.year} />
-            </td>
-        </tr>
-        <tr>
-            <th> Categoría de Exposición </th>
-            <th> Categoría del Índice de Riesgo </th>
-            <th> Categoría de Vulnerabilidad </th>
-            <th> Categoría de Susceptibilidad </th>
-        </tr>
-        <tr>
-            <td>
-                <input bind:value={newData.exposure_category} />
-            </td>
-            <td>
-                <input bind:value={newData.wri_category} />
-            </td>
-            <td>
-                <input bind:value={newData.vulnerability_category} />
-            </td>
-            <td>
-                <input bind:value={newData.susceptibility_category} />
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="contenedor">
+    <div class="titulo">
+        <h2>Datos de World Risk Index</h2>
+    </div>
 
-<ul>
-    {#each dataset as data}
-        <li>
-            <a href="/wris-datasets/{data.country}/{data.year}">{data.country}</a>
-            {data.country}, {data.wri}, {data.exposure}, {data.vulnerability}, {data.susceptibility}, {data.lack_of_coping_capability}, {data.lack_of_adaptive_capacity}, {data.year}, {data.exposure_category}, {data.wri_category}, {data.vulnerability_category}, {data.susceptibility_category}
-            <button on:click={deleteData(data.country, data.year)}
-                >Eliminar</button
-            >
-        </li>
-    {/each}
-</ul>
-<button on:click={loadData}>Cargar datos de prueba</button>
-<button on:click={getData}>Obtener todos los datos</button>
-<button on:click={createData}>Crear un nuevo dato</button>
-<button on:click={deleteAllData}>Eliminar todos los datos</button>
+    <table class="tablaCampos">
+        <thead>
+            <tr>
+                <th> País </th>
+                <th> Índice de Riesgo </th>
+                <th> Exposición </th>
+                <th> Vulnerabilidad </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input bind:value={newData.country} />
+                </td>
+                <td>
+                    <input bind:value={newData.wri} />
+                </td>
+                <td>
+                    <input bind:value={newData.exposure} />
+                </td>
+                <td>
+                    <input bind:value={newData.vulnerability} />
+                </td>
+            </tr>
+            <tr>
+                <th> Susceptibilidad </th>
+                <th> Falta de capacidad de afrontamiento </th>
+                <th> Falta de capacidad adaptativa </th>
+                <th> Año </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={newData.susceptibility} />
+                </td>
+                <td>
+                    <input bind:value={newData.lack_of_coping_capability} />
+                </td>
+                <td>
+                    <input bind:value={newData.lack_of_adaptive_capacity} />
+                </td>
+                <td>
+                    <input bind:value={newData.year} />
+                </td>
+            </tr>
+            <tr>
+                <th> Categoría de Exposición </th>
+                <th> Categoría del Índice de Riesgo </th>
+                <th> Categoría de Vulnerabilidad </th>
+                <th> Categoría de Susceptibilidad </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={newData.exposure_category} />
+                </td>
+                <td>
+                    <input bind:value={newData.wri_category} />
+                </td>
+                <td>
+                    <input bind:value={newData.vulnerability_category} />
+                </td>
+                <td>
+                    <input bind:value={newData.susceptibility_category} />
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-{#if confirmation != ""}
-    <hr />
-    {confirmation}
-{/if}
+    <ul>
+        {#each dataset as data}
+            <li>
+                <a href="/wris-datasets/{data.country}/{data.year}"
+                    >{data.country}</a
+                >
+                {data.country}, {data.wri}, {data.exposure}, {data.vulnerability},
+                {data.susceptibility},
+                {data.lack_of_coping_capability}, {data.lack_of_adaptive_capacity},
+                {data.year},
+                {data.exposure_category}, {data.wri_category}, {data.vulnerability_category},
+                {data.susceptibility_category}
+                <button on:click={deleteData(data.country, data.year)}
+                    >Eliminar</button
+                >
+            </li>
+        {/each}
+    </ul>
 
-{#if errorMsg != ""}
-    <hr />
-    ERROR: {errorMsg}
-{/if}
+    <div class="botones">
+        <button on:click={loadData}>Cargar datos de prueba</button>
+        <button on:click={getData}>Obtener todos los datos</button>
+        <button on:click={createData}>Crear un nuevo dato</button>
+        <button on:click={deleteAllData}>Eliminar todos los datos</button>
+    </div>
+
+    {#if confirmation != ""}
+        <hr />
+        <div class="conf">{confirmation}.</div>
+    {/if}
+
+    {#if errorMsg != ""}
+        <hr />
+        <div class="err">ERROR: {errorMsg}</div>
+    {/if}
+</div>
+
+<style>
+    .contenedor {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    .titulo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .botones button {
+        background-color: rgb(6, 0, 88);
+        color: whitesmoke;
+        align-content: center;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .tablaCampos {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .tablaCampos th,
+    .tablaCampos td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .tablaCampos th {
+        background-color: #f2f2f2f5;
+    }
+
+    .tablaCampos input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .conf {
+        color: #3b8834;
+    }
+
+    .err {
+        color: red;
+    }
+</style>

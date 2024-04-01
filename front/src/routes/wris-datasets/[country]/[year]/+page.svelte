@@ -110,83 +110,144 @@
     }
 </script>
 
-<h3>Detalles del dato del país: {ldcountry} para el año {ldyear}.</h3>
-<br />
-<table>
-    <thead>
-        <tr>
-            <th> País </th>
-            <th> Índice de Riesgo </th>
-            <th> Exposición </th>
-            <th> Vulnerabilidad </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                <input bind:value={loadedData.country} />
-            </td>
-            <td>
-                <input bind:value={loadedData.wri} />
-            </td>
-            <td>
-                <input bind:value={loadedData.exposure} />
-            </td>
-            <td>
-                <input bind:value={loadedData.vulnerability} />
-            </td>
-        </tr>
-        <tr>
-            <th> Susceptibilidad </th>
-            <th> Falta de capacidad de afrontamiento </th>
-            <th> Falta de capacidad adaptativa </th>
-            <th> Año </th>
-        </tr>
-        <tr>
-            <td>
-                <input bind:value={loadedData.susceptibility} />
-            </td>
-            <td>
-                <input bind:value={loadedData.lack_of_coping_capability} />
-            </td>
-            <td>
-                <input bind:value={loadedData.lack_of_adaptive_capacity} />
-            </td>
-            <td>
-                <input bind:value={loadedData.year} />
-            </td>
-        </tr>
-        <tr>
-            <th> Categoría de Exposición </th>
-            <th> Categoría del Índice de Riesgo </th>
-            <th> Categoría de Vulnerabilidad </th>
-            <th> Categoría de Susceptibilidad </th>
-        </tr>
-        <tr>
-            <td>
-                <input bind:value={loadedData.exposure_category} />
-            </td>
-            <td>
-                <input bind:value={loadedData.wri_category} />
-            </td>
-            <td>
-                <input bind:value={loadedData.vulnerability_category} />
-            </td>
-            <td>
-                <input bind:value={loadedData.susceptibility_category} />
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="contenedor">
+    <div class="titulo">
+        <h2>Detalles del dato del país: {ldcountry} para el año {ldyear}.</h2>
+    </div>
+    <br />
 
-<button on:click={updateData}>Actualizar el dato</button>
+    <table class="tablaCampos">
+        <thead>
+            <tr>
+                <th> País </th>
+                <th> Índice de Riesgo </th>
+                <th> Exposición </th>
+                <th> Vulnerabilidad </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input bind:value={loadedData.country} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.wri} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.exposure} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.vulnerability} />
+                </td>
+            </tr>
+            <tr>
+                <th> Susceptibilidad </th>
+                <th> Falta de capacidad de afrontamiento </th>
+                <th> Falta de capacidad adaptativa </th>
+                <th> Año </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={loadedData.susceptibility} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.lack_of_coping_capability} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.lack_of_adaptive_capacity} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.year} />
+                </td>
+            </tr>
+            <tr>
+                <th> Categoría de Exposición </th>
+                <th> Categoría del Índice de Riesgo </th>
+                <th> Categoría de Vulnerabilidad </th>
+                <th> Categoría de Susceptibilidad </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={loadedData.exposure_category} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.wri_category} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.vulnerability_category} />
+                </td>
+                <td>
+                    <input bind:value={loadedData.susceptibility_category} />
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-{#if confirmation != ""}
-    <hr />
-    {confirmation}
-{/if}
+    <div class="botones">
+        <button on:click={updateData}>Actualizar el dato</button>
+    </div>
 
-{#if errorMsg != ""}
-    <hr />
-    ERROR: {errorMsg}
-{/if}
+    {#if confirmation != ""}
+        <hr />
+        <div class="conf">{confirmation}.</div>
+    {/if}
+
+    {#if errorMsg != ""}
+        <hr />
+        <div class="err">ERROR: {errorMsg}</div>
+    {/if}
+</div>
+
+<style>
+    .contenedor {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+    }
+
+    .titulo {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .botones button {
+        background-color: rgb(6, 0, 88);
+        color: whitesmoke;
+        align-content: center;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .tablaCampos {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .tablaCampos th,
+    .tablaCampos td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .tablaCampos th {
+        background-color: #f2f2f2f5;
+    }
+
+    .tablaCampos input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .conf {
+        color: #3b8834;
+    }
+
+    .err {
+        color: red;
+    }
+</style>
