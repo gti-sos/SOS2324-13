@@ -199,7 +199,7 @@
 
     .data-item {
         margin-bottom: 10px;
-        background-color: #f2f2f2; /* Tono grisáceo leve en el fondo */
+        background-color: #f2f2f2; 
         padding: 10px;
         border-radius: 4px;
     }
