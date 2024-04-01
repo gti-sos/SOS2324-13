@@ -227,7 +227,7 @@
     }
 
     .data-table th {
-        background-color: #f2f2f2;
+        background-color: #f2f2f2f5;
     }
 
     .data-table input {
