@@ -51,11 +51,9 @@
             if (status == 200) {
                 dataset = data;
                 confirmation = "Datos obtenidos correctamente";
-                errorMsg = "";
-            } else if (status == 404) {
-                errorMsg = "No hay datos existentes";
-                confirmation = "";
-                dataset = [];
+                
+            } else {
+                errorMsg = `Error ${status}: Los datos no se han podido obtener`;
             }
         } catch (error) {
             errorMsg = error.message;
