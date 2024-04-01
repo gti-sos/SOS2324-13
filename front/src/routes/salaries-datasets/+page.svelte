@@ -92,7 +92,7 @@
 
     async function deleteData(year, country) {
         try {
-            const response = await fetch(API + `/${country}/${year}`, { method: "DELETE" });
+            const response = await fetch(API + `/${encodeURIComponent(country)}/${year}`, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
                 dataset = dataset.filter(data => data.country !== country || data.year !== year);
@@ -131,45 +131,47 @@
     {#if errorMsg !== ""}
         <div class="error">Error: {errorMsg}</div>
     {/if}
-</div>
 
-<table>
-    <thead>
-        <tr>
-            <th> Año </th>
-            <th> Timestamp </th>
-            <th> Salario </th>
-            <th> País </th>
-            <th> Base de datos primaria </th>
-            <th> Tiempo con esta base de datos </th>
-            <th> Estado de empleo </th>
-            <th> Título del trabajo </th>
-            <th> Gestionar personal </th>
-            <th> Tiempo en el trabajo actual </th>
-            <th> Otras personas en tu equipo </th>
-            <th> Magnitud de la empresa </th>
-            <th> Sector </th>
-        </tr>
-    </thead>
-    <!-- Inputs para agregar nuevos datos -->
-    <tbody>
-        <tr>
-            <td><input bind:value={newData.year} /></td>
-            <td><input bind:value={newData.timestamp} /></td>
-            <td><input bind:value={newData.salary} /></td>
-            <td><input bind:value={newData.country} /></td>
-            <td><input bind:value={newData.primary_database} /></td>
-            <td><input bind:value={newData.time_with_this_database} /></td>
-            <td><input bind:value={newData.employment_state} /></td>
-            <td><input bind:value={newData.job_title} /></td>
-            <td><input bind:value={newData.manage_staff} /></td>
-            <td><input bind:value={newData.time_in_current_job} /></td>
-            <td><input bind:value={newData.other_people_on_your_team} /></td>
-            <td><input bind:value={newData.magnitude_of_company} /></td>
-            <td><input bind:value={newData.sector} /></td>
-        </tr>
-    </tbody>
-</table>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th> Año </th>
+                <th> Timestamp </th>
+                <th> Salario </th>
+                <th> País </th>
+                <th> Base de datos primaria </th>
+                <th> Tiempo con esta base de datos </th>
+                <th> Estado de empleo </th>
+                <th> Título del trabajo </th>
+                <th> Gestionar personal </th>
+                <th> Tiempo en el trabajo actual </th>
+                <th> Otras personas en tu equipo </th>
+                <th> Magnitud de la empresa </th>
+                <th> Sector </th>
+                <th> Acción </th>
+            </tr>
+        </thead>
+        <!-- Inputs para agregar nuevos datos -->
+        <tbody>
+            <tr>
+                <td><input bind:value={newData.year} /></td>
+                <td><input bind:value={newData.timestamp} /></td>
+                <td><input bind:value={newData.salary} /></td>
+                <td><input bind:value={newData.country} /></td>
+                <td><input bind:value={newData.primary_database} /></td>
+                <td><input bind:value={newData.time_with_this_database} /></td>
+                <td><input bind:value={newData.employment_state} /></td>
+                <td><input bind:value={newData.job_title} /></td>
+                <td><input bind:value={newData.manage_staff} /></td>
+                <td><input bind:value={newData.time_in_current_job} /></td>
+                <td><input bind:value={newData.other_people_on_your_team} /></td>
+                <td><input bind:value={newData.magnitude_of_company} /></td>
+                <td><input bind:value={newData.sector} /></td>
+                <td><button on:click={createData}>Crear</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <style>
     .container {
@@ -184,7 +186,7 @@
 
     button {
         background-color: yellow;
-        color: white;
+        color: black;
         padding: 10px 20px;
         border: none;
         border-radius: 4px;
@@ -199,7 +201,7 @@
 
     .data-item {
         margin-bottom: 10px;
-        background-color: #f2f2f2; 
+        background-color: #f2f2f2;
         padding: 10px;
         border-radius: 4px;
     }
@@ -210,5 +212,27 @@
 
     .confirmation {
         color: yellow;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .data-table th, .data-table td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .data-table th {
+        background-color: #f2f2f2;
+    }
+
+    .data-table input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
     }
 </style>
