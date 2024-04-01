@@ -41,7 +41,7 @@
             if (status == 201) {
                 getData();
                 errorMsg = "";
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Datos cargados correctamente";
             } else {
                 errorMsg = "Ya se han cargado los datos de prueba";
                 confirmation = "";
@@ -64,7 +64,7 @@
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Datos obtenidos correctamente";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes";
@@ -93,7 +93,7 @@
             if (status == 201) {
                 getData();
                 errorMsg = "";
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Dato creado correctamente";
             } else {
                 if (status == 409) {
                     errorMsg = "Ya existe un dato con este país y año";
@@ -125,7 +125,7 @@
             if (status == 200) {
                 dataset = [];
                 errorMsg = "";
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Datos eliminados correctamente";
             }
         } catch (e) {
             errorMsg = e;
@@ -145,7 +145,7 @@
             if (status == 200) {
                 getData();
                 errorMsg = "";
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Recurso eliminado correctamente";
             } else {
                 confirmation = "";
                 errorMsg = "El dato para este país y año ya no existe";

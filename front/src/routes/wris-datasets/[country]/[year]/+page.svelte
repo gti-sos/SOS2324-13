@@ -47,7 +47,7 @@
             let status = await response.status;
             if (status == 200) {
                 loadedData = data;
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Datos obtenidos correctamente";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes";
@@ -90,7 +90,7 @@
             if (status == 200) {
                 getThisData();
                 errorMsg = "";
-                confirmation = "Accion realizada correctamente";
+                confirmation = "Datos actualizados correctamente";
             } else {
                 if (status == 404) {
                     errorMsg = "No existe un dato con este país y año";
@@ -110,7 +110,8 @@
     }
 </script>
 
-Detalles del dato del país: {ldcountry} para el año {ldyear}.
+<h3>Detalles del dato del país: {ldcountry} para el año {ldyear}.</h3>
+<br />
 <table>
     <thead>
         <tr>
