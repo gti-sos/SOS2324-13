@@ -9,16 +9,16 @@
 
     let dataset = [];
     let newData = {
-        country: "",
-        code: "",
-        schizophrenia: "",
-        bipolar_disorder: "",
-        eating_disorder: "",
-        anxiety_disorder: "",
-        drug_use_disorder: "",
-        depression: "",
-        alcoholism: "",
-        year: "",
+        country: "country",
+        code: "code",
+        schizophrenia: 0,
+        bipolar_disorder: 0,
+        eating_disorder: 0,
+        anxiety_disorder: 0,
+        drug_use_disorder: 0,
+        depression: 0,
+        alcoholism: 0,
+        year: 0,
     };
 
     let errorMsg = "";
