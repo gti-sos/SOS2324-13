@@ -68,12 +68,13 @@ function loadWRIApi(app, dataset) {
 
             // aplico limit y offset
             let resultData = riskData;
-            if (limit) {
-                resultData = resultData.slice(0, parseInt(limit));
-            }
             if (offset) {
                 resultData = resultData.slice(parseInt(offset));
             }
+            if (limit) {
+                resultData = resultData.slice(0, parseInt(limit));
+            }
+            
 
             // aplico la vista personalizada
             if (fields) {

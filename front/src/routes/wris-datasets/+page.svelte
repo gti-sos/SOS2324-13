@@ -23,6 +23,8 @@
     };
     let errorMsg = "";
     let confirmation = "";
+    let currentPage = 0;
+    const pageSize = 10;
 
     onMount(() => {
         getData();
@@ -51,19 +53,30 @@
         }
     }
 
-    //Hacer un GET de todos los datos (404)
+    //Obtener todos los datos (GET de todos los recursos)
     async function getData() {
         try {
-            let response = await fetch(API, {
-                method: "GET",
-            });
+            let response;
+            if (currentPage > 0) {
+                // si estoy en una página distinta de la primera, calculamos el offset
+                const offset = currentPage * pageSize;
+                response = await fetch(
+                    API + `?offset=${offset}&limit=${pageSize}`,
+                    {
+                        method: "GET",
+                    },
+                );
+            } else {
+                // si estoy en la primera pagina (0), simplemente hacemos una petición con el límite
+                response = await fetch(API + `?limit=${pageSize}`, {
+                    method: "GET",
+                });
+            }
 
-            //Devuelve los datos
-            let data = await response.json();
-            console.log(data);
+            let respData = await response.json();
             let status = await response.status;
             if (status == 200) {
-                dataset = data;
+                dataset = respData;
                 confirmation = "Datos obtenidos correctamente.";
                 errorMsg = "";
             } else if (status == 404) {
@@ -73,6 +86,20 @@
             }
         } catch (e) {
             errorMsg = e;
+        }
+    }
+
+    // Función para ir a la página siguiente
+    function nextPage() {
+        currentPage++;
+        getData();
+    }
+
+    // Función para ir a la página anterior
+    function previousPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            getData();
         }
     }
 
@@ -91,12 +118,16 @@
             let status = await response.status;
             console.log(`Status code: ${status}`);
             if (status == 201) {
+                //aqui deberia establecer que el dataset ahora es dataset+newData
+                dataset.push(newData);
+                console.log("nuevo dataset");
+                console.log(dataset);
                 getData();
                 errorMsg = "";
                 confirmation = "Dato creado correctamente.";
             } else {
                 if (status == 409) {
-                    errorMsg = `Ya existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
+                    errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
                     confirmation = "";
                 } else if (status == 400) {
                     errorMsg =
@@ -249,9 +280,14 @@
 
     <div class="botones">
         <button on:click={loadData}>Cargar datos de prueba</button>
-        <button on:click={getData}>Obtener todos los datos</button>
+        <button on:click={getData()}>Refrescar</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
+    </div>
+
+    <div class="pagina">
+        <button on:click={previousPage}>Página anterior</button>
+        <button on:click={nextPage}>Página siguiente</button>
     </div>
 
     {#if confirmation != ""}
@@ -274,6 +310,10 @@
     .titulo {
         text-align: center;
         margin-bottom: 20px;
+    }
+
+    .pagina {
+        padding: 10px;
     }
 
     .botones button {
