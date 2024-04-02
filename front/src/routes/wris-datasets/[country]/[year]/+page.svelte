@@ -47,10 +47,10 @@
             let status = await response.status;
             if (status == 200) {
                 loadedData = data;
-                confirmation = "Datos obtenidos correctamente";
+                confirmation = "Datos obtenidos correctamente.";
                 errorMsg = "";
             } else if (status == 404) {
-                errorMsg = "No hay datos existentes";
+                errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
                 confirmation = "";
             }
         } catch (e) {
@@ -90,14 +90,14 @@
             if (status == 200) {
                 getThisData();
                 errorMsg = "";
-                confirmation = "Datos actualizados correctamente";
+                confirmation = "Dato actualizado correctamente.";
             } else {
                 if (status == 404) {
-                    errorMsg = "No existe un dato con este país y año";
+                    errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
                     confirmation = "";
                 } else if (status == 400) {
                     errorMsg =
-                        "No se han completado los campos de manera correcta";
+                        "No se han completado los campos de manera correcta.";
                     confirmation = "";
                 } else {
                     errorMsg = "Error " + status;

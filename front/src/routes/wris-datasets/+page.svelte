@@ -41,9 +41,9 @@
             if (status == 201) {
                 getData();
                 errorMsg = "";
-                confirmation = "Datos cargados correctamente";
+                confirmation = "Datos cargados correctamente.";
             } else {
-                errorMsg = "Ya se han cargado los datos de prueba";
+                errorMsg = "Ya se han cargado los datos de prueba.";
                 confirmation = "";
             }
         } catch (e) {
@@ -64,10 +64,10 @@
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
-                confirmation = "Datos obtenidos correctamente";
+                confirmation = "Datos obtenidos correctamente.";
                 errorMsg = "";
             } else if (status == 404) {
-                errorMsg = "No hay datos existentes";
+                errorMsg = "No hay datos existentes.";
                 confirmation = "";
                 dataset = [];
             }
@@ -93,14 +93,14 @@
             if (status == 201) {
                 getData();
                 errorMsg = "";
-                confirmation = "Dato creado correctamente";
+                confirmation = "Dato creado correctamente.";
             } else {
                 if (status == 409) {
-                    errorMsg = "Ya existe un dato con este país y año";
+                    errorMsg = `Ya existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
                     confirmation = "";
                 } else if (status == 400) {
                     errorMsg =
-                        "No se han completado los campos de manera correcta";
+                        "No se han completado los campos de manera correcta.";
                     confirmation = "";
                 } else {
                     errorMsg = "Error " + status;
@@ -125,7 +125,7 @@
             if (status == 200) {
                 dataset = [];
                 errorMsg = "";
-                confirmation = "Datos eliminados correctamente";
+                confirmation = "Datos eliminados correctamente.";
             }
         } catch (e) {
             errorMsg = e;
@@ -145,10 +145,10 @@
             if (status == 200) {
                 getData();
                 errorMsg = "";
-                confirmation = "Recurso eliminado correctamente";
+                confirmation = "Recurso eliminado correctamente.";
             } else {
                 confirmation = "";
-                errorMsg = "El dato para este país y año ya no existe";
+                errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
             }
         } catch (e) {
             errorMsg = e;
@@ -256,7 +256,7 @@
 
     {#if confirmation != ""}
         <hr />
-        <div class="conf">{confirmation}.</div>
+        <div class="conf">{confirmation}</div>
     {/if}
 
     {#if errorMsg != ""}
