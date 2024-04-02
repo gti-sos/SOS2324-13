@@ -77,7 +77,6 @@
             let status = await response.status;
             if (status == 200) {
                 dataset = respData;
-                confirmation = "Datos obtenidos correctamente.";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes.";
@@ -261,9 +260,11 @@
 
     <ul>
         {#each dataset as data}
-            <li>
-                <a href="/wris-datasets/{data.country}/{data.year}"
-                    >{data.country}</a
+            <li class="objetoDeLista">
+                <a
+                    class="irDato"
+                    href="/wris-datasets/{data.country}/{data.year}"
+                    >Ir al dato</a
                 >
                 {data.country}, {data.wri}, {data.exposure}, {data.vulnerability},
                 {data.susceptibility},
@@ -271,7 +272,9 @@
                 {data.year},
                 {data.exposure_category}, {data.wri_category}, {data.vulnerability_category},
                 {data.susceptibility_category}
-                <button on:click={deleteData(data.country, data.year)}
+                <button
+                    class="eliminarDato"
+                    on:click={deleteData(data.country, data.year)}
                     >Eliminar</button
                 >
             </li>
@@ -280,14 +283,10 @@
 
     <div class="botones">
         <button on:click={loadData}>Cargar datos de prueba</button>
-        <button on:click={getData()}>Refrescar</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
-    </div>
-
-    <div class="pagina">
-        <button on:click={previousPage}>Página anterior</button>
-        <button on:click={nextPage}>Página siguiente</button>
+        <button id="pagAv" on:click={previousPage}>Página anterior</button>
+        <button id="pagNe" on:click={nextPage}>Página siguiente</button>
     </div>
 
     {#if confirmation != ""}
@@ -312,10 +311,6 @@
         margin-bottom: 20px;
     }
 
-    .pagina {
-        padding: 10px;
-    }
-
     .botones button {
         background-color: rgb(6, 0, 88);
         color: whitesmoke;
@@ -325,6 +320,40 @@
         border-radius: 4px;
         cursor: pointer;
         margin-right: 10px;
+    }
+
+    .irDato {
+        background-color: rgb(71, 64, 176);
+        color: whitesmoke;
+        align-content: center;
+        border: none;
+        border-radius: 6px;
+        padding: 3px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .eliminarDato {
+        background-color: rgb(139, 0, 0);
+        color: whitesmoke;
+        align-content: center;
+        align-content: center;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    #pagAv {
+        background-color: rgb(63, 63, 63);
+    }
+
+    #pagNe {
+        background-color: rgb(63, 63, 63);
+    }
+
+    .objetoDeLista {
+        padding: 3px;
     }
 
     .tablaCampos {

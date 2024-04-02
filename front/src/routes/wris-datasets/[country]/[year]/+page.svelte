@@ -47,7 +47,6 @@
             let status = await response.status;
             if (status == 200) {
                 loadedData = data;
-                confirmation = "Datos obtenidos correctamente.";
                 errorMsg = "";
             } else if (status == 404) {
                 errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
@@ -189,7 +188,7 @@
 
     {#if confirmation != ""}
         <hr />
-        <div class="conf">{confirmation}.</div>
+        <div class="conf">{confirmation}</div>
     {/if}
 
     {#if errorMsg != ""}
@@ -217,6 +216,7 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        margin-top: 15px;
         margin-right: 10px;
     }
 
