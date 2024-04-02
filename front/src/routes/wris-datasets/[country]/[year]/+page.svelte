@@ -68,7 +68,7 @@
                 susceptibility: loadedData.susceptibility,
                 lack_of_coping_capability: loadedData.lack_of_coping_capability,
                 lack_of_adaptive_capacity: loadedData.lack_of_adaptive_capacity,
-                year: loadedData.year,
+                year: parseInt(loadedData.year),
                 exposure_category: loadedData.exposure_category,
                 wri_category: loadedData.wri_category,
                 vulnerability_category: loadedData.vulnerability_category,
@@ -95,6 +95,7 @@
                     errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
                     confirmation = "";
                 } else if (status == 400) {
+                    console.log(newData);
                     errorMsg =
                         "No se han completado los campos de manera correcta.";
                     confirmation = "";
