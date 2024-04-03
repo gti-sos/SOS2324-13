@@ -38,7 +38,7 @@
             console.log(salarie);
             let status = response.status;
             if (status == 200) {
-                salaries = data;
+                salaries = salaries;
                 confirmation = "Datos obtenidos correctamente";
                 
             } else {
@@ -128,12 +128,13 @@ async function deleteAllData() {
     <button on:click={deleteAllData}>Eliminar todos los datos</button>
 
     <ul class="data-list">
-        {#each salaries as salarie}
-            <li class="data-item">
-                <span>{salarie.year}, {salarie.timestamp}, {salarie.salary}, {salarie.country}, {salarie.primary_database}, {salarie.time_with_this_database}, {salarie.employment_state}, {salarie.job_title}, {salarie.manage_staff}, {salarie.time_in_current_job}, {salarie.other_people_on_your_team}, {salarie.magnitude_of_company}, {salarie.sector}</span>
-                <button on:click={() => deleteData(salarie.year, salarie.country)}>Eliminar</button>
-            </li>
-        {/each}
+        {#each salaries as salaries}
+    <li class="data-item">
+        <span>{salaries.year}, {salaries.timestamp}, {salaries.salary}, {salaries.country}, {salaries.primary_database}, {salaries.time_with_this_database}, {salaries.employment_state}, {salaries.job_title}, {salaries.manage_staff}, {salaries.time_in_current_job}, {salaries.other_people_on_your_team}, {salaries.magnitude_of_company}, {salaries.sector}</span>
+        <button on:click={() => deleteData(salaries.year, salaries.country)}>Eliminar</button>
+    </li>
+{/each}
+
     </ul>
 
     {#if confirmation !== ""}
