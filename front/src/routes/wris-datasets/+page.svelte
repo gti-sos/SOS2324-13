@@ -7,6 +7,24 @@
     if (dev) API = "http://localhost:10000" + API;
 
     let dataset = [];
+
+    //variables para la busqueda de campos
+    let from = "";
+    let to = "";
+    let country = "";
+    let wri = "";
+    let exposure = "";
+    let vulnerability = "";
+    let susceptibility = "";
+    let lack_of_coping_capability = "";
+    let lack_of_adaptive_capacity = "";
+    let year = "";
+    let exposure_category = "";
+    let wri_category = "";
+    let vulnerability_category = "";
+    let susceptibility_category = "";
+
+    //datos a crear y por defecto en la tabla
     let newData = {
         country: "country",
         wri: 0.0,
@@ -21,12 +39,23 @@
         vulnerability_category: "Very Low",
         susceptibility_category: "Very Low",
     };
+
+    //mensajes
     let errorMsg = "";
     let confirmation = "";
-    let currentPage = 0;
-    const pageSize = 10;
 
+    //offset
+    let currentPage = 0;
+    //limit
+    const pageSize = 10;
+    //estado de la tabla:
+    let mostrarTabla = false;
+
+    //cargar los datos cuando se cargue la pagina
     onMount(() => {
+        mostrarTabla = false;
+        toggleTabla();
+        limpiarCampos();
         getData();
     });
 
@@ -57,21 +86,69 @@
     async function getData() {
         try {
             let response;
+            let parametros = `?limit=${pageSize}`;
             if (currentPage > 0) {
                 // si estoy en una página distinta de la primera, calculamos el offset
                 const offset = currentPage * pageSize;
-                response = await fetch(
-                    API + `?offset=${offset}&limit=${pageSize}`,
-                    {
-                        method: "GET",
-                    },
-                );
-            } else {
-                // si estoy en la primera pagina (0), simplemente hacemos una petición con el límite
-                response = await fetch(API + `?limit=${pageSize}`, {
-                    method: "GET",
-                });
+                parametros += `&offset=${offset}`;
             }
+
+            //compruebo si se han introducido parametros de busqueda
+            if (from !== "") {
+                let parsedFrom = parseInt(from);
+                parametros += `&from=${parsedFrom}`;
+            }
+            if (to !== "") {
+                let parsedTo = parseInt(to);
+                parametros += `&to=${parsedTo}`;
+            }
+            if (country !== "") {
+                parametros += `&country=${country}`;
+            }
+            if (wri !== "") {
+                let parsedWri = parseFloat(wri);
+                parametros += `&wri=${parsedWri}`;
+            }
+            if (exposure !== "") {
+                let parsedExposure = parseFloat(exposure);
+                parametros += `&exposure=${parsedExposure}`;
+            }
+            if (vulnerability !== "") {
+                let parsedVulnerability = parseFloat(vulnerability);
+                parametros += `&vulnerability=${parsedVulnerability}`;
+            }
+            if (susceptibility !== "") {
+                let parsedSusceptibility = parseFloat(susceptibility);
+                parametros += `&susceptibility=${parsedSusceptibility}`;
+            }
+            if (lack_of_coping_capability !== "") {
+                let parsedLack_of_coping_capability = parseFloat(lack_of_coping_capability);
+                parametros += `&lack_of_coping_capability=${parsedLack_of_coping_capability}`;
+            }
+            if (lack_of_adaptive_capacity !== "") {
+                let parsedLack_of_adaptive_capacity = parseFloat(lack_of_adaptive_capacity);
+                parametros += `&lack_of_adaptive_capacity=${parsedLack_of_adaptive_capacity}`;
+            }
+            if (year !== "") {
+                let parsedYear = parseInt(year);
+                parametros += `&year=${parsedYear}`;
+            }
+            if (exposure_category !== "") {
+                parametros += `&exposure_category=${exposure_category}`;
+            }
+            if (wri_category !== "") {
+                parametros += `&wri_category=${wri_category}`;
+            }
+            if (vulnerability_category !== "") {
+                parametros += `&vulnerability_category=${vulnerability_category}`;
+            }
+            if (susceptibility_category !== "") {
+                parametros += `&susceptibility_category=${susceptibility_category}`;
+            }
+
+            response = await fetch(API + parametros, {
+                method: "GET",
+            });
 
             let respData = await response.json();
             let status = await response.status;
@@ -184,6 +261,30 @@
             errorMsg = e;
         }
     }
+
+    //ocultamos y mostramos la tabla
+    function toggleTabla() {
+        mostrarTabla = !mostrarTabla;
+    }
+
+    //vaciar todos los campos de la tabla de filtrado
+    function limpiarCampos() {
+        from = "";
+        to = "";
+        country = "";
+        wri = "";
+        exposure = "";
+        vulnerability = "";
+        susceptibility = "";
+        lack_of_coping_capability = "";
+        lack_of_adaptive_capacity = "";
+        year = "";
+        exposure_category = "";
+        wri_category = "";
+        vulnerability_category = "";
+        susceptibility_category = "";
+        getData();
+    }
 </script>
 
 <div class="contenedor">
@@ -284,10 +385,98 @@
     <div class="botones">
         <button on:click={loadData}>Cargar datos de prueba</button>
         <button on:click={createData}>Crear un nuevo dato</button>
+        <button on:click={toggleTabla}>Filtrar</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button id="pagAv" on:click={previousPage}>Página anterior</button>
         <button id="pagNe" on:click={nextPage}>Página siguiente</button>
     </div>
+
+    <table class:tabla={mostrarTabla}>
+        <thead>
+            <tr>
+                <th> País </th>
+                <th> Índice de Riesgo </th>
+                <th> Exposición </th>
+                <th> Vulnerabilidad </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <input bind:value={country} />
+                </td>
+                <td>
+                    <input bind:value={wri} />
+                </td>
+                <td>
+                    <input bind:value={exposure} />
+                </td>
+                <td>
+                    <input bind:value={vulnerability} />
+                </td>
+            </tr>
+            <tr>
+                <th> Susceptibilidad </th>
+                <th> Falta de capacidad de afrontamiento </th>
+                <th> Falta de capacidad adaptativa </th>
+                <th> Año </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={susceptibility} />
+                </td>
+                <td>
+                    <input bind:value={lack_of_coping_capability} />
+                </td>
+                <td>
+                    <input bind:value={lack_of_adaptive_capacity} />
+                </td>
+                <td>
+                    <input bind:value={year} />
+                </td>
+            </tr>
+            <tr>
+                <th> Categoría de Exposición </th>
+                <th> Categoría del Índice de Riesgo </th>
+                <th> Categoría de Vulnerabilidad </th>
+                <th> Categoría de Susceptibilidad </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={exposure_category} />
+                </td>
+                <td>
+                    <input bind:value={wri_category} />
+                </td>
+                <td>
+                    <input bind:value={vulnerability_category} />
+                </td>
+                <td>
+                    <input bind:value={susceptibility_category} />
+                </td>
+            </tr>
+            <tr>
+                <th> Datos desde el año: </th>
+                <th> Datos hasta el año: </th>
+            </tr>
+            <tr>
+                <td>
+                    <input bind:value={from} />
+                </td>
+                <td>
+                    <input bind:value={to} />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button on:click={getData}>Buscar</button>
+                </td>
+                <td>
+                    <button on:click={limpiarCampos}>Limpiar búsqueda</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
     {#if confirmation != ""}
         <hr />
@@ -385,5 +574,9 @@
 
     .err {
         color: red;
+    }
+
+    .tabla {
+        display: none;
     }
 </style>

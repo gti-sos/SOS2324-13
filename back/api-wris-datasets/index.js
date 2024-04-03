@@ -5,7 +5,7 @@ function loadWRIApi(app, dataset) {
     // PAGINA "/DOCS" v1
     // GET -- OK
     app.get('/api/v1/wris-datasets/docs', (req, res) => {
-        res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
+        res.redirect('https://documenter.getpostman.com/view/32976490/2sA35K1LT2');
     });
 
     // PAGINA "/DOCS" v2
@@ -58,10 +58,39 @@ function loadWRIApi(app, dataset) {
     app.get(API_BASE, (req, res) => {
         // EN CASO DE PONER ?limit=xx o ?offset=yy o ?fields=...,... 
         // los encuentra directamente en la peticion (forma dinámica)
-        const { limit, offset, fields, ...searchParams } = req.query;
+        const { limit, offset, fields, from, to, ...searchParams } = req.query;
+
+        // convertimos a tipo de datos adecuado 
+        const convertedSearchParams = {};
+        for (const key in searchParams) {
+            if (Object.hasOwnProperty.call(searchParams, key)) {
+                let value = searchParams[key];
+                if (key === 'year') {
+                    // Convertir a número entero
+                    value = parseInt(value);
+                } else if (['wri', 'exposure', 'vulnerability', 'susceptibility', 'lack_of_coping_capability', 'lack_of_adaptive_capacity'].includes(key)) {
+                    // Convertir a número de punto flotante
+                    value = parseFloat(value);
+                }
+                // Agregar el valor convertido al objeto de parámetros de búsqueda
+                convertedSearchParams[key] = value;
+            }
+        }
+
+        // Construir objeto de búsqueda para el atributo 'year'
+        const yearSearch = {};
+        if (from !== undefined) {
+            yearSearch['$gte'] = parseInt(from);
+        }
+        if (to !== undefined) {
+            yearSearch['$lte'] = parseInt(to);
+        }
+        if (Object.keys(yearSearch).length > 0) {
+            convertedSearchParams['year'] = yearSearch;
+        }
 
         // obtengo los datos del dataset
-        dataset.find(searchParams, (err, riskData) => {
+        dataset.find(convertedSearchParams, (err, riskData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
@@ -74,7 +103,7 @@ function loadWRIApi(app, dataset) {
             if (limit) {
                 resultData = resultData.slice(0, parseInt(limit));
             }
-            
+
 
             // aplico la vista personalizada
             if (fields) {

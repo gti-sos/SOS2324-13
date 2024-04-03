@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "7e2a1c16-fd5d-4567-8e5d-19a3f00989f7",
-		"name": "SOS2324-13 rubromgui",
-		"description": "Mi colección de APIs para SOS-2324, grupo 13. Hay dos entornos, el entorno local (definido como localhost:10000) y el entorno de gcloud (por defecto y definido como https://sos2324-13.appspot.com).\n\n  \nDesarrollado por Rubén Romero Guisado.",
+		"name": "SOS2324-13 rubromgui v2",
+		"description": "Mi colección de APIs v2 para SOS-2324, grupo 13. Hay dos entornos, el entorno local (definido como localhost:10000) y el entorno de gcloud (por defecto y definido como [https://sos2324-13.appspot.com](https://sos2324-13.appspot.com)).\n\nDesarrollado por Rubén Romero Guisado.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32976490"
 	},
@@ -225,6 +225,58 @@
 					],
 					"path": [
 						"Kiribati"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "2010"
+						},
+						{
+							"key": "to",
+							"value": "2014"
+						}
+					]
+				},
+				"description": "Obtiene los datos (o dato) para un país concreto comprendidos en un rango de años (ambos inclusive)."
+			},
+			"response": []
+		},
+		{
+			"name": "GET ?from-to",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(8)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}{{wrisAPI}}/?from=2010&to=2014",
+					"host": [
+						"{{SERVER}}{{wrisAPI}}"
+					],
+					"path": [
+						""
 					],
 					"query": [
 						{
@@ -601,7 +653,8 @@
 							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -610,7 +663,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"wri\": 8.00,\r\n    \"exposure\": 2.00,\r\n    \"vulnerability\": 40.00,\r\n    \"susceptibility\": 80.00,\r\n    \"lack_of_coping_capability\": 83.00,\r\n    \"lack_of_adaptive_capacity\": 42.00,\r\n    \"year\": 2024,\r\n    \"exposure_category\": \"Very High\",\r\n    \"wri_category\": \"Very High\",\r\n    \"vulnerability_category\": \"High\",\r\n    \"susceptibility_category\": \"High\"\r\n}",
+					"raw": "{\r\n    \"wri\": 2.00,\r\n    \"wri_category\": \"Very Low\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -762,12 +815,12 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati/2011",
+					"raw": "{{SERVER}}{{wrisAPI}}/Kiribati/2013",
 					"host": [
 						"{{SERVER}}{{wrisAPI}}"
 					],
 					"path": [
-						"Guatemala",
+						"Kiribati",
 						"2013"
 					]
 				},
