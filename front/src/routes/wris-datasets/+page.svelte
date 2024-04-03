@@ -6,7 +6,7 @@
 
     if (dev) API = "http://localhost:10000" + API;
 
-    let dataset = []; 
+    let dataset = [];
 
     //variables para la busqueda de campos
     let from = "";
@@ -122,11 +122,15 @@
                 parametros += `&susceptibility=${parsedSusceptibility}`;
             }
             if (lack_of_coping_capability !== "") {
-                let parsedLack_of_coping_capability = parseFloat(lack_of_coping_capability);
+                let parsedLack_of_coping_capability = parseFloat(
+                    lack_of_coping_capability,
+                );
                 parametros += `&lack_of_coping_capability=${parsedLack_of_coping_capability}`;
             }
             if (lack_of_adaptive_capacity !== "") {
-                let parsedLack_of_adaptive_capacity = parseFloat(lack_of_adaptive_capacity);
+                let parsedLack_of_adaptive_capacity = parseFloat(
+                    lack_of_adaptive_capacity,
+                );
                 parametros += `&lack_of_adaptive_capacity=${parsedLack_of_adaptive_capacity}`;
             }
             if (year !== "") {
@@ -391,92 +395,96 @@
         <button id="pagNe" on:click={nextPage}>Página siguiente</button>
     </div>
 
-    <table class:tabla={mostrarTabla}>
-        <thead>
-            <tr>
-                <th> País </th>
-                <th> Índice de Riesgo </th>
-                <th> Exposición </th>
-                <th> Vulnerabilidad </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <input bind:value={country} />
-                </td>
-                <td>
-                    <input bind:value={wri} />
-                </td>
-                <td>
-                    <input bind:value={exposure} />
-                </td>
-                <td>
-                    <input bind:value={vulnerability} />
-                </td>
-            </tr>
-            <tr>
-                <th> Susceptibilidad </th>
-                <th> Falta de capacidad de afrontamiento </th>
-                <th> Falta de capacidad adaptativa </th>
-                <th> Año </th>
-            </tr>
-            <tr>
-                <td>
-                    <input bind:value={susceptibility} />
-                </td>
-                <td>
-                    <input bind:value={lack_of_coping_capability} />
-                </td>
-                <td>
-                    <input bind:value={lack_of_adaptive_capacity} />
-                </td>
-                <td>
-                    <input bind:value={year} />
-                </td>
-            </tr>
-            <tr>
-                <th> Categoría de Exposición </th>
-                <th> Categoría del Índice de Riesgo </th>
-                <th> Categoría de Vulnerabilidad </th>
-                <th> Categoría de Susceptibilidad </th>
-            </tr>
-            <tr>
-                <td>
-                    <input bind:value={exposure_category} />
-                </td>
-                <td>
-                    <input bind:value={wri_category} />
-                </td>
-                <td>
-                    <input bind:value={vulnerability_category} />
-                </td>
-                <td>
-                    <input bind:value={susceptibility_category} />
-                </td>
-            </tr>
-            <tr>
-                <th> Datos desde el año: </th>
-                <th> Datos hasta el año: </th>
-            </tr>
-            <tr>
-                <td>
-                    <input bind:value={from} />
-                </td>
-                <td>
-                    <input bind:value={to} />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <button on:click={getData}>Buscar</button>
-                </td>
-                <td>
-                    <button on:click={limpiarCampos}>Limpiar búsqueda</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="menuB">
+        <table class:tabla={mostrarTabla}>
+            <caption><h2>Menú de búsqueda</h2></caption>
+            <thead>
+                <tr>
+                    <th> País </th>
+                    <th> Índice de Riesgo </th>
+                    <th> Exposición </th>
+                    <th> Vulnerabilidad </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input bind:value={country} />
+                    </td>
+                    <td>
+                        <input bind:value={wri} />
+                    </td>
+                    <td>
+                        <input bind:value={exposure} />
+                    </td>
+                    <td>
+                        <input bind:value={vulnerability} />
+                    </td>
+                </tr>
+                <tr>
+                    <th> Susceptibilidad </th>
+                    <th> Falta de capacidad de afrontamiento </th>
+                    <th> Falta de capacidad adaptativa </th>
+                    <th> Año </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input bind:value={susceptibility} />
+                    </td>
+                    <td>
+                        <input bind:value={lack_of_coping_capability} />
+                    </td>
+                    <td>
+                        <input bind:value={lack_of_adaptive_capacity} />
+                    </td>
+                    <td>
+                        <input bind:value={year} />
+                    </td>
+                </tr>
+                <tr>
+                    <th> Categoría de Exposición </th>
+                    <th> Categoría del Índice de Riesgo </th>
+                    <th> Categoría de Vulnerabilidad </th>
+                    <th> Categoría de Susceptibilidad </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input bind:value={exposure_category} />
+                    </td>
+                    <td>
+                        <input bind:value={wri_category} />
+                    </td>
+                    <td>
+                        <input bind:value={vulnerability_category} />
+                    </td>
+                    <td>
+                        <input bind:value={susceptibility_category} />
+                    </td>
+                </tr>
+                <tr>
+                    <th> Datos desde el año: </th>
+                    <th> Datos hasta el año: </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input bind:value={from} />
+                    </td>
+                    <td>
+                        <input bind:value={to} />
+                    </td>
+                </tr>
+                <tr>
+                    <td id="noBorder" colspan="4" style="text-align: center;">
+                            <button on:click={getData}>Buscar</button>
+
+                            <button on:click={limpiarCampos}
+                                >Limpiar búsqueda</button
+                            >
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     {#if confirmation != ""}
         <hr />
@@ -578,5 +586,49 @@
 
     .tabla {
         display: none;
+    }
+
+    .menuB {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .menuB caption {
+        text-align: center;
+    }
+
+    .menuB th,
+    .menuB td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .menuB th {
+        background-color: #f2f2f2f5;
+    }
+
+    .menuB input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .menuB button {
+        box-sizing: none;
+        background-color: rgb(6, 0, 88);
+        color: whitesmoke;
+        align-content: center;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    #noBorder {
+        border: none;
+        margin-top: 10px;
     }
 </style>
