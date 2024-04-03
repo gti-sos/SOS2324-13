@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import {dev} from "$app/environment";
 
-    let API = "/api/v1/salaries-datasets";
+    let API = "/api/v2/salaries-datasets";
 
     if(dev)
         API = "https://localhost:10000"+API;
