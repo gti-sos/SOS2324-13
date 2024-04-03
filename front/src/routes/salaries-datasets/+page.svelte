@@ -25,6 +25,7 @@
      };
     
      let errorMsg="";
+     let confirmation="";
 
     onMount(()=>{
         getData();
@@ -41,6 +42,20 @@
     }catch(e){
         errorMsg = e;                        
     }}
+
+    async function loadData() {
+        try {
+            const response = await fetch(API + "/loadInitialData", { method: "GET" });
+            const status = response.status;
+            if (status === 201) {
+                confirmation = "Datos cargados correctamente";
+            } else {
+                errorMsg = `Error ${status}: Los datos ya han sido cargados`;
+            }
+        } catch (error) {
+            errorMsg = error.message;
+        }
+    }
 
     async function createData(){ 
         try{
@@ -65,8 +80,8 @@
         } 
     }
 
-    async function deleteContact(n){
-        console.log(`Deleting contact with name ${n}`);
+    async function deleteData(n){
+        console.log(`Deleting contact with country ${n}`);
         try{
             let response =  await   fetch(API+"/"+n,{
                                     method: "DELETE"
@@ -82,13 +97,45 @@
             } 
 } 
 
+async function deleteAllData() {
+        try {
+            const response = await fetch(API, { method: "DELETE" });
+            const status = response.status;
+            if (status === 200) {
+                salaries = [];
+                confirmation = "Todos los datos eliminados";
+            } else {
+                errorMsg = `Error ${status}: No se pudieron eliminar los datos`;
+            }
+        } catch (error) {
+            errorMsg = error.message;
+        }
+    }
 </script>
 
-<ul>
-    {#each salaries as salarie}
-        <li>{salarie.country}</li>
-    {/each}
-</ul>
+<div class="container">
+    <h1>Salaries Datasets</h1>
+
+    <button on:click={loadData}>Cargar datos iniciales</button>
+    <button on:click={getData}>Obtener todos los datos</button>
+    <button on:click={createData}>Crear nuevo dato</button>
+    <button on:click={deleteAllData}>Eliminar todos los datos</button>
+
+    <ul class="data-list">
+        {#each salaries as salarie}
+            <li class="data-item">
+                <span>{salarie.year}, {salarie.timestamp}, {salarie.salary}, {salarie.country}, {salarie.primary_database}, {salarie.time_with_this_database}, {salarie.employment_state}, {salarie.job_title}, {salarie.manage_staff}, {salarie.time_in_current_job}, {salarie.other_people_on_your_team}, {salarie.magnitude_of_company}, {salarie.sector}</span>
+                <button on:click={() => deleteData(salarie.year, salarie.country)}>Eliminar</button>
+            </li>
+        {/each}
+    </ul>
+
+    {#if confirmation !== ""}
+        <div class="confirmation">{confirmation}</div>
+    {/if}
+    {#if errorMsg !== ""}
+        <div class="error">Error: {errorMsg}</div>
+    {/if}
 
 <table class="data-table">
     <thead>
@@ -129,3 +176,4 @@
         </tr>
     </tbody>
 </table>
+</div>
