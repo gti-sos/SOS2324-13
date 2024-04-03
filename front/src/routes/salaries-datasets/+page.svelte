@@ -35,10 +35,10 @@
         try {
             const response = await fetch(API, { method: "GET" });
             let data = await response.json();
-            console.log(data);
+            console.log(salarie);
             let status = response.status;
             if (status == 200) {
-                dataset = data;
+                salaries = data;
                 confirmation = "Datos obtenidos correctamente";
                 
             } else {
