@@ -31,17 +31,23 @@
         getData();
     })
 
-    async function getData(){
-        try{
-            let respone = await fetch(API,{
-                                method: "GET"
-                                });
-        let data = await respone.json();
-        salaries = salarie;
-        console.log(salarie);
-    }catch(e){
-        errorMsg = e;                        
-    }}
+    async function getData() {
+        try {
+            const response = await fetch(API, { method: "GET" });
+            let data = await response.json();
+            console.log(data);
+            let status = response.status;
+            if (status == 200) {
+                dataset = data;
+                confirmation = "Datos obtenidos correctamente";
+                
+            } else {
+                errorMsg = `Error ${status}: Los datos no se han podido obtener`;
+            }
+        } catch (error) {
+            errorMsg = error.message;
+        }
+    }
 
     async function loadData() {
         try {
