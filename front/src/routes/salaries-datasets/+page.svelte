@@ -22,8 +22,9 @@
         other_people_on_your_team: "",
         magnitude_of_company: "",
         sector: ""
-    };
-    let errorMsg="";
+     };
+    
+     let errorMsg="";
 
     onMount(()=>{
         getData();
