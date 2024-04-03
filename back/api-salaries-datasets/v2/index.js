@@ -1,6 +1,6 @@
 const API_BASE = '/api/v2/salaries-datasets';
 
-function loadSalarieApi(app, salarieDB) {
+function loadSalarieApi2(app, salarieDB) {
 
 
     // RUTA "/loadInitialData"
@@ -379,4 +379,4 @@ function loadSalarieApi(app, salarieDB) {
     });
 };
 
-export {loadSalarieApi};
+export {loadSalarieApi2};

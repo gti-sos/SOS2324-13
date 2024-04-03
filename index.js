@@ -3,7 +3,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { loadWRIApi } from "./back/api-wris-datasets/index.js";
 import { loadMentalApi } from "./back/api-mentalhealth-datasets/index.js";
-import { loadSalarieApi } from "./back/api-salaries-datasets/index.js";
+import { loadSalarieApi2 } from "./back/api-salaries-datasets/v2/index.js";
 import dataStore from "nedb";
 import {handler} from "./front/build/handler.js";
 import cors from "cors";
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 // Cargar las functions de las APIs
 loadWRIApi(app, dbRisk);
 loadMentalApi(app, dbMental);
-loadSalarieApi(app, dbSalarie);
+loadSalarieApi2(app, dbSalarie);
 
 // Cargamos el handler
 app.use(handler);
