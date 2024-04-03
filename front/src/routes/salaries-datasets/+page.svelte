@@ -1,6 +1,6 @@
 <script>
     import {onMount} from "svelte";
-    import {dev} from "$app/enviroment";
+    import {dev} from "$app/environment";
 
     let API = "/api/v1/salaries-datasets";
 
