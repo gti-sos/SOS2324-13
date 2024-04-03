@@ -7,6 +7,18 @@
 			"value": "https://sos2324-13.appspot.com",
 			"type": "default",
 			"enabled": true
+		},
+		{
+			"key": "salariesAPI",
+			"value": "/api/v2/salaries-datasets",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "loadData",
+			"value": "/loadInitialData",
+			"type": "default",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
