@@ -1,6 +1,6 @@
 const API_BASE = '/api/v1/wris-datasets';
 
-function loadWRIApi(app, dataset) {
+function loadWRIApi1(app, dataset) {
 
     // PAGINA "/DOCS" v1
     // GET -- OK
@@ -376,4 +376,4 @@ function loadWRIApi(app, dataset) {
     });
 };
 
-export { loadWRIApi };
+export { loadWRIApi1 };

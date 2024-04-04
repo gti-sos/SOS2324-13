@@ -1,6 +1,7 @@
 //CODIGO GENERAL DEL SERVIDOR
 import express from "express";
 import bodyParser from "body-parser";
+import { loadWRIApi1 } from "./back/api-wris-datasets/v1/index.js";
 import { loadWRIApi2 } from "./back/api-wris-datasets/v2/index.js";
 import { loadMentalApi2} from "./back/api-mentalhealth-datasets/v2/index.js";
 import { loadSalarieApi2 } from "./back/api-salaries-datasets/v2/index.js";
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Cargar las functions de las APIs
+loadWRIApi1(app, dbRisk);
 loadWRIApi2(app, dbRisk);
 loadMentalApi2(app, dbMental);
 loadSalarieApi2(app, dbSalarie);

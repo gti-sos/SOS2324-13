@@ -32,8 +32,13 @@
         <h3>Enlaces de APIs:</h3>
         <ul>
             <li>
+                <a href="/api/v1/wris-datasets"
+                    >api-wris-datasets v1 (desarrollada por Rubén Romero Guisado)</a
+                >
+            </li>
+            <li>
                 <a href="/api/v2/wris-datasets"
-                    >api-wris-datasets (desarrollada por Rubén Romero Guisado)</a
+                    >api-wris-datasets v2 (desarrollada por Rubén Romero Guisado)</a
                 >
             </li>
             <li>
