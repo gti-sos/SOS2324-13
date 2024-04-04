@@ -6,6 +6,7 @@
 
     if (dev) API = "http://localhost:10000" + API;
 
+
     let dataset = [];
     let newData = {
         country: "country",
@@ -25,118 +26,10 @@
     let currentPage = 1; 
     let pageSize = 10; 
 
-    // Campos adicionales para búsqueda
-    let from = "";
-    let to = "";
-    let searchCountry = "";
-    let searchCode = "";
-    let searchSchizophrenia = "";
-    let searchBipolarDisorder = "";
-    let searchEatingDisorder = "";
-    let searchAnxietyDisorder = "";
-    let searchDrugUseDisorder = "";
-    let searchDepression = "";
-    let searchAlcoholism = "";
-    let searchYear = "";
-
     onMount(() => {
         getData();
     });
-
-    // Obtener datos con parámetros de búsqueda
-    async function getData() {
-        try {
-            let url = `${API}?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`;
-
-            // Agregar parámetros de búsqueda si están definidos
-            if (from) url += `&from=${from}`;
-            if (to) url += `&to=${to}`;
-            if (searchCountry) url += `&country=${searchCountry}`;
-            if (searchCode) url += `&code=${searchCode}`;
-            if (searchSchizophrenia) url += `&schizophrenia=${searchSchizophrenia}`;
-            if (searchBipolarDisorder) url += `&bipolar_disorder=${searchBipolarDisorder}`;
-            if (searchEatingDisorder) url += `&eating_disorder=${searchEatingDisorder}`;
-            if (searchAnxietyDisorder) url += `&anxiety_disorder=${searchAnxietyDisorder}`;
-            if (searchDrugUseDisorder) url += `&drug_use_disorder=${searchDrugUseDisorder}`;
-            if (searchDepression) url += `&depression=${searchDepression}`;
-            if (searchAlcoholism) url += `&alcoholism=${searchAlcoholism}`;
-            if (searchYear) url += `&year=${searchYear}`;
-
-            const response = await fetch(url, { method: "GET" });
-            let data = await response.json();
-            console.log(data);
-            let status = await response.status;
-            if (status == 200) {
-                dataset = data;
-                confirmation = "Datos obtenidos correctamente";
-                setTimeout(() => {
-                    confirmation = "";
-                }, 5000); 
-            } else if (status == 404) {
-                errorMsg = "No hay datos existentes.";
-                setTimeout(() => {
-                    errorMsg = "";
-                }, 5000); 
-                confirmation = "";
-                dataset = [];
-            }
-        } catch (error) {
-            errorMsg = error.message;
-            setTimeout(() => {
-                errorMsg = "";
-            }, 5000); 
-        }
-    }
-
-    // Función para realizar la búsqueda
-    function search() {
-        // Realizar la búsqueda si todos los campos están llenos
-        if (searchCountry !== "" && 
-            searchCode !== "" && 
-            searchSchizophrenia !== "" && 
-            searchBipolarDisorder !== "" && 
-            searchEatingDisorder !== "" && 
-            searchAnxietyDisorder !== "" && 
-            searchDrugUseDisorder !== "" && 
-            searchDepression !== "" && 
-            searchAlcoholism !== "" && 
-            searchYear !== "") {
-            // Parsear los campos que necesitan ser parseados
-            from = parseInt(from);
-            to = parseInt(to);
-            searchSchizophrenia = parseFloat(searchSchizophrenia);
-            searchBipolarDisorder = parseFloat(searchBipolarDisorder);
-            searchEatingDisorder = parseFloat(searchEatingDisorder);
-            searchAnxietyDisorder = parseFloat(searchAnxietyDisorder);
-            searchDrugUseDisorder = parseFloat(searchDrugUseDisorder);
-            searchDepression = parseFloat(searchDepression);
-            searchAlcoholism = parseFloat(searchAlcoholism);
-            searchYear = parseFloat(searchYear);
-            // Realizar la búsqueda
-            getData();
-        } else {
-            // Mostrar mensaje de error si algún campo está vacío
-            errorMsg = "Todos los campos de búsqueda son obligatorios.";
-            setTimeout(() => {
-                errorMsg = "";
-            }, 5000); 
-        }
-    }
-
-    // Funciones para la paginación
-    function nextPage() {
-        currentPage++;
-        getData();
-    }
-
-    function prevPage() {
-        if (currentPage > 1) {
-            currentPage--;
-            getData();
-        }
-    }
-
-    // CARGAR DATOS INICIALES
+    //CARGAR DATOS INICIALES
     async function loadData() {
         try {
             const response = await fetch(API + "/loadInitialData", { method: "GET" });
@@ -159,7 +52,44 @@
             }, 5000); 
         }
     }
-     //CREAR UN DATO
+    //OBTENER DATOS
+    async function getData() {
+        try {
+            const response = await fetch(API+`?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
+            let data = await response.json();
+            console.log(data);
+            let status = await response.status;
+            if (status == 200) {
+                dataset = data;
+                errorMsg = "";
+            } else if (status == 404) {
+                errorMsg = "No hay datos existentes.";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
+                confirmation = "";
+                dataset = [];
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
+        }
+    }
+
+    function nextPage() {
+        currentPage++;
+        getData();
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            getData();
+        }
+    }
+    //CREAR DATOS
     async function createData() {
         try {
             const response = await fetch(API + "/", {
@@ -202,7 +132,7 @@
             }, 5000); 
         }
     }
- //ELIMINAR TODOS LOS DATOS
+    //BORRAR TODOS LOS DATOS
     async function deleteAllData() {
         try {
             const response = await fetch(API, { method: "DELETE" });
@@ -226,12 +156,13 @@
             }, 5000); 
         }
     }
-    //ELIMINAR UN DATO
+    //BORRAR DATO CONCRETO
     async function deleteData(country, year) {
         try {
             const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
+                // Eliminar el dato del conjunto de datos local
                 getData();
                 confirmation = "Dato eliminado correctamente";
                 setTimeout(() => {
@@ -255,6 +186,8 @@
             }, 5000); 
         }
     }
+
+    
 </script>
 
 <div>
@@ -383,7 +316,6 @@
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button on:click={prevPage}>Página anterior</button>
         <button on:click={nextPage}>Página siguiente</button>
-        <button on:click={search}>Buscar</button>
     </div>
 
     <!-- Sección para mostrar mensajes -->
