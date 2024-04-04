@@ -1,6 +1,6 @@
 {
-	"id": "ef9ba88a-0afc-4b72-94be-d780b6a14943",
-	"name": "Local",
+	"id": "963de2f8-40a9-44c0-b472-b692784d7f32",
+	"name": "local",
 	"values": [
 		{
 			"key": "SERVER",
@@ -9,8 +9,8 @@
 			"enabled": true
 		},
 		{
-			"key": "salariesAPI",
-			"value": "/api/v2/salaries-datasets",
+			"key": "wrisAPI",
+			"value": "/api/v1/wris-datasets",
 			"type": "default",
 			"enabled": true
 		},
@@ -22,6 +22,6 @@
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2024-03-19T10:21:32.005Z",
-	"_postman_exported_using": "Postman/10.24.6-240318-0452"
+	"_postman_exported_at": "2024-03-10T13:58:48.282Z",
+	"_postman_exported_using": "Postman/10.23.12-240308-0814"
 }

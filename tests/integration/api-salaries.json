@@ -27,13 +27,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/loadInitialData",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/loadInitialData",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"loadInitialData"
 					]
@@ -62,13 +62,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						""
 					]
@@ -97,13 +97,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Sweden",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Sweden",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Sweden"
@@ -142,13 +142,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						""
 					]
@@ -177,13 +177,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Pakistan",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Pakistan",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Pakistan"
@@ -213,13 +213,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Pakistan",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Pakistan",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Pakistan"
@@ -258,13 +258,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Spain",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Spain",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Spain"
@@ -303,13 +303,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/United States",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/United States",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"United States"
@@ -352,13 +352,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/United States/year/2021",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/United States/year/2021",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"United States",
@@ -399,13 +399,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Spain/year/2022",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Spain/year/2022",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Spain",
@@ -446,13 +446,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/country/Sweden/year/2021",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/country/Sweden/year/2021",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"country",
 						"Sweden",
@@ -484,13 +484,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/1235423452",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/1235423452",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"1235423452"
 					]
@@ -519,13 +519,13 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/United States",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/United States",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						"United States"
 					]
@@ -563,13 +563,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						""
 					]
@@ -598,13 +598,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets/?country=United States&limit=1",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets/?country=United States&limit=1",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets",
 						""
 					],
@@ -653,13 +653,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{SERVER}}/api/v1/salaries-datasets",
+					"raw": "{{SERVER}}/api/v2/salaries-datasets",
 					"host": [
 						"{{SERVER}}"
 					],
 					"path": [
 						"api",
-						"v1",
+						"v2",
 						"salaries-datasets"
 					]
 				},

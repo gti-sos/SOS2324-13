@@ -37,13 +37,13 @@
                 >
             </li>
             <li>
-                <a href="/api/v1/mentalhealth-datasets"
+                <a href="/api/v2/mentalhealth-datasets"
                     >api-mentalhealth-datasets (desarrollada por Antonio López
                     Barrios)</a
                 >
             </li>
             <li>
-                <a href="/api/v1/salaries-datasets"
+                <a href="/api/v2/salaries-datasets"
                     >api-salaries-datasets (desarrolada por Aaron López Leal)</a
                 >
             </li>
@@ -69,6 +69,13 @@
                 <a
                     href="https://documenter.getpostman.com/view/32965348/2sA2xh1rtd"
                     >Documentacion api-mentalheath-datasets v1 (desarrollada por
+                    Antonio López Barrios)</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://documenter.getpostman.com/view/32965348/2sA35K31w8"
+                    >Documentacion api-mentalheath-datasets v2(desarrollada por
                     Antonio López Barrios)</a
                 >
             </li>

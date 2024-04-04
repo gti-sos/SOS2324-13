@@ -1,13 +1,14 @@
 <script>
-    import { onMount } from "svelte";
-    import { dev } from "$app/environment";
+    import {onMount} from "svelte";
+    import {dev} from "$app/environment";
 
-    let API = "/api/v1/salaries-datasets";
+    let API = "/api/v2/salaries-datasets";
 
-    if (dev) API = "http://localhost:10000" + API;
+    if(dev)
+        API = "https://localhost:10000"+API;
 
-    let dataset = [];
-    let newData = {
+    let salaries = []
+    let newSalarie = {
         year: "",
         timestamp: "",
         salary: "",
@@ -21,14 +22,32 @@
         other_people_on_your_team: "",
         magnitude_of_company: "",
         sector: ""
-    };
+     };
+    
+     let errorMsg="";
+     let confirmation="";
 
-    let errorMsg = "";
-    let confirmation = "";
-
-    onMount(() => {
+    onMount(()=>{
         getData();
-    });
+    })
+
+    async function getData() {
+        try {
+            const response = await fetch(API, { method: "GET" });
+            let data = await response.json();
+            console.log(data);
+            let status = response.status;
+            if (status == 200) {
+                salaries = data;
+                confirmation = "Datos obtenidos correctamente";
+                
+            } else {
+                errorMsg = `Error ${status}: Los datos no se han podido obtener`;
+            }
+        } catch (error) {
+            errorMsg = error.message;
+        }
+    }
 
     async function loadData() {
         try {
@@ -44,43 +63,52 @@
         }
     }
 
-    async function getData() {
-        try {
-            const response = await fetch(API, { method: "GET" });
-            let data = await response.json();
-            dataset = data;
-            confirmation = "Datos obtenidos correctamente";
-            errorMsg = "";
-        } catch (error) {
-            errorMsg = error.message;
-        }
-    }
+    async function createData(){ 
+        try{
+            let response =  await   fetch(API,{
+                                    method: "POST",
+                                    headers:{
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify(newSalarie)
+                                });
 
-    async function createData() {
-        try {
-            const response = await fetch(API, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newData)
-            });
-            const status = response.status;
-            if (status === 201) {
+            let status = await response.status;
+            console.log(`Creation response status ${status}`);
+            if(status == 201)
                 getData();
-                confirmation = "Nuevo dato creado";
-            } else {
-                errorMsg = `Error ${status}: No se pudo crear el dato`;
-            }
-        } catch (error) {
-            errorMsg = error.message;
-        }
+            else
+                errorMsg = "code:"+status;
+
+    
+        }catch(e){
+            errorMsg = e;
+        } 
     }
 
-    async function deleteAllData() {
+    async function deleteData(n){
+        console.log(`Deleting contact with country ${n}`);
+        try{
+            let response =  await   fetch(API+"/"+n,{
+                                    method: "DELETE"
+                                    });
+    
+        if(response.status == 200)
+        getContacts();
+        else
+            errorMsg = "code:"+response.status;
+    
+            }catch(e){
+                    errorMsg = e;
+            } 
+} 
+
+async function deleteAllData() {
         try {
             const response = await fetch(API, { method: "DELETE" });
             const status = response.status;
             if (status === 200) {
-                dataset = [];
+                salaries = [];
                 confirmation = "Todos los datos eliminados";
             } else {
                 errorMsg = `Error ${status}: No se pudieron eliminar los datos`;
@@ -89,25 +117,6 @@
             errorMsg = error.message;
         }
     }
-
-    async function deleteData(country, year) {
-        try {
-            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
-            const status = response.status;
-            if (status === 200) {
-                // Eliminar el dato del conjunto de datos local
-                dataset = dataset.filter(data => data.country !== country || data.year !== year);
-                confirmation = "Dato eliminado correctamente";
-            } else if (status === 404) {
-                errorMsg = `Error ${status}: No se encontró el dato a eliminar`;
-            } else {
-                errorMsg = `Error ${status}: No se pudo eliminar el dato`;
-            }
-        } catch (error) {
-            errorMsg = error.message;
-        }
-    }
-
 </script>
 
 <div class="container">
@@ -119,12 +128,13 @@
     <button on:click={deleteAllData}>Eliminar todos los datos</button>
 
     <ul class="data-list">
-        {#each dataset as data}
-            <li class="data-item">
-                <span>{data.year}, {data.timestamp}, {data.salary}, {data.country}, {data.primary_database}, {data.time_with_this_database}, {data.employment_state}, {data.job_title}, {data.manage_staff}, {data.time_in_current_job}, {data.other_people_on_your_team}, {data.magnitude_of_company}, {data.sector}</span>
-                <button on:click={() => deleteData(data.year, data.country)}>Eliminar</button>
-            </li>
-        {/each}
+        {#each salaries as salaries}
+    <li class="data-item">
+        <span>{salaries.year}, {salaries.timestamp}, {salaries.salary}, {salaries.country}, {salaries.primary_database}, {salaries.time_with_this_database}, {salaries.employment_state}, {salaries.job_title}, {salaries.manage_staff}, {salaries.time_in_current_job}, {salaries.other_people_on_your_team}, {salaries.magnitude_of_company}, {salaries.sector}</span>
+        <button on:click={() => deleteData(salaries.year, salaries.country)}>Eliminar</button>
+    </li>
+{/each}
+
     </ul>
 
     {#if confirmation !== ""}
@@ -134,107 +144,43 @@
         <div class="error">Error: {errorMsg}</div>
     {/if}
 
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th> Año </th>
-                <th> Timestamp </th>
-                <th> Salario </th>
-                <th> País </th>
-                <th> Base de datos primaria </th>
-                <th> Tiempo con esta base de datos </th>
-                <th> Estado de empleo </th>
-                <th> Título del trabajo </th>
-                <th> Gestionar personal </th>
-                <th> Tiempo en el trabajo actual </th>
-                <th> Otras personas en tu equipo </th>
-                <th> Magnitud de la empresa </th>
-                <th> Sector </th>
-                <th> Acción </th>
-            </tr>
-        </thead>
-        <!-- Inputs para agregar nuevos datos -->
-        <tbody>
-            <tr>
-                <td><input bind:value={newData.year} /></td>
-                <td><input bind:value={newData.timestamp} /></td>
-                <td><input bind:value={newData.salary} /></td>
-                <td><input bind:value={newData.country} /></td>
-                <td><input bind:value={newData.primary_database} /></td>
-                <td><input bind:value={newData.time_with_this_database} /></td>
-                <td><input bind:value={newData.employment_state} /></td>
-                <td><input bind:value={newData.job_title} /></td>
-                <td><input bind:value={newData.manage_staff} /></td>
-                <td><input bind:value={newData.time_in_current_job} /></td>
-                <td><input bind:value={newData.other_people_on_your_team} /></td>
-                <td><input bind:value={newData.magnitude_of_company} /></td>
-                <td><input bind:value={newData.sector} /></td>
-                <td><button on:click={createData}>Crear</button></td>
-            </tr>
-        </tbody>
-    </table>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th> Año </th>
+            <th> Timestamp </th>
+            <th> Salario </th>
+            <th> País </th>
+            <th> Base de datos primaria </th>
+            <th> Tiempo con esta base de datos </th>
+            <th> Estado de empleo </th>
+            <th> Título del trabajo </th>
+            <th> Gestionar personal </th>
+            <th> Tiempo en el trabajo actual </th>
+            <th> Otras personas en tu equipo </th>
+            <th> Magnitud de la empresa </th>
+            <th> Sector </th>
+            <th> Acción </th>
+        </tr>
+    </thead>
+    <!-- Inputs para agregar nuevos datos -->
+    <tbody>
+        <tr>
+            <td><input bind:value={newSalarie.year} /></td>
+            <td><input bind:value={newSalarie.timestamp} /></td>
+            <td><input bind:value={newSalarie.salary} /></td>
+            <td><input bind:value={newSalarie.country} /></td>
+            <td><input bind:value={newSalarie.primary_database} /></td>
+            <td><input bind:value={newSalarie.time_with_this_database} /></td>
+            <td><input bind:value={newSalarie.employment_state} /></td>
+            <td><input bind:value={newSalarie.job_title} /></td>
+            <td><input bind:value={newSalarie.manage_staff} /></td>
+            <td><input bind:value={newSalarie.time_in_current_job} /></td>
+            <td><input bind:value={newSalarie.other_people_on_your_team} /></td>
+            <td><input bind:value={newSalarie.magnitude_of_company} /></td>
+            <td><input bind:value={newSalarie.sector} /></td>
+            <td><button on:click={createData}>Crear</button></td>
+        </tr>
+    </tbody>
+</table>
 </div>
-
-<style>
-    .container {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    button {
-        background-color: yellow;
-        color: black;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-
-    .data-list {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .data-item {
-        margin-bottom: 10px;
-        background-color: #f2f2f2;
-        padding: 10px;
-        border-radius: 4px;
-    }
-
-    .error {
-        color: red;
-    }
-
-    .confirmation {
-        color: yellow;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    .data-table th, .data-table td {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
-
-    .data-table th {
-        background-color: #f2f2f2f5;
-    }
-
-    .data-table input {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-    }
-</style>

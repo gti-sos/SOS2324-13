@@ -1,0 +1,910 @@
+{
+	"info": {
+		"_postman_id": "dd2fa1fb-412d-4760-8f9a-7248deb98e42",
+		"name": "SOS-ALB V2",
+		"description": "Es una colección de peticiones dentro de mi API(v2), la cual consiste en un dataset de trastornos mentales y sus proporciones , en diferentes países y años.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32965348"
+	},
+	"item": [
+		{
+			"name": "Cargar Datos Iniciales",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/loadInitialData",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"loadInitialData"
+					]
+				},
+				"description": "Esta petición carga unos datos inciales(10 lineas), si no contiene ninguna anteriormente"
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar todos los datos con paginacion (sin busquedas concretas)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(10)\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Carga todos los datos con paginacion."
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar datos con paginacion y busquedas por campos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array');\r",
+							"    pm.expect(jsonData.length).to.be.at.most(10); // Verifica que la longitud sea 10 o menor\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/?country=Afghanistan&year=1991",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "Afghanistan"
+						},
+						{
+							"key": "year",
+							"value": "1991"
+						}
+					]
+				},
+				"description": "Cargar datos con paginacion y buquedas por campos"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener pais por nnombre especifico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Argentina",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Argentina"
+					]
+				},
+				"description": "Esta petición devuelve las lineas del dataset buscando por un pais específico."
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Argenti",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Argenti"
+					]
+				},
+				"description": "Si se intenta acceder a un recurso inexistente devolverá error 404"
+			},
+			"response": []
+		},
+		{
+			"name": "Busqueda por pais y año",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verificar que se devuelve un solo objeto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('object'); // Verifica que la respuesta sea un objeto\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Albania/1991",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Albania",
+						"1991"
+					]
+				},
+				"description": "Get que busca por pais y año"
+			},
+			"response": []
+		},
+		{
+			"name": "Busqueda por año",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(2); \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/?year=1991",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "1991"
+						}
+					]
+				},
+				"description": "Get que busca por año"
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar pais concreto en periodo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/?to=1993&from=1991&country=Afghanistan",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					],
+					"query": [
+						{
+							"key": "to",
+							"value": "1993"
+						},
+						{
+							"key": "from",
+							"value": "1991"
+						},
+						{
+							"key": "country",
+							"value": "Afghanistan"
+						}
+					]
+				},
+				"description": "Get que carga pais concreto en periodo"
+			},
+			"response": []
+		},
+		{
+			"name": "Cargar datos en periodo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verificar el tamaño del array devuelto\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an('array').that.has.lengthOf(7); \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/?from=1991&to=2000",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "1991"
+						},
+						{
+							"key": "to",
+							"value": "2000"
+						}
+					]
+				},
+				"description": "Cargar datos con periodo determinado"
+			},
+			"response": []
+		},
+		{
+			"name": "Postear algo nuevo en la raiz",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"code\": \"SPA\",\r\n    \"year\": 1900,\r\n    \"schizophrenia\": 0.160312,\r\n    \"bipolar_disorder\": 0.697961,\r\n    \"eating_disorder\": 0.099313,\r\n    \"anxiety_disorder\": 4.82974,\r\n    \"drug_use_disorder\": 1.684746,\r\n    \"depression\": 4.079531,\r\n    \"alcoholism\": 0.671768\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Esta petición crea una nueva línea en la raíz."
+			},
+			"response": []
+		},
+		{
+			"name": "Postear un pais por nombre especifico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"country\": \"Afghanistan\",\r\n        \"code\": \"AFG\",\r\n        \"year\": 2000,\r\n        \"schizophrenia\": 0.161621,\r\n        \"bipolar_disorder\": 0.700015,\r\n        \"eating_disorder\": 0.086021,\r\n        \"anxiety_disorder\": 4.827047,\r\n        \"drug_use_disorder\": 1.788395,\r\n        \"depression\": 4.11861,\r\n        \"alcoholism\": 0.662479\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Afghanistan",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Afghanistan"
+					]
+				},
+				"description": "Esta petición devolverá siempre error 405,Method not allowed."
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 409",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Spain\",\r\n    \"code\": \"SPA\",\r\n    \"year\": 1900,\r\n    \"schizophrenia\": 0.160312,\r\n    \"bipolar_disorder\": 0.697961,\r\n    \"eating_disorder\": 0.099313,\r\n    \"anxiety_disorder\": 4.82974,\r\n    \"drug_use_disorder\": 1.684746,\r\n    \"depression\": 4.079531,\r\n    \"alcoholism\": 0.671768\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Si hacemos una petición POST de una línea idéntica a la que ya hay en el dataset, nos dará un error 409(conflict)"
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400 POST",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{        \"countrçy\": \"Spain\",\r\n        \"code\": \"SPA\",\r\n        \"year\": 1991,\r\n        \"schizophrenia\": 0.160312,\r\n        \"bipolar_disorder\": 0.697961,\r\n        \"eating_disorder\": 0.099313,\r\n        \"anxiety_disorder\": 4.82974,\r\n        \"drug_use_disorder\": 1.684746,\r\n        \"depression\": 4.079531,\r\n        \"alcoholism\": 0.671768\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Si hacemos un POST y no tiene los datos esperados dará error 400(bad request)"
+			},
+			"response": []
+		},
+		{
+			"name": "Cambiar en la raiz",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Afghanistan\",\r\n    \"code\": \"AFG\",\r\n    \"year\": 1900,\r\n    \"schizophrenia\": 0.160315,\r\n    \"bipolar_disorder\": 0.697961,\r\n    \"eating_disorder\": 0.099313,\r\n    \"anxiety_disorder\": 4.82974,\r\n    \"drug_use_disorder\": 1.684746,\r\n    \"depression\": 4.079531,\r\n    \"alcoholism\": 0.671768\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Esta petición siempre nos devolverá el error 405, Method not allowed."
+			},
+			"response": []
+		},
+		{
+			"name": "Cambiar pais por nombre especifico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"Argentina\",\r\n    \"code\": \"ARG\",\r\n    \"year\": 1990,\r\n    \"schizophrenia\": 0.193413,\r\n    \"bipolar_disorder\": 0.695013,\r\n    \"eating_disorder\": 0.130782,\r\n    \"anxiety_disorder\": 3.327587,\r\n    \"drug_use_disorder\": 0.497616,\r\n    \"depression\": 2.139903,\r\n    \"alcoholism\": 1.709465\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Argentina",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Argentina"
+					]
+				},
+				"description": "Esta petición actualiza la linea de dataset de un pais en concreto."
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar pais y año concreto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n    \"country\": \"Spain\",\r\n    \"code\": \"SPA\",\r\n    \"year\": 1900,\r\n    \"schizophrenia\": 0.1031,\r\n    \"bipolar_disorder\": 0.697961,\r\n    \"eating_disorder\": 0.099313,\r\n    \"anxiety_disorder\": 4.82974,\r\n    \"drug_use_disorder\": 1.684746,\r\n    \"depression\": 4.079531,\r\n    \"alcoholism\": 0.671768\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Spain/1900",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Spain",
+						"1900"
+					]
+				},
+				"description": "Actualizar un pais y año concretos"
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 400 PUT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"country\": \"j\",\r\n    \"code\": \"AFG\",\r\n    \"year\": 1900,\r\n    \"schizophrenia\": 0.160315,\r\n    \"bipolar_disorder\": 0.697961,\r\n    \"eating_disorder\": 0.099313,\r\n    \"anxiety_disorder\": 4.82974,\r\n    \"drug_use_disorder\": 1.684746,\r\n    \"depression\": 4.079531,\r\n    \"alcoholism\": 0.671768\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Afghanistan",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Afghanistan"
+					]
+				},
+				"description": "En esta petición,si el país de la URL no coincide,con el de body, delvolverá un error 400(bad request)"
+			},
+			"response": []
+		},
+		{
+			"name": "ERROR 405",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {\r",
+							"    pm.response.to.have.status(405);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Si se intenta hacer un PUT en la raíz,devolverá error 405(method not allowed)"
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar pais por nombre especifico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Argentina",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Argentina"
+					]
+				},
+				"description": "Esta petición borra todas las líneas del dataset de un país en concreto."
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar datos por pais y año",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/Afghanistan/1991",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						"Afghanistan",
+						"1991"
+					]
+				},
+				"description": "Peticion que borra por pais y año concretos."
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar datos raiz",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
+					"host": [
+						"{{SERVER}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"mentalhealth-datasets",
+						""
+					]
+				},
+				"description": "Esta petición borra todos los datos del dataset."
+			},
+			"response": []
+		}
+	]
+}

@@ -1,17 +1,11 @@
-const API_BASE = '/api/v2/wris-datasets';
+const API_BASE = '/api/v1/wris-datasets';
 
 function loadWRIApi(app, dataset) {
 
     // PAGINA "/DOCS" v1
     // GET -- OK
-    app.get('/api/v1/wris-datasets/docs', (req, res) => {
-        res.redirect('https://documenter.getpostman.com/view/32976490/2sA35K1LT2');
-    });
-
-    // PAGINA "/DOCS" v2
-    // GET -- OK
     app.get(API_BASE + '/docs', (req, res) => {
-        res.redirect('https://documenter.getpostman.com/view/32976490/2sA2xh3YgN');
+        res.redirect('https://documenter.getpostman.com/view/32976490/2sA35K1LT2');
     });
 
     // RUTA "/loadInitialData"
@@ -58,50 +52,21 @@ function loadWRIApi(app, dataset) {
     app.get(API_BASE, (req, res) => {
         // EN CASO DE PONER ?limit=xx o ?offset=yy o ?fields=...,... 
         // los encuentra directamente en la peticion (forma dinámica)
-        const { limit, offset, fields, from, to, ...searchParams } = req.query;
-
-        // convertimos a tipo de datos adecuado 
-        const convertedSearchParams = {};
-        for (const key in searchParams) {
-            if (Object.hasOwnProperty.call(searchParams, key)) {
-                let value = searchParams[key];
-                if (key === 'year') {
-                    // Convertir a número entero
-                    value = parseInt(value);
-                } else if (['wri', 'exposure', 'vulnerability', 'susceptibility', 'lack_of_coping_capability', 'lack_of_adaptive_capacity'].includes(key)) {
-                    // Convertir a número de punto flotante
-                    value = parseFloat(value);
-                }
-                // Agregar el valor convertido al objeto de parámetros de búsqueda
-                convertedSearchParams[key] = value;
-            }
-        }
-
-        // Construir objeto de búsqueda para el atributo 'year'
-        const yearSearch = {};
-        if (from !== undefined) {
-            yearSearch['$gte'] = parseInt(from);
-        }
-        if (to !== undefined) {
-            yearSearch['$lte'] = parseInt(to);
-        }
-        if (Object.keys(yearSearch).length > 0) {
-            convertedSearchParams['year'] = yearSearch;
-        }
+        const { limit, offset, fields, ...searchParams } = req.query;
 
         // obtengo los datos del dataset
-        dataset.find(convertedSearchParams, (err, riskData) => {
+        dataset.find(searchParams, (err, riskData) => {
             if (err) {
                 return res.status(500).json({ error: '500, Internal Server Error' });
             }
 
             // aplico limit y offset
             let resultData = riskData;
-            if (offset) {
-                resultData = resultData.slice(parseInt(offset));
-            }
             if (limit) {
                 resultData = resultData.slice(0, parseInt(limit));
+            }
+            if (offset) {
+                resultData = resultData.slice(parseInt(offset));
             }
 
 
@@ -136,7 +101,6 @@ function loadWRIApi(app, dataset) {
     app.post(API_BASE, (req, res) => {
         // pedimos el contenido (esperado)
         let data = req.body;
-        const newData = req.body;
         const expectedFields = [
             'country',
             'wri',
@@ -145,41 +109,12 @@ function loadWRIApi(app, dataset) {
             'susceptibility',
             'lack_of_coping_capability',
             'lack_of_adaptive_capacity',
-            'year',
             'exposure_category',
-            'wri_category',
-            'vulnerability_category',
-            'susceptibility_category'
+            'vulnerability_category'
         ];
         const receivedFields = Object.keys(data);
 
         const isValidData = expectedFields.every(field => receivedFields.includes(field));
-
-        // Validamos cada campo
-        for (const field of expectedFields) {
-            // verificamos que el campo no es vacío
-            if (newData[field] === "") {
-                return res.status(400).json({ error: `400, Bad Request: No field should be empty` });
-            }
-
-            // verificamos el tipo de campo según los requisitos
-            if (field === 'year') {
-                if (isNaN(newData[field])) {
-                    return res.status(400).json({ error: `400, Bad Request: Field 'year' must be an integer` });
-                }
-            } else if (['wri', 'exposure', 'vulnerability', 'susceptibility', 'lack_of_coping_capability', 'lack_of_adaptive_capacity'].includes(field)) {
-                if (isNaN(newData[field])) {
-                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
-                } else {
-                    // parseamos el valor a número antes de pasar al método de creación
-                    newData[field] = parseFloat(newData[field]);
-                }
-            } else {
-                if (typeof newData[field] !== 'string') {
-                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a string` });
-                }
-            }
-        }
 
         // verificamos si los datos son válidos
         if (!isValidData) {
@@ -376,22 +311,13 @@ function loadWRIApi(app, dataset) {
                 return res.status(400).json({ error: `400, Bad Request: Field '${field}' is missing` });
             }
 
-            // verificamos que el campo no es vacío
-            if (newData[field] === "") {
-                return res.status(400).json({ error: `400, Bad Request: No field should be empty` });
-            }
-
-            // verificamos el tipo de campo según los requisitos
             if (field === 'year') {
                 if (!Number.isInteger(newData[field])) {
                     return res.status(400).json({ error: `400, Bad Request: Field 'year' must be an integer` });
                 }
             } else if (['wri', 'exposure', 'vulnerability', 'susceptibility', 'lack_of_coping_capability', 'lack_of_adaptive_capacity'].includes(field)) {
-                if (isNaN(newData[field])) {
+                if (typeof newData[field] !== 'number') {
                     return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
-                } else {
-                    // parseamos el valor a número antes de pasar al método de actualización
-                    newData[field] = parseFloat(newData[field]);
                 }
             } else {
                 if (typeof newData[field] !== 'string') {

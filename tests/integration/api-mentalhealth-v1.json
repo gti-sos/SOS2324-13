@@ -3,7 +3,7 @@
 		"_postman_id": "902dc66b-4674-40af-b1b5-ffe01d349368",
 		"name": "SOS-ALB",
 		"description": "Es una colección de peticiones dentro de mi API, la cual consiste en un dataset de trastornos mentales y sus proporciones , en diferentes países y años.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v1.1.0/collection.json",
 		"_exporter_id": "32965348"
 	},
 	"item": [

@@ -3,7 +3,7 @@
     import { dev } from "$app/environment";
     import { page } from "$app/stores";
 
-    let API = "/api/v2/mentalhealth-datasets";
+    let API = "/api/v2/salaries-datasets";
 
     if (dev) API = "http://localhost:10000" + API;
 
@@ -11,17 +11,20 @@
     let year = $page.params.year;
 
     // Definir los datos cargados
-    let loadedData = {
+    let loadedSalarie = {
+        year: "",
+        timestamp: "",
+        salary: "",
         country: "",
-        code: "",
-        schizophrenia: 0,
-        bipolar_disorder: 0,
-        eating_disorder: 0,
-        anxiety_disorder: 0,
-        drug_use_disorder: 0,
-        depression: 0,
-        alcoholism: 0,
-        year: ""
+        primary_database: "",
+        time_with_this_database: "",
+        employment_state: "",
+        job_title: "",
+        manage_staff: "",
+        time_in_current_job: "",
+        other_people_on_your_team: "",
+        magnitude_of_company: "",
+        sector: ""
     };
 
     let confirmationMessage = ""; // Mensaje de confirmación
@@ -37,7 +40,7 @@
 
             // Verificar si se encontraron datos para el país y año especificados
             if (response.ok) {
-                loadedData = data;
+                loadedSalarie = salarie;
             } else if (response.status === 404) {
                 console.log("No hay datos disponibles");
             }
@@ -54,7 +57,7 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(loadedData),
+                body: JSON.stringify(loadedSalarie),
             });
 
             // Verificar el estado de la respuesta
@@ -156,30 +159,34 @@
 <table>
     <thead>
         <tr>
-            <th> País </th>
-            <th> Código </th>
-            <th> Esquizofrenia </th>
-            <th> Trastorno bipolar </th>
-            <th> Trastorno alimentario </th>
-            <th> Trastorno de ansiedad </th>
-            <th> Trastorno por consumo de drogas </th>
-            <th> Depresión </th>
-            <th> Alcoholismo </th>
             <th> Año </th>
+            <th> Timestamp </th>
+            <th> Salario </th>
+            <th> País </th>
+            <th> Base de datos primaria </th>
+            <th> Tiempo con esta base de datos </th>
+            <th> Estado de empleo </th>
+            <th> Título del trabajo </th>
+            <th> Gestionar personal </th>
+            <th> Tiempo en el trabajo actual </th>
+            <th> Otras personas en tu equipo </th>
+            <th> Magnitud de la empresa </th>
+            <th> Sector </th>
+            <th> Acción </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={loadedData.country} /></td>
-            <td><input bind:value={loadedData.code} /></td>
-            <td><input bind:value={loadedData.schizophrenia} /></td>
-            <td><input bind:value={loadedData.bipolar_disorder} /></td>
-            <td><input bind:value={loadedData.eating_disorder} /></td>
-            <td><input bind:value={loadedData.anxiety_disorder} /></td>
-            <td><input bind:value={loadedData.drug_use_disorder} /></td>
-            <td><input bind:value={loadedData.depression} /></td>
-            <td><input bind:value={loadedData.alcoholism} /></td>
-            <td><input bind:value={loadedData.year} /></td>
+            <td><input bind:value={loadedSalarie.country} /></td>
+            <td><input bind:value={loadedSalarie.code} /></td>
+            <td><input bind:value={loadedSalarie.schizophrenia} /></td>
+            <td><input bind:value={loadedSalarie.bipolar_disorder} /></td>
+            <td><input bind:value={loadedSalarie.eating_disorder} /></td>
+            <td><input bind:value={loadedSalarie.anxiety_disorder} /></td>
+            <td><input bind:value={loadedSalarie.drug_use_disorder} /></td>
+            <td><input bind:value={loadedSalarie.depression} /></td>
+            <td><input bind:value={loadedSalarie.alcoholism} /></td>
+            <td><input bind:value={loadedSalarie.year} /></td>
         </tr>
     </tbody>
 </table>
