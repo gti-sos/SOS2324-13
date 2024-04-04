@@ -52,8 +52,10 @@
                 dataset = data;
                 confirmation = "Datos obtenidos correctamente";
                 
-            } else {
-                errorMsg = `Error ${status}: Los datos no se han podido obtener`;
+            } else if (status == 404) {
+                errorMsg = "No hay datos existentes.";
+                confirmation = "";
+                dataset = [];
             }
         } catch (error) {
             errorMsg = error.message;
@@ -72,7 +74,16 @@
                 getData();
                 confirmation = "Nuevo dato creado";
             } else {
-                errorMsg = `Error ${status}: No se pudo crear el dato`;
+                if (status == 409) {
+                    errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
+                    confirmation = "";
+                } else if (status == 400) {
+                    errorMsg ="No se han completado los campos de manera correcta.";
+                    confirmation = "";
+                } else {
+                    errorMsg = "Error Servidor";
+                    confirmation = "";
+                }
             }
         } catch (error) {
             errorMsg = error.message;
@@ -87,7 +98,7 @@
                 dataset = [];
                 confirmation = "Todos los datos eliminados";
             } else {
-                errorMsg = `Error ${status}: No se pudieron eliminar los datos`;
+                errorMsg = `Error: No se pudieron eliminar los datos`;
             }
         } catch (error) {
             errorMsg = error.message;
@@ -100,12 +111,12 @@
             const status = response.status;
             if (status === 200) {
                 // Eliminar el dato del conjunto de datos local
-                dataset = dataset.filter(data => data.country !== country || data.year !== year);
+                getData();
                 confirmation = "Dato eliminado correctamente";
             } else if (status === 404) {
-                errorMsg = `Error ${status}: No se encontró el dato a eliminar`;
+                errorMsg = `Error : No se encontró el dato a eliminar`;
             } else {
-                errorMsg = `Error ${status}: No se pudo eliminar el dato`;
+                errorMsg = `Error : No se pudo eliminar el dato`;
             }
         } catch (error) {
             errorMsg = error.message;

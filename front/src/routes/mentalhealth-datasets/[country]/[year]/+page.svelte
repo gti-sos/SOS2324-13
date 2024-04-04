@@ -60,11 +60,14 @@
             // Verificar el estado de la respuesta
             if (response.ok) {
                 fetchData(); // Recargar los datos después de la actualización
+                errorMsg = "";
                 confirmationMessage = "Datos actualizados correctamente"; // Actualizar el mensaje de confirmación
             } else if (response.status === 404) {
-                console.log("No existe un dato para este país y año");
+                errorMsg = "No existe un dato para este país y año";
+                confirmationMessage ="";
             } else if (response.status === 400) {
-                console.log("Campos incompletos o incorrectos");
+                errorMsg = "Campos incompletos o incorrectos";
+                confirmationMessage = "";
             } else {
                 console.log(`Error ${response.status}`);
             }
