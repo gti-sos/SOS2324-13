@@ -330,39 +330,40 @@ async function search() {
     <table>
         <thead>
             <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>País</th>
-                <th>Código</th>
-                <th>Esquizofrenia</th>
-                <th>Trastorno bipolar</th>
-                <th>Trastorno alimentario</th>
-                <th>Trastorno de ansiedad</th>
-                <th>Trastorno por consumo de drogas</th>
-                <th>Depresión</th>
-                <th>Alcoholismo</th>
-                <th>Año</th>
+                <th><label for="from">From</label></th>
+                <th><label for="to">To</label></th>
+                <th><label for="countryFilter">País</label></th>
+                <th><label for="codeFilter">Código</label></th>
+                <th><label for="schizophreniaFilter">Esquizofrenia</label></th>
+                <th><label for="bipolarDisorderFilter">Trastorno bipolar</label></th>
+                <th><label for="eatingDisorderFilter">Trastorno alimentario</label></th>
+                <th><label for="anxietyDisorderFilter">Trastorno de ansiedad</label></th>
+                <th><label for="drugUseDisorderFilter">Trastorno por consumo de drogas</label></th>
+                <th><label for="depressionFilter">Depresión</label></th>
+                <th><label for="alcoholismFilter">Alcoholismo</label></th>
+                <th><label for="yearFilter">Año</label></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><input type="text" bind:value={from} /></td>
-                <td><input type="text" bind:value={to} /></td>
-                <td><input type="text" bind:value={countryFilter} /></td>
-                <td><input type="text" bind:value={codeFilter} /></td>
-                <td><input type="text" bind:value={schizophreniaFilter} /></td>
-                <td><input type="text" bind:value={bipolarDisorderFilter} /></td>
-                <td><input type="text" bind:value={eatingDisorderFilter} /></td>
-                <td><input type="text" bind:value={anxietyDisorderFilter} /></td>
-                <td><input type="text" bind:value={drugUseDisorderFilter} /></td>
-                <td><input type="text" bind:value={depressionFilter} /></td>
-                <td><input type="text" bind:value={alcoholismFilter} /></td>
-                <td><input type="text" bind:value={yearFilter} /></td>
+                <td><input type="text" bind:value={from} id="from" placeholder="From" /></td>
+                <td><input type="text" bind:value={to} id="to" placeholder="To" /></td>
+                <td><input type="text" bind:value={countryFilter} id="countryFilter" placeholder="País" /></td>
+                <td><input type="text" bind:value={codeFilter} id="codeFilter" placeholder="Código" /></td>
+                <td><input type="text" bind:value={schizophreniaFilter} id="schizophreniaFilter" placeholder="Esquizofrenia" /></td>
+                <td><input type="text" bind:value={bipolarDisorderFilter} id="bipolarDisorderFilter" placeholder="Trastorno bipolar" /></td>
+                <td><input type="text" bind:value={eatingDisorderFilter} id="eatingDisorderFilter" placeholder="Trastorno alimentario" /></td>
+                <td><input type="text" bind:value={anxietyDisorderFilter} id="anxietyDisorderFilter" placeholder="Trastorno de ansiedad" /></td>
+                <td><input type="text" bind:value={drugUseDisorderFilter} id="drugUseDisorderFilter" placeholder="Trastorno por consumo de drogas" /></td>
+                <td><input type="text" bind:value={depressionFilter} id="depressionFilter" placeholder="Depresión" /></td>
+                <td><input type="text" bind:value={alcoholismFilter} id="alcoholismFilter" placeholder="Alcoholismo" /></td>
+                <td><input type="text" bind:value={yearFilter} id="yearFilter" placeholder="Año" /></td>
             </tr>
         </tbody>
     </table>
     <button on:click={search}>Buscar</button>
 {/if}
+
 
 
     <!-- Lista de resultados -->
