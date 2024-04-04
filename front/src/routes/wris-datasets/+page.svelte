@@ -317,7 +317,10 @@
                     <input id="newExposure" bind:value={newData.exposure} />
                 </td>
                 <td>
-                    <input id="newVulnerability" bind:value={newData.vulnerability} />
+                    <input
+                        id="newVulnerability"
+                        bind:value={newData.vulnerability}
+                    />
                 </td>
             </tr>
             <tr>
@@ -328,13 +331,22 @@
             </tr>
             <tr>
                 <td>
-                    <input id="newSusceptibility" bind:value={newData.susceptibility} />
+                    <input
+                        id="newSusceptibility"
+                        bind:value={newData.susceptibility}
+                    />
                 </td>
                 <td>
-                    <input id="newLack_of_coping_capability" bind:value={newData.lack_of_coping_capability} />
+                    <input
+                        id="newLack_of_coping_capability"
+                        bind:value={newData.lack_of_coping_capability}
+                    />
                 </td>
                 <td>
-                    <input id="newLack_of_adaptive_capacity" bind:value={newData.lack_of_adaptive_capacity} />
+                    <input
+                        id="newLack_of_adaptive_capacity"
+                        bind:value={newData.lack_of_adaptive_capacity}
+                    />
                 </td>
                 <td>
                     <input id="newYear" bind:value={newData.year} />
@@ -348,16 +360,28 @@
             </tr>
             <tr>
                 <td>
-                    <input id="newExposure_category" bind:value={newData.exposure_category} />
+                    <input
+                        id="newExposure_category"
+                        bind:value={newData.exposure_category}
+                    />
                 </td>
                 <td>
-                    <input id="newWri_category" bind:value={newData.wri_category} />
+                    <input
+                        id="newWri_category"
+                        bind:value={newData.wri_category}
+                    />
                 </td>
                 <td>
-                    <input id="newVulnerability_category" bind:value={newData.vulnerability_category} />
+                    <input
+                        id="newVulnerability_category"
+                        bind:value={newData.vulnerability_category}
+                    />
                 </td>
                 <td>
-                    <input id="newSusceptibility_category" bind:value={newData.susceptibility_category} />
+                    <input
+                        id="newSusceptibility_category"
+                        bind:value={newData.susceptibility_category}
+                    />
                 </td>
             </tr>
         </tbody>
@@ -392,6 +416,7 @@
         <button on:click={toggleTabla}>Filtrar</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button id="pagAv" on:click={previousPage}>Página anterior</button>
+        Página: {currentPage}
         <button id="pagNe" on:click={nextPage}>Página siguiente</button>
     </div>
 
@@ -418,7 +443,10 @@
                         <input id="exposureFilter" bind:value={exposure} />
                     </td>
                     <td>
-                        <input id="vulnerabilityFilter" bind:value={vulnerability} />
+                        <input
+                            id="vulnerabilityFilter"
+                            bind:value={vulnerability}
+                        />
                     </td>
                 </tr>
                 <tr>
@@ -429,13 +457,22 @@
                 </tr>
                 <tr>
                     <td>
-                        <input id="susceptibilityFilter" bind:value={susceptibility} />
+                        <input
+                            id="susceptibilityFilter"
+                            bind:value={susceptibility}
+                        />
                     </td>
                     <td>
-                        <input id="lack_of_coping_capabilityFilter" bind:value={lack_of_coping_capability} />
+                        <input
+                            id="lack_of_coping_capabilityFilter"
+                            bind:value={lack_of_coping_capability}
+                        />
                     </td>
                     <td>
-                        <input id="lack_of_adaptive_capacityFilter" bind:value={lack_of_adaptive_capacity} />
+                        <input
+                            id="lack_of_adaptive_capacityFilter"
+                            bind:value={lack_of_adaptive_capacity}
+                        />
                     </td>
                     <td>
                         <input id="yearFilter" bind:value={year} />
@@ -449,16 +486,28 @@
                 </tr>
                 <tr>
                     <td>
-                        <input id="exposure_categoryFilter" bind:value={exposure_category} />
+                        <input
+                            id="exposure_categoryFilter"
+                            bind:value={exposure_category}
+                        />
                     </td>
                     <td>
-                        <input id="wri_categoryFilter" bind:value={wri_category} />
+                        <input
+                            id="wri_categoryFilter"
+                            bind:value={wri_category}
+                        />
                     </td>
                     <td>
-                        <input id="vulnerability_categoryFilter" bind:value={vulnerability_category} />
+                        <input
+                            id="vulnerability_categoryFilter"
+                            bind:value={vulnerability_category}
+                        />
                     </td>
                     <td>
-                        <input id="susceptibility_categoryFilter" bind:value={susceptibility_category} />
+                        <input
+                            id="susceptibility_categoryFilter"
+                            bind:value={susceptibility_category}
+                        />
                     </td>
                 </tr>
                 <tr>
@@ -475,11 +524,11 @@
                 </tr>
                 <tr>
                     <td id="noBorder" colspan="4" style="text-align: center;">
-                            <button id="search" on:click={getData}>Buscar</button>
+                        <button id="search" on:click={getData}>Buscar</button>
 
-                            <button id="erase" on:click={limpiarCampos}
-                                >Limpiar búsqueda</button
-                            >
+                        <button id="erase" on:click={limpiarCampos}
+                            >Limpiar búsqueda</button
+                        >
                     </td>
                 </tr>
             </tbody>
@@ -543,10 +592,12 @@
 
     #pagAv {
         background-color: rgb(63, 63, 63);
+        margin-right: 3px;
     }
 
     #pagNe {
         background-color: rgb(63, 63, 63);
+        margin-left: 5px;
     }
 
     .objetoDeLista {
