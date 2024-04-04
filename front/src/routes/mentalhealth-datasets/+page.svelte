@@ -78,7 +78,7 @@
         }
     }
 
-    function nextPage() {
+   function nextPage() {
     if (dataset.length >= pageSize) {
         currentPage++;
         getData();
@@ -288,11 +288,6 @@
                 <th> Esquizofrenia </th>
                 <th> Trastorno bipolar </th>
                 <th> Trastorno alimentario </th>
-                <th> Trastorno de ansiedad </th>
-                <th> Trastorno por consumo de drogas </th>
-                <th> Depresión </th>
-                <th> Alcoholismo </th>
-                <th> Año </th>
             </tr>
         </thead>
         <!-- Inputs para agregar nuevos datos -->
@@ -303,6 +298,23 @@
                 <td><input bind:value={newData.schizophrenia} /></td>
                 <td><input bind:value={newData.bipolar_disorder} /></td>
                 <td><input bind:value={newData.eating_disorder} /></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table>
+        <thead>
+            <tr>
+                <th> Trastorno de ansiedad </th>
+                <th> Trastorno por consumo de drogas </th>
+                <th> Depresión </th>
+                <th> Alcoholismo </th>
+                <th> Año </th>
+            </tr>
+        </thead>
+        <!-- Inputs para agregar nuevos datos -->
+        <tbody>
+            <tr>
                 <td><input bind:value={newData.anxiety_disorder} /></td>
                 <td><input bind:value={newData.drug_use_disorder} /></td>
                 <td><input bind:value={newData.depression} /></td>
@@ -311,6 +323,7 @@
             </tr>
         </tbody>
     </table>
+    
 
     <ul>
         {#each dataset as data}
@@ -331,6 +344,9 @@
         <button on:click={prevPage}>Página anterior</button>
         <button on:click={nextPage}>Página siguiente</button>
     </div>
+
+
+
 
     <!-- Sección para mostrar mensajes -->
     {#if confirmation != ""}
