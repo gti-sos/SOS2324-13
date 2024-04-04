@@ -220,58 +220,60 @@
         }
     }
 
-// Buscar
-async function search() {
-    let parametros = "";
+    async function search() {
+    let parametros = "?"; // Inicializamos la cadena de parámetros con el símbolo de interrogación para el primer parámetro
 
-if (from !== "") {
-    let parsedFrom = parseInt(from);
-    parametros += `&from=${parsedFrom}`;
-}
-if (to !== "") {
-    let parsedTo = parseInt(to);
-    parametros += `&to=${parsedTo}`;
-}
-if (country !== "") {
-    parametros += `&country=${country}`;
-}
-if (code !== "") {
-    parametros += `&code=${code}`;
-}
-if (schizophrenia !== "") {
-    let parsedSchizophrenia = parseFloat(schizophrenia);
-    parametros += `&schizophrenia=${parsedSchizophrenia}`;
-}
-if (bipolarDisorder !== "") {
-    let parsedBipolarDisorder = parseFloat(bipolarDisorder);
-    parametros += `&bipolar_disorder=${parsedBipolarDisorder}`;
-}
-if (eatingDisorder !== "") {
-    let parsedEatingDisorder = parseFloat(eatingDisorder);
-    parametros += `&eating_disorder=${parsedEatingDisorder}`;
-}
-if (anxietyDisorder !== "") {
-    let parsedAnxietyDisorder = parseFloat(anxietyDisorder);
-    parametros += `&anxiety_disorder=${parsedAnxietyDisorder}`;
-}
-if (drugUseDisorder !== "") {
-    let parsedDrugUseDisorder = parseFloat(drugUseDisorder);
-    parametros += `&drug_use_disorder=${parsedDrugUseDisorder}`;
-}
-if (depression !== "") {
-    let parsedDepression = parseFloat(depression);
-    parametros += `&depression=${parsedDepression}`;
-}
-if (alcoholism !== "") {
-    let parsedAlcoholism = parseFloat(alcoholism);
-    parametros += `&alcoholism=${parsedAlcoholism}`;
-}
-if (year !== "") {
-    let parsedYear = parseInt(year);
-    parametros += `&year=${parsedYear}`;
-}
+    // Verificamos cada filtro y lo agregamos a la cadena de parámetros si está presente
+    if (from !== "") {
+        let parsedFrom = parseInt(from);
+        parametros += `from=${parsedFrom}&`;
+    }
+    if (to !== "") {
+        let parsedTo = parseInt(to);
+        parametros += `to=${parsedTo}&`;
+    }
+    if (countryFilter !== "") {
+        parametros += `country=${countryFilter}&`;
+    }
+    if (codeFilter !== "") {
+        parametros += `code=${codeFilter}&`;
+    }
+    if (schizophreniaFilter !== "") {
+        let parsedSchizophrenia = parseFloat(schizophreniaFilter);
+        parametros += `schizophrenia=${parsedSchizophrenia}&`;
+    }
+    if (bipolarDisorderFilter !== "") {
+        let parsedBipolarDisorder = parseFloat(bipolarDisorderFilter);
+        parametros += `bipolar_disorder=${parsedBipolarDisorder}&`;
+    }
+    if (eatingDisorderFilter !== "") {
+        let parsedEatingDisorder = parseFloat(eatingDisorderFilter);
+        parametros += `eating_disorder=${parsedEatingDisorder}&`;
+    }
+    if (anxietyDisorderFilter !== "") {
+        let parsedAnxietyDisorder = parseFloat(anxietyDisorderFilter);
+        parametros += `anxiety_disorder=${parsedAnxietyDisorder}&`;
+    }
+    if (drugUseDisorderFilter !== "") {
+        let parsedDrugUseDisorder = parseFloat(drugUseDisorderFilter);
+        parametros += `drug_use_disorder=${parsedDrugUseDisorder}&`;
+    }
+    if (depressionFilter !== "") {
+        let parsedDepression = parseFloat(depressionFilter);
+        parametros += `depression=${parsedDepression}&`;
+    }
+    if (alcoholismFilter !== "") {
+        let parsedAlcoholism = parseFloat(alcoholismFilter);
+        parametros += `alcoholism=${parsedAlcoholism}&`;
+    }
+    if (yearFilter !== "") {
+        let parsedYear = parseInt(yearFilter);
+        parametros += `year=${parsedYear}&`;
+    }
 
     try {
+        // Eliminamos el último carácter '&' de la cadena de parámetros
+        parametros = parametros.slice(0, -1);
         const response = await fetch(API + parametros, { method: "GET" });
         let data = await response.json();
         console.log(data);
@@ -294,6 +296,7 @@ if (year !== "") {
         }, 5000);
     }
 }
+
 
 </script>
 
