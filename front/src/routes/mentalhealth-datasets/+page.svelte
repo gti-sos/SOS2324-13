@@ -79,16 +79,29 @@
     }
 
     function nextPage() {
-        currentPage++;
-        getData();
+        if (dataset.length > 0) {
+            currentPage++;
+            getData();
+        } else {
+            errorMsg = "No hay datos disponibles en la página siguiente.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
     }
 
     function prevPage() {
         if (currentPage > 1) {
             currentPage--;
             getData();
+        } else {
+            errorMsg = "Ya estás en la primera página.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
         }
     }
+
     //CREAR DATOS
     async function createData() {
         try {
