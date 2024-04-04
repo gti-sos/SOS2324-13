@@ -79,19 +79,17 @@
     }
 
     function nextPage() {
-    const nextOffset = currentPage * pageSize;
-    const totalData = dataset.length;
-
-    if (totalData > nextOffset) {
+    if (dataset.length >= pageSize) {
         currentPage++;
         getData();
     } else {
-        errorMsg = "No hay datos disponibles en la página siguiente.";
+        errorMsg = "No hay más datos disponibles en la página siguiente.";
         setTimeout(() => {
             errorMsg = "";
         }, 5000);
     }
 }
+
 
     function prevPage() {
         if (currentPage > 1) {
