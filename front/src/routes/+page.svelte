@@ -37,7 +37,7 @@
                 >
             </li>
             <li>
-                <a href="/api/v1/mentalhealth-datasets"
+                <a href="/api/v2/mentalhealth-datasets"
                     >api-mentalhealth-datasets (desarrollada por Antonio López
                     Barrios)</a
                 >
