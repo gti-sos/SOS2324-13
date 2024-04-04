@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "dd2fa1fb-412d-4760-8f9a-7248deb98e42",
 		"name": "SOS-ALB V2",
-		"description": "Es una colección de peticiones dentro de mi API, la cual consiste en un dataset de trastornos mentales y sus proporciones , en diferentes países y años.",
+		"description": "Es una colección de peticiones dentro de mi API(v2), la cual consiste en un dataset de trastornos mentales y sus proporciones , en diferentes países y años.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32965348"
 	},
@@ -513,9 +513,10 @@
 				"url": {
 					"raw": "{{SERVER}}/api/v2/mentalhealth-datasets/",
 					"host": [
-						"{{SERVER}}api"
+						"{{SERVER}}"
 					],
 					"path": [
+						"api",
 						"v2",
 						"mentalhealth-datasets",
 						""
