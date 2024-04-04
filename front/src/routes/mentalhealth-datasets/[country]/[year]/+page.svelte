@@ -25,6 +25,7 @@
     };
 
     let confirmationMessage = ""; // Mensaje de confirmación
+    let errorMessage = ""; // Mensaje de error
 
     // Función para cargar los datos del país y año específicos
     async function fetchData() {
@@ -39,10 +40,11 @@
             if (response.ok) {
                 loadedData = data;
             } else if (response.status === 404) {
-                console.log("No hay datos disponibles");
+                errorMessage = "No hay datos disponibles";
             }
         } catch (e) {
             console.error(e);
+            errorMessage = "Error al cargar los datos";
         }
     }
 
@@ -60,19 +62,23 @@
             // Verificar el estado de la respuesta
             if (response.ok) {
                 fetchData(); // Recargar los datos después de la actualización
-                errorMsg = "";
                 confirmationMessage = "Datos actualizados correctamente"; // Actualizar el mensaje de confirmación
+                errorMessage = ""; // Reiniciar el mensaje de error
             } else if (response.status === 404) {
-                errorMsg = "No existe un dato para este país y año";
-                confirmationMessage ="";
+                errorMessage = "No existe un dato para este país y año";
+                confirmationMessage = ""; // Reiniciar el mensaje de confirmación
             } else if (response.status === 400) {
-                errorMsg = "Campos incompletos o incorrectos";
-                confirmationMessage = "";
+                errorMessage = "Campos incompletos o incorrectos";
+                confirmationMessage = ""; // Reiniciar el mensaje de confirmación
             } else {
                 console.log(`Error ${response.status}`);
+                errorMessage = "Error al actualizar los datos";
+                confirmationMessage = ""; // Reiniciar el mensaje de confirmación
             }
         } catch (e) {
             console.error(e);
+            errorMessage = "Error al actualizar los datos";
+            confirmationMessage = ""; // Reiniciar el mensaje de confirmación
         }
     }
 
@@ -83,20 +89,7 @@
 </script>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f3f3f3;
-        color: #333;
-        margin: 0;
-        padding: 0;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    table {
+   table {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 20px;
@@ -114,12 +107,6 @@
 
     tbody tr:nth-child(even) {
         background-color: #f9f9f9;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
     }
 
     button {
@@ -152,6 +139,7 @@
         color: #721c24;
         border: 1px solid #f5c6cb;
     }
+
 </style>
 
 <p>Detalles del dato del país: {country} para el año {year}.</p>
@@ -191,4 +179,8 @@
 
 {#if confirmationMessage}
     <p class="message confirmation">{confirmationMessage}</p>
+{/if}
+
+{#if errorMessage}
+    <p class="message error">{errorMessage}</p>
 {/if}

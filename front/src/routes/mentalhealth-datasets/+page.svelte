@@ -23,6 +23,8 @@
 
     let errorMsg = "";
     let confirmation = "";
+    let currentPage = 1; 
+    let pageSize = 10; 
 
     onMount(() => {
         getData();
@@ -44,7 +46,7 @@
 
     async function getData() {
         try {
-            const response = await fetch(API, { method: "GET" });
+            const response = await fetch(API+`?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
             let data = await response.json();
             console.log(data);
             let status = await response.status;
@@ -98,7 +100,7 @@
                 dataset = [];
                 confirmation = "Todos los datos eliminados";
             } else {
-                errorMsg = `Error: No se pudieron eliminar los datos`;
+                errorMsg = "Error: No se pudieron eliminar los datos";
             }
         } catch (error) {
             errorMsg = error.message;
@@ -114,12 +116,24 @@
                 getData();
                 confirmation = "Dato eliminado correctamente";
             } else if (status === 404) {
-                errorMsg = `Error : No se encontró el dato a eliminar`;
+                errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
             } else {
-                errorMsg = `Error : No se pudo eliminar el dato`;
+                errorMsg = "Error : No se pudo eliminar el dato";
             }
         } catch (error) {
             errorMsg = error.message;
+        }
+    }
+
+    function nextPage() {
+        currentPage++;
+        getData();
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            getData();
         }
     }
 </script>
@@ -247,6 +261,8 @@
         <button on:click={getData}>Obtener todos los datos</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
+        <button on:click={prevPage}>Página anterior</button>
+        <button on:click={nextPage}>Página siguiente</button>
     </div>
 
     <!-- Sección para mostrar mensajes -->
