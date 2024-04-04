@@ -6,8 +6,22 @@
 
     if (dev) API = "http://localhost:10000" + API;
 
-
     let dataset = [];
+
+    // Variables para filtro
+    let from = "";
+    let to = "";
+    let country = "";
+    let code = "";
+    let schizophrenia = "";
+    let bipolar_disorder = "";
+    let eating_disorder = "";
+    let anxiety_disorder = "";
+    let drug_use_disorder = "";
+    let depression = "";
+    let alcoholism = "";
+    let year = "";
+
     let newData = {
         country: "country",
         code: "code",
@@ -20,78 +34,103 @@
         alcoholism: 0,
         year: 0,
     };
-    let filterData = {
-        from: undefined,
-        to: undefined,
-        country: "",
-        code: "",
-        schizophrenia: undefined,
-        bipolar_disorder: undefined,
-        eating_disorder: undefined,
-        anxiety_disorder: undefined,
-        drug_use_disorder: undefined,
-        depression: undefined,
-        alcoholism: undefined
-    };
 
     let errorMsg = "";
     let confirmation = "";
-    let currentPage = 1; 
-    let pageSize = 10; 
+    let currentPage = 1;
+    let pageSize = 10;
 
     onMount(() => {
         getData();
     });
 
-
-
-
-
-
-    function goToFilterForm() {
-        // Obtener el elemento del formulario por su ID
-        const filterForm = document.getElementById("formulario");
-
-        // Desplazar la ventana para que el formulario sea visible
-        filterForm.scrollIntoView({ behavior: 'smooth' });
-        
-    }
-
-
-
-
-
-
-
-    //CARGAR DATOS INICIALES
+    // Cargar datos iniciales
     async function loadData() {
         try {
             const response = await fetch(API + "/loadInitialData", { method: "GET" });
             const status = response.status;
             if (status === 201) {
+                getData();
                 confirmation = "Datos cargados correctamente";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = `Error: Los datos ya han sido cargados`;
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //OBTENER DATOS
+
+    // Obtener datos
     async function getData() {
         try {
-            const response = await fetch(API+`?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
-            let data = await response.json();
-            console.log(data);
+            let response;
+            let parameters = `?limit=${pageSize}`;
+            if (currentPage > 0) {
+                const offset = currentPage * pageSize;
+                parameters += `&offset=${offset}`;
+            }
+
+            // Compruebo los parámetros de búsqueda seleccionados
+            // Compruebo si se han introducido parámetros de búsqueda
+            if (from !== "") {
+                let parsedFrom = parseInt(from);
+                parameters += `&from=${parsedFrom}`;
+            }
+            if (to !== "") {
+                let parsedTo = parseInt(to);
+                parameters += `&to=${parsedTo}`;
+            }
+            if (country !== "") {
+                parameters += `&country=${country}`;
+            }
+            if (code !== "") {
+                parameters += `&code=${code}`;
+            }
+            if (schizophrenia !== "") {
+                let parsedSchizophrenia = parseFloat(schizophrenia);
+                parameters += `&schizophrenia=${parsedSchizophrenia}`;
+            }
+            if (bipolar_disorder !== "") {
+                let parsedBipolar_disorder = parseFloat(bipolar_disorder);
+                parameters += `&bipolar_disorder=${parsedBipolar_disorder}`;
+            }
+            if (eating_disorder !== "") {
+                let parsedEating_disorder = parseFloat(eating_disorder);
+                parameters += `&eating_disorder=${parsedEating_disorder}`;
+            }
+            if (anxiety_disorder !== "") {
+                let parsedAnxiety_disorder = parseFloat(anxiety_disorder);
+                parameters += `&anxiety_disorder=${parsedAnxiety_disorder}`;
+            }
+            if (drug_use_disorder !== "") {
+                let parsedDrug_use_disorder = parseFloat(drug_use_disorder);
+                parameters += `&drug_use_disorder=${parsedDrug_use_disorder}`;
+            }
+            if (depression !== "") {
+                let parsedDepression = parseFloat(depression);
+                parameters += `&depression=${parsedDepression}`;
+            }
+            if (alcoholism !== "") {
+                let parsedAlcoholism = parseFloat(alcoholism);
+                parameters += `&alcoholism=${parsedAlcoholism}`;
+            }
+            if (year !== "") {
+                let parsedYear = parseInt(year);
+                parameters += `&year=${parsedYear}`;
+            }
+
+            response = await fetch(API + parameters, {
+                method: "GET",
+            });
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
@@ -100,7 +139,7 @@
                 errorMsg = "No hay datos existentes.";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
                 confirmation = "";
                 dataset = [];
             }
@@ -108,22 +147,21 @@
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
 
-   function nextPage() {
-    if (dataset.length >= pageSize) {
-        currentPage++;
-        getData();
-    } else {
-        errorMsg = "No hay más datos disponibles en la página siguiente.";
-        setTimeout(() => {
-            errorMsg = "";
-        }, 5000);
+    function nextPage() {
+        if (dataset.length >= pageSize) {
+            currentPage++;
+            getData();
+        } else {
+            errorMsg = "No hay más datos disponibles en la página siguiente.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
     }
-}
-
 
     function prevPage() {
         if (currentPage > 1) {
@@ -137,7 +175,7 @@
         }
     }
 
-    //CREAR DATOS
+    // Crear datos
     async function createData() {
         try {
             const response = await fetch(API + "/", {
@@ -151,7 +189,7 @@
                 confirmation = "Nuevo dato creado";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 if (status == 409) {
                     errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
@@ -160,16 +198,16 @@
                     }, 5000);
                     confirmation = "";
                 } else if (status == 400) {
-                    errorMsg ="No se han completado los campos de manera correcta.";
+                    errorMsg = "No se han completado los campos de manera correcta.";
                     setTimeout(() => {
                         errorMsg = "";
-                    }, 5000); 
+                    }, 5000);
                     confirmation = "";
                 } else {
                     errorMsg = "Error Servidor";
                     setTimeout(() => {
                         errorMsg = "";
-                    }, 5000); 
+                    }, 5000);
                     confirmation = "";
                 }
             }
@@ -177,10 +215,11 @@
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //BORRAR TODOS LOS DATOS
+
+    // Borrar todos los datos
     async function deleteAllData() {
         try {
             const response = await fetch(API, { method: "DELETE" });
@@ -190,21 +229,22 @@
                 confirmation = "Todos los datos eliminados";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = "Error: No se pudieron eliminar los datos";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //BORRAR DATO CONCRETO
+
+    // Borrar dato concreto
     async function deleteData(country, year) {
         try {
             const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
@@ -215,32 +255,43 @@
                 confirmation = "Dato eliminado correctamente";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else if (status === 404) {
                 errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = "Error : No se pudo eliminar el dato";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
 
-    
+    async function buscar() {
+        // Llama a la función getData para aplicar los filtros
+        getData();
+    }
+
+    // Función para mostrar/ocultar tabla de filtros
+    function toggleFilterTable() {
+        const table = document.getElementById("filterTable");
+        if (table.style.display === "none") {
+            table.style.display = "table";
+        } else {
+            table.style.display = "none";
+        }
+    }
 </script>
 
 <div>
-   
-
     <h1>Mental Health Datasets</h1>
 
     <table>
@@ -253,7 +304,6 @@
                 <th> Trastorno alimentario </th>
             </tr>
         </thead>
-        <!-- Inputs para agregar nuevos datos -->
         <tbody>
             <tr>
                 <td><input bind:value={newData.country} /></td>
@@ -275,7 +325,6 @@
                 <th> Año </th>
             </tr>
         </thead>
-        <!-- Inputs para agregar nuevos datos -->
         <tbody>
             <tr>
                 <td><input bind:value={newData.anxiety_disorder} /></td>
@@ -286,19 +335,17 @@
             </tr>
         </tbody>
     </table>
-    
 
     <ul>
         {#each dataset as data}
             <li>
-                <a href="/mentalhealth-datasets/{data.country}/{data.year}">{data.country}</a>
+                <a href="/mentalhealth-datasets/{data.country}/{data.year}">{data.country}, {data.year}</a>
                 <span>{data.country}, {data.code}, {data.schizophrenia}, {data.bipolar_disorder}, {data.eating_disorder}, {data.anxiety_disorder}, {data.drug_use_disorder}, {data.depression}, {data.alcoholism}, {data.year}</span>
                 <button on:click={() => deleteData(data.country, data.year)}>Eliminar</button>
             </li>
         {/each}
     </ul>
 
-    <!-- Botones para realizar acciones -->
     <div>
         <button on:click={loadData}>Cargar datos</button>
         <button on:click={getData}>Obtener todos los datos</button>
@@ -306,89 +353,22 @@
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button on:click={prevPage}>Página anterior</button>
         <button on:click={nextPage}>Página siguiente</button>
-        <button on:click={goToFilterForm}>Ir al formulario</button>
-        
     </div>
 
+    <button on:click={toggleFilterTable}>Mostrar Filtros</button>
+    <table id="filterTable" style="display:none;">
+        <!-- Aquí van los campos de filtro -->
+    </table>
 
-
-
-    <!-- Sección para mostrar mensajes -->
     {#if confirmation != ""}
-        <div class="Mensaje confirmacion">{confirmation}</div>
+        <div class="message confirmation">{confirmation}</div>
     {/if}
     {#if errorMsg != ""}
-        <div class="Mensaje error">Error: {errorMsg}</div>
+        <div class="message error">Error: {errorMsg}</div>
     {/if}
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Formulario para filtrar datos -->
-<table id="formulario">
-    <tr>
-        <td>From (Año)</td>
-        <td><input type="number" bind:value={filterData.from}></td>
-        <td>País</td>
-        <td><input type="text" bind:value={filterData.country}></td>
-    </tr>
-    <tr>
-        <td>To (Año)</td>
-        <td><input type="number" bind:value={filterData.to}></td>
-        <td>Código</td>
-        <td><input type="text" bind:value={filterData.code}></td>
-    </tr>
-    <tr>
-        <td>Esquizofrenia</td>
-        <td><input type="number" bind:value={filterData.schizophrenia}></td>
-        <td>Trastorno bipolar</td>
-        <td><input type="number" bind:value={filterData.bipolar_disorder}></td>
-    </tr>
-    <tr>
-        <td>Trastorno alimentario</td>
-        <td><input type="number" bind:value={filterData.eating_disorder}></td>
-        <td>Trastorno de ansiedad</td>
-        <td><input type="number" bind:value={filterData.anxiety_disorder}></td>
-    </tr>
-    <tr>
-        <td>Trastorno por consumo de drogas</td>
-        <td><input type="number" bind:value={filterData.drug_use_disorder}></td>
-        <td>Depresión</td>
-        <td><input type="number" bind:value={filterData.depression}></td>
-    </tr>
-    <tr>
-        <td>Alcoholismo</td>
-        <td><input type="number" bind:value={filterData.alcoholism}></td>
-        <td colspan="2"><button type="button" on:click={filterData}>Filtrar</button></td>
-    </tr>
-    <button type="button" on:click={filterData}>Filtrar</button>
-
-</table>
-
-
-
-
-
-
-
-
-
- <!-- Estilos -->
- <style>
+<style>
     body {
         font-family: Arial, sans-serif;
         background-color: #f3f3f3;
@@ -459,5 +439,3 @@
         border: 1px solid #f5c6cb;
     }
 </style>
-</div>
-
