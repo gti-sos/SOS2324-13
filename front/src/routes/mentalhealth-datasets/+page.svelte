@@ -220,31 +220,46 @@
         }
     }
 
-    // Buscar
-    async function search() {
-        try {
-            const response = await fetch(API + `?from=${from}&to=${to}&country=${countryFilter}&code=${codeFilter}&schizophrenia=${schizophreniaFilter}&bipolar_disorder=${bipolarDisorderFilter}&eating_disorder=${eatingDisorderFilter}&anxiety_disorder=${anxietyDisorderFilter}&drug_use_disorder=${drugUseDisorderFilter}&depression=${depressionFilter}&alcoholism=${alcoholismFilter}&year=${yearFilter}`, { method: "GET" });
-            let data = await response.json();
-            console.log(data);
-            let status = await response.status;
-            if (status == 200) {
-                dataset = data;
-                errorMsg = "";
-            } else if (status == 404) {
-                errorMsg = "No se encontraron resultados para la búsqueda.";
-                setTimeout(() => {
-                    errorMsg = "";
-                }, 5000);
-                confirmation = "";
-                dataset = [];
-            }
-        } catch (error) {
-            errorMsg = error.message;
+// Buscar
+async function search() {
+    let queryParams = `?from=${from}&to=${to}`;
+
+    // Agregar campos de filtro al query params según lo seleccionado en el formulario
+    if (countryFilter) queryParams += `&country=${countryFilter}`;
+    if (codeFilter) queryParams += `&code=${codeFilter}`;
+    if (schizophreniaFilter) queryParams += `&schizophrenia=${schizophreniaFilter}`;
+    if (bipolarDisorderFilter) queryParams += `&bipolar_disorder=${bipolarDisorderFilter}`;
+    if (eatingDisorderFilter) queryParams += `&eating_disorder=${eatingDisorderFilter}`;
+    if (anxietyDisorderFilter) queryParams += `&anxiety_disorder=${anxietyDisorderFilter}`;
+    if (drugUseDisorderFilter) queryParams += `&drug_use_disorder=${drugUseDisorderFilter}`;
+    if (depressionFilter) queryParams += `&depression=${depressionFilter}`;
+    if (alcoholismFilter) queryParams += `&alcoholism=${alcoholismFilter}`;
+    if (yearFilter) queryParams += `&year=${yearFilter}`;
+
+    try {
+        const response = await fetch(API + queryParams, { method: "GET" });
+        let data = await response.json();
+        console.log(data);
+        let status = await response.status;
+        if (status == 200) {
+            dataset = data;
+            errorMsg = "";
+        } else if (status == 404) {
+            errorMsg = "No se encontraron resultados para la búsqueda.";
             setTimeout(() => {
                 errorMsg = "";
             }, 5000);
+            confirmation = "";
+            dataset = [];
         }
+    } catch (error) {
+        errorMsg = error.message;
+        setTimeout(() => {
+            errorMsg = "";
+        }, 5000);
     }
+}
+
 </script>
 
 <div>
