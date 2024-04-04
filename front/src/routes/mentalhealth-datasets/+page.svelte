@@ -6,7 +6,6 @@
 
     if (dev) API = "http://localhost:10000" + API;
 
-
     let dataset = [];
     let newData = {
         country: "country",
@@ -20,31 +19,34 @@
         alcoholism: 0,
         year: 0,
     };
-    
 
     let errorMsg = "";
     let confirmation = "";
-    let currentPage = 1; 
-    let pageSize = 10; 
+    let currentPage = 1;
+    let pageSize = 10;
+
+    // Variables para filtro
+    let from = "";
+    let to = "";
+    let countryFilter = "";
+    let codeFilter = "";
+    let schizophreniaFilter = "";
+    let bipolarDisorderFilter = "";
+    let eatingDisorderFilter = "";
+    let anxietyDisorderFilter = "";
+    let drugUseDisorderFilter = "";
+    let depressionFilter = "";
+    let alcoholismFilter = "";
+    let yearFilter = "";
+
+    // Variable para controlar la visibilidad de la tabla de búsqueda
+    let showSearchTable = false;
 
     onMount(() => {
         getData();
     });
 
-
-
-
-
-
-   
-
-
-
-
-
-
-
-    //CARGAR DATOS INICIALES
+    // Cargar datos iniciales
     async function loadData() {
         try {
             const response = await fetch(API + "/loadInitialData", { method: "GET" });
@@ -53,24 +55,25 @@
                 confirmation = "Datos cargados correctamente";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = `Error: Los datos ya han sido cargados`;
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //OBTENER DATOS
+
+    // Obtener datos
     async function getData() {
         try {
-            const response = await fetch(API+`?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
+            const response = await fetch(API + `?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
             let data = await response.json();
             console.log(data);
             let status = await response.status;
@@ -81,7 +84,7 @@
                 errorMsg = "No hay datos existentes.";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
                 confirmation = "";
                 dataset = [];
             }
@@ -89,22 +92,21 @@
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
 
-   function nextPage() {
-    if (dataset.length >= pageSize) {
-        currentPage++;
-        getData();
-    } else {
-        errorMsg = "No hay más datos disponibles en la página siguiente.";
-        setTimeout(() => {
-            errorMsg = "";
-        }, 5000);
+    function nextPage() {
+        if (dataset.length >= pageSize) {
+            currentPage++;
+            getData();
+        } else {
+            errorMsg = "No hay más datos disponibles en la página siguiente.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
     }
-}
-
 
     function prevPage() {
         if (currentPage > 1) {
@@ -118,7 +120,7 @@
         }
     }
 
-    //CREAR DATOS
+    // Crear datos
     async function createData() {
         try {
             const response = await fetch(API + "/", {
@@ -132,7 +134,7 @@
                 confirmation = "Nuevo dato creado";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 if (status == 409) {
                     errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
@@ -141,16 +143,16 @@
                     }, 5000);
                     confirmation = "";
                 } else if (status == 400) {
-                    errorMsg ="No se han completado los campos de manera correcta.";
+                    errorMsg = "No se han completado los campos de manera correcta.";
                     setTimeout(() => {
                         errorMsg = "";
-                    }, 5000); 
+                    }, 5000);
                     confirmation = "";
                 } else {
                     errorMsg = "Error Servidor";
                     setTimeout(() => {
                         errorMsg = "";
-                    }, 5000); 
+                    }, 5000);
                     confirmation = "";
                 }
             }
@@ -158,10 +160,11 @@
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //BORRAR TODOS LOS DATOS
+
+    // Borrar todos los datos
     async function deleteAllData() {
         try {
             const response = await fetch(API, { method: "DELETE" });
@@ -171,21 +174,22 @@
                 confirmation = "Todos los datos eliminados";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = "Error: No se pudieron eliminar los datos";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
-    //BORRAR DATO CONCRETO
+
+    // Borrar dato concreto
     async function deleteData(country, year) {
         try {
             const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
@@ -196,32 +200,54 @@
                 confirmation = "Dato eliminado correctamente";
                 setTimeout(() => {
                     confirmation = "";
-                }, 5000); 
+                }, 5000);
             } else if (status === 404) {
                 errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             } else {
                 errorMsg = "Error : No se pudo eliminar el dato";
                 setTimeout(() => {
                     errorMsg = "";
-                }, 5000); 
+                }, 5000);
             }
         } catch (error) {
             errorMsg = error.message;
             setTimeout(() => {
                 errorMsg = "";
-            }, 5000); 
+            }, 5000);
         }
     }
 
-    
+    // Buscar
+    async function search() {
+        try {
+            const response = await fetch(API + `?from=${from}&to=${to}&country=${countryFilter}&code=${codeFilter}&schizophrenia=${schizophreniaFilter}&bipolar_disorder=${bipolarDisorderFilter}&eating_disorder=${eatingDisorderFilter}&anxiety_disorder=${anxietyDisorderFilter}&drug_use_disorder=${drugUseDisorderFilter}&depression=${depressionFilter}&alcoholism=${alcoholismFilter}&year=${yearFilter}`, { method: "GET" });
+            let data = await response.json();
+            console.log(data);
+            let status = await response.status;
+            if (status == 200) {
+                dataset = data;
+                errorMsg = "";
+            } else if (status == 404) {
+                errorMsg = "No se encontraron resultados para la búsqueda.";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000);
+                confirmation = "";
+                dataset = [];
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
+    }
 </script>
 
 <div>
-   
-
     <h1>Mental Health Datasets</h1>
 
     <table>
@@ -267,8 +293,31 @@
             </tr>
         </tbody>
     </table>
-    
-    <!--BOTON ELIMINAR PARA CADA DATO -->
+
+    <!-- Botones para realizar acciones -->
+    <div>
+        <button on:click={loadData}>Cargar datos</button>
+        <button on:click={getData}>Obtener todos los datos</button>
+        <button on:click={createData}>Crear un nuevo dato</button>
+        <button on:click={deleteAllData}>Eliminar todos los datos</button>
+        <button on:click={prevPage}>Página anterior</button>
+        <button on:click={nextPage}>Página siguiente</button>
+    </div>
+
+    <!-- Botón para mostrar/ocultar tabla de búsqueda -->
+    <button on:click={() => (showSearchTable = !showSearchTable)}>
+        {showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}
+    </button>
+
+    <!-- Tabla de búsqueda -->
+    {#if showSearchTable}
+        <h2>Búsqueda</h2>
+        <table>
+            <!-- Resto de la tabla de búsqueda aquí -->
+        </table>
+    {/if}
+
+    <!-- Lista de resultados -->
     <ul>
         {#each dataset as data}
             <li>
@@ -279,26 +328,12 @@
         {/each}
     </ul>
 
-    <!-- Botones para realizar acciones -->
-    <div>
-        <button on:click={loadData}>Cargar datos</button>
-        <button on:click={getData}>Obtener todos los datos</button>
-        <button on:click={createData}>Crear un nuevo dato</button>
-        <button on:click={deleteAllData}>Eliminar todos los datos</button>
-        <button on:click={prevPage}>Página anterior</button>
-        <button on:click={nextPage}>Página siguiente</button>
-        
-    </div>
-
-
-
-
-    <!-- Sección para mostrar mensajes -->
+    <!-- Mensajes de confirmación y error -->
     {#if confirmation != ""}
-        <div class="Mensaje confirmacion">{confirmation}</div>
+        <div class="message confirmation">{confirmation}</div>
     {/if}
     {#if errorMsg != ""}
-        <div class="Mensaje error">Error: {errorMsg}</div>
+        <div class="message error">Error: {errorMsg}</div>
     {/if}
 
 
