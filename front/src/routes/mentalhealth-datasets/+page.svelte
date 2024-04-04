@@ -305,17 +305,50 @@
     </div>
 
     <!-- Botón para mostrar/ocultar tabla de búsqueda -->
-    <button on:click={() => (showSearchTable = !showSearchTable)}>
-        {showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}
-    </button>
+<button on:click={() => (showSearchTable = !showSearchTable)}>
+    {showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}
+</button>
 
-    <!-- Tabla de búsqueda -->
-    {#if showSearchTable}
-        <h2>Búsqueda</h2>
-        <table>
-            <!-- Resto de la tabla de búsqueda aquí -->
-        </table>
-    {/if}
+<!-- Tabla de búsqueda -->
+{#if showSearchTable}
+    <h2>Búsqueda</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>País</th>
+                <th>Código</th>
+                <th>Esquizofrenia</th>
+                <th>Trastorno bipolar</th>
+                <th>Trastorno alimentario</th>
+                <th>Trastorno de ansiedad</th>
+                <th>Trastorno por consumo de drogas</th>
+                <th>Depresión</th>
+                <th>Alcoholismo</th>
+                <th>Año</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" bind:value={from} /></td>
+                <td><input type="text" bind:value={to} /></td>
+                <td><input type="text" bind:value={countryFilter} /></td>
+                <td><input type="text" bind:value={codeFilter} /></td>
+                <td><input type="text" bind:value={schizophreniaFilter} /></td>
+                <td><input type="text" bind:value={bipolarDisorderFilter} /></td>
+                <td><input type="text" bind:value={eatingDisorderFilter} /></td>
+                <td><input type="text" bind:value={anxietyDisorderFilter} /></td>
+                <td><input type="text" bind:value={drugUseDisorderFilter} /></td>
+                <td><input type="text" bind:value={depressionFilter} /></td>
+                <td><input type="text" bind:value={alcoholismFilter} /></td>
+                <td><input type="text" bind:value={yearFilter} /></td>
+            </tr>
+        </tbody>
+    </table>
+    <button on:click={search}>Buscar</button>
+{/if}
+
 
     <!-- Lista de resultados -->
     <ul>
@@ -335,6 +368,8 @@
     {#if errorMsg != ""}
         <div class="message error">Error: {errorMsg}</div>
     {/if}
+
+
 
 
  <!-- Estilos -->
