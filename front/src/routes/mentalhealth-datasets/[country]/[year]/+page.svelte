@@ -3,7 +3,7 @@
     import { dev } from "$app/environment";
     import { page } from "$app/stores";
 
-    let API = "/api/v1/mentalhealth-datasets";
+    let API = "/api/v2/mentalhealth-datasets";
 
     if (dev) API = "http://localhost:10000" + API;
 
