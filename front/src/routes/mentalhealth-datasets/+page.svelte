@@ -20,6 +20,19 @@
         alcoholism: 0,
         year: 0,
     };
+    let filterData = {
+        from: undefined,
+        to: undefined,
+        country: "",
+        code: "",
+        schizophrenia: undefined,
+        bipolar_disorder: undefined,
+        eating_disorder: undefined,
+        anxiety_disorder: undefined,
+        drug_use_disorder: undefined,
+        depression: undefined,
+        alcoholism: undefined
+    };
 
     let errorMsg = "";
     let confirmation = "";
@@ -29,6 +42,27 @@
     onMount(() => {
         getData();
     });
+
+
+
+
+
+
+    function goToFilterForm() {
+        // Obtener el elemento del formulario por su ID
+        const filterForm = document.getElementById("formulario");
+
+        // Desplazar la ventana para que el formulario sea visible
+        filterForm.scrollIntoView({ behavior: 'smooth' });
+        
+    }
+
+
+
+
+
+
+
     //CARGAR DATOS INICIALES
     async function loadData() {
         try {
@@ -205,78 +239,7 @@
 </script>
 
 <div>
-    <!-- Estilos -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        .message {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
-        .confirmation {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
+   
 
     <h1>Mental Health Datasets</h1>
 
@@ -343,6 +306,8 @@
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button on:click={prevPage}>Página anterior</button>
         <button on:click={nextPage}>Página siguiente</button>
+        <button on:click={goToFilterForm}>Ir al formulario</button>
+        
     </div>
 
 
@@ -355,4 +320,144 @@
     {#if errorMsg != ""}
         <div class="Mensaje error">Error: {errorMsg}</div>
     {/if}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Formulario para filtrar datos -->
+<table id="formulario">
+    <tr>
+        <td>From (Año)</td>
+        <td><input type="number" bind:value={filterData.from}></td>
+        <td>País</td>
+        <td><input type="text" bind:value={filterData.country}></td>
+    </tr>
+    <tr>
+        <td>To (Año)</td>
+        <td><input type="number" bind:value={filterData.to}></td>
+        <td>Código</td>
+        <td><input type="text" bind:value={filterData.code}></td>
+    </tr>
+    <tr>
+        <td>Esquizofrenia</td>
+        <td><input type="number" bind:value={filterData.schizophrenia}></td>
+        <td>Trastorno bipolar</td>
+        <td><input type="number" bind:value={filterData.bipolar_disorder}></td>
+    </tr>
+    <tr>
+        <td>Trastorno alimentario</td>
+        <td><input type="number" bind:value={filterData.eating_disorder}></td>
+        <td>Trastorno de ansiedad</td>
+        <td><input type="number" bind:value={filterData.anxiety_disorder}></td>
+    </tr>
+    <tr>
+        <td>Trastorno por consumo de drogas</td>
+        <td><input type="number" bind:value={filterData.drug_use_disorder}></td>
+        <td>Depresión</td>
+        <td><input type="number" bind:value={filterData.depression}></td>
+    </tr>
+    <tr>
+        <td>Alcoholismo</td>
+        <td><input type="number" bind:value={filterData.alcoholism}></td>
+        <td colspan="2"><button type="button" on:click={filterData}>Filtrar</button></td>
+    </tr>
+    <button type="button" on:click={filterData}>Filtrar</button>
+
+</table>
+
+
+
+
+
+
+
+
+
+ <!-- Estilos -->
+ <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f3f3f3;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    .message {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .confirmation {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
 </div>
+
