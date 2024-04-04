@@ -128,16 +128,16 @@
         <tbody>
             <tr>
                 <td>
-                    <input bind:value={loadedData.country} />
+                    <input id="updCountry" bind:value={loadedData.country} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.wri} />
+                    <input id="updWri" bind:value={loadedData.wri} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.exposure} />
+                    <input id="updExposure" bind:value={loadedData.exposure} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.vulnerability} />
+                    <input id="updVulnerability" bind:value={loadedData.vulnerability} />
                 </td>
             </tr>
             <tr>
@@ -148,16 +148,16 @@
             </tr>
             <tr>
                 <td>
-                    <input bind:value={loadedData.susceptibility} />
+                    <input id="updSusceptibility" bind:value={loadedData.susceptibility} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.lack_of_coping_capability} />
+                    <input id="updLack_of_coping_capability" bind:value={loadedData.lack_of_coping_capability} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.lack_of_adaptive_capacity} />
+                    <input id="updLack_of_adaptive_capacity" bind:value={loadedData.lack_of_adaptive_capacity} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.year} />
+                    <input id="updYear" bind:value={loadedData.year} />
                 </td>
             </tr>
             <tr>
@@ -168,16 +168,16 @@
             </tr>
             <tr>
                 <td>
-                    <input bind:value={loadedData.exposure_category} />
+                    <input id="updExposure_category" bind:value={loadedData.exposure_category} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.wri_category} />
+                    <input id="updWri_category" bind:value={loadedData.wri_category} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.vulnerability_category} />
+                    <input id="updVulnerability_category" bind:value={loadedData.vulnerability_category} />
                 </td>
                 <td>
-                    <input bind:value={loadedData.susceptibility_category} />
+                    <input id="updSusceptibility_category" bind:value={loadedData.susceptibility_category} />
                 </td>
             </tr>
         </tbody>

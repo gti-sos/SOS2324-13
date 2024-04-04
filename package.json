@@ -14,12 +14,18 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test": "npm run test-wris-datasets && npm run test-mentalhealth-datasets && npm run test-salaries",
-    "test-wris-datasets": "npx newman run ./tests/api-wris.json -e ./tests/environments-wr/gcloud.json",
-    "test-mentalhealth-datasets": "npx newman run ./tests/api-mentalhealth.json -e ./tests/environments-mh/gcloud.json",
-    "test-salaries": "npx newman run ./tests/api-salaries.json -e ./tests/environments-sa/gcloud.json"
+    "test-integration": "npm run test-wris && npm run test-mentalhealth && npm run test-salaries",
+    "test-wris": "npx newman run ./tests/integration/api-wris.json -e ./tests/integration/environments-wr/gcloud.json",
+    "test-mentalhealth": "npx newman run ./tests/integration/api-mentalhealth.json -e ./tests/integration/environments-mh/gcloud.json",
+    "test-salaries": "npx newman run ./tests/integration/api-salaries.json -e ./tests/integration/environments-sa/gcloud.json",
+    "test-e2e": "npx playwright test",
+    "test": "npm run test-integration && npm run test-e2e"
   },
   "author": "rubromgui ",
   "license": "GPL-3.0",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.42.1",
+    "@types/node": "^20.12.3"
+  }
 }
