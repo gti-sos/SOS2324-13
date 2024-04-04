@@ -43,7 +43,7 @@
                 >
             </li>
             <li>
-                <a href="/api/v1/salaries-datasets"
+                <a href="/api/v2/salaries-datasets"
                     >api-salaries-datasets (desarrolada por Aaron López Leal)</a
                 >
             </li>
