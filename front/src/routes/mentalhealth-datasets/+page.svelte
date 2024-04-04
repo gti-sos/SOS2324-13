@@ -222,22 +222,57 @@
 
 // Buscar
 async function search() {
-    let queryParams = `?from=${from}&to=${to}`;
+    let parametros = "";
 
-    // Agregar campos de filtro al query params según lo seleccionado en el formulario
-    if (countryFilter) queryParams += `&country=${countryFilter}`;
-    if (codeFilter) queryParams += `&code=${codeFilter}`;
-    if (schizophreniaFilter) queryParams += `&schizophrenia=${schizophreniaFilter}`;
-    if (bipolarDisorderFilter) queryParams += `&bipolar_disorder=${bipolarDisorderFilter}`;
-    if (eatingDisorderFilter) queryParams += `&eating_disorder=${eatingDisorderFilter}`;
-    if (anxietyDisorderFilter) queryParams += `&anxiety_disorder=${anxietyDisorderFilter}`;
-    if (drugUseDisorderFilter) queryParams += `&drug_use_disorder=${drugUseDisorderFilter}`;
-    if (depressionFilter) queryParams += `&depression=${depressionFilter}`;
-    if (alcoholismFilter) queryParams += `&alcoholism=${alcoholismFilter}`;
-    if (yearFilter) queryParams += `&year=${yearFilter}`;
+if (from !== "") {
+    let parsedFrom = parseInt(from);
+    parametros += `&from=${parsedFrom}`;
+}
+if (to !== "") {
+    let parsedTo = parseInt(to);
+    parametros += `&to=${parsedTo}`;
+}
+if (country !== "") {
+    parametros += `&country=${country}`;
+}
+if (code !== "") {
+    parametros += `&code=${code}`;
+}
+if (schizophrenia !== "") {
+    let parsedSchizophrenia = parseFloat(schizophrenia);
+    parametros += `&schizophrenia=${parsedSchizophrenia}`;
+}
+if (bipolarDisorder !== "") {
+    let parsedBipolarDisorder = parseFloat(bipolarDisorder);
+    parametros += `&bipolar_disorder=${parsedBipolarDisorder}`;
+}
+if (eatingDisorder !== "") {
+    let parsedEatingDisorder = parseFloat(eatingDisorder);
+    parametros += `&eating_disorder=${parsedEatingDisorder}`;
+}
+if (anxietyDisorder !== "") {
+    let parsedAnxietyDisorder = parseFloat(anxietyDisorder);
+    parametros += `&anxiety_disorder=${parsedAnxietyDisorder}`;
+}
+if (drugUseDisorder !== "") {
+    let parsedDrugUseDisorder = parseFloat(drugUseDisorder);
+    parametros += `&drug_use_disorder=${parsedDrugUseDisorder}`;
+}
+if (depression !== "") {
+    let parsedDepression = parseFloat(depression);
+    parametros += `&depression=${parsedDepression}`;
+}
+if (alcoholism !== "") {
+    let parsedAlcoholism = parseFloat(alcoholism);
+    parametros += `&alcoholism=${parsedAlcoholism}`;
+}
+if (year !== "") {
+    let parsedYear = parseInt(year);
+    parametros += `&year=${parsedYear}`;
+}
 
     try {
-        const response = await fetch(API + queryParams, { method: "GET" });
+        const response = await fetch(API + parametros, { method: "GET" });
         let data = await response.json();
         console.log(data);
         let status = await response.status;
