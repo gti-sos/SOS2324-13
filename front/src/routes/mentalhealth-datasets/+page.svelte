@@ -6,7 +6,6 @@
 
     if (dev) API = "http://localhost:10000" + API;
 
-
     let dataset = [];
     let newData = {
         country: "country",
@@ -26,105 +25,105 @@
     let currentPage = 1; 
     let pageSize = 10; 
 
+    // Campos adicionales para búsqueda
+    let from = "";
+    let to = "";
+    let searchCountry = "";
+    let searchCode = "";
+    let searchSchizophrenia = "";
+    let searchBipolarDisorder = "";
+    let searchEatingDisorder = "";
+    let searchAnxietyDisorder = "";
+    let searchDrugUseDisorder = "";
+    let searchDepression = "";
+    let searchAlcoholism = "";
+    let searchYear = "";
+
     onMount(() => {
         getData();
     });
 
-    async function loadData() {
-        try {
-            const response = await fetch(API + "/loadInitialData", { method: "GET" });
-            const status = response.status;
-            if (status === 201) {
-                confirmation = "Datos cargados correctamente";
-            } else {
-                errorMsg = `Error ${status}: Los datos ya han sido cargados`;
-            }
-        } catch (error) {
-            errorMsg = error.message;
-        }
-    }
-
+    // Obtener datos con parámetros de búsqueda
     async function getData() {
         try {
-            const response = await fetch(API+`?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
+            let url = `${API}?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`;
+
+            // Agregar parámetros de búsqueda si están definidos
+            if (from) url += `&from=${from}`;
+            if (to) url += `&to=${to}`;
+            if (searchCountry) url += `&country=${searchCountry}`;
+            if (searchCode) url += `&code=${searchCode}`;
+            if (searchSchizophrenia) url += `&schizophrenia=${searchSchizophrenia}`;
+            if (searchBipolarDisorder) url += `&bipolar_disorder=${searchBipolarDisorder}`;
+            if (searchEatingDisorder) url += `&eating_disorder=${searchEatingDisorder}`;
+            if (searchAnxietyDisorder) url += `&anxiety_disorder=${searchAnxietyDisorder}`;
+            if (searchDrugUseDisorder) url += `&drug_use_disorder=${searchDrugUseDisorder}`;
+            if (searchDepression) url += `&depression=${searchDepression}`;
+            if (searchAlcoholism) url += `&alcoholism=${searchAlcoholism}`;
+            if (searchYear) url += `&year=${searchYear}`;
+
+            const response = await fetch(url, { method: "GET" });
             let data = await response.json();
             console.log(data);
             let status = await response.status;
             if (status == 200) {
                 dataset = data;
                 confirmation = "Datos obtenidos correctamente";
-                
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000); 
             } else if (status == 404) {
                 errorMsg = "No hay datos existentes.";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
                 confirmation = "";
                 dataset = [];
             }
         } catch (error) {
             errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
         }
     }
 
-    async function createData() {
-        try {
-            const response = await fetch(API + "/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newData)
-            });
-            const status = response.status;
-            if (status === 201) {
-                getData();
-                confirmation = "Nuevo dato creado";
-            } else {
-                if (status == 409) {
-                    errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
-                    confirmation = "";
-                } else if (status == 400) {
-                    errorMsg ="No se han completado los campos de manera correcta.";
-                    confirmation = "";
-                } else {
-                    errorMsg = "Error Servidor";
-                    confirmation = "";
-                }
-            }
-        } catch (error) {
-            errorMsg = error.message;
+    // Función para realizar la búsqueda
+    function search() {
+        // Realizar la búsqueda si todos los campos están llenos
+        if (searchCountry !== "" && 
+            searchCode !== "" && 
+            searchSchizophrenia !== "" && 
+            searchBipolarDisorder !== "" && 
+            searchEatingDisorder !== "" && 
+            searchAnxietyDisorder !== "" && 
+            searchDrugUseDisorder !== "" && 
+            searchDepression !== "" && 
+            searchAlcoholism !== "" && 
+            searchYear !== "") {
+            // Parsear los campos que necesitan ser parseados
+            from = parseInt(from);
+            to = parseInt(to);
+            searchSchizophrenia = parseFloat(searchSchizophrenia);
+            searchBipolarDisorder = parseFloat(searchBipolarDisorder);
+            searchEatingDisorder = parseFloat(searchEatingDisorder);
+            searchAnxietyDisorder = parseFloat(searchAnxietyDisorder);
+            searchDrugUseDisorder = parseFloat(searchDrugUseDisorder);
+            searchDepression = parseFloat(searchDepression);
+            searchAlcoholism = parseFloat(searchAlcoholism);
+            searchYear = parseFloat(searchYear);
+            // Realizar la búsqueda
+            getData();
+        } else {
+            // Mostrar mensaje de error si algún campo está vacío
+            errorMsg = "Todos los campos de búsqueda son obligatorios.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
         }
     }
 
-    async function deleteAllData() {
-        try {
-            const response = await fetch(API, { method: "DELETE" });
-            const status = response.status;
-            if (status === 200) {
-                dataset = [];
-                confirmation = "Todos los datos eliminados";
-            } else {
-                errorMsg = "Error: No se pudieron eliminar los datos";
-            }
-        } catch (error) {
-            errorMsg = error.message;
-        }
-    }
-
-    async function deleteData(country, year) {
-        try {
-            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
-            const status = response.status;
-            if (status === 200) {
-                // Eliminar el dato del conjunto de datos local
-                getData();
-                confirmation = "Dato eliminado correctamente";
-            } else if (status === 404) {
-                errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
-            } else {
-                errorMsg = "Error : No se pudo eliminar el dato";
-            }
-        } catch (error) {
-            errorMsg = error.message;
-        }
-    }
-
+    // Funciones para la paginación
     function nextPage() {
         currentPage++;
         getData();
@@ -136,9 +135,130 @@
             getData();
         }
     }
+
+    // CARGAR DATOS INICIALES
+    async function loadData() {
+        try {
+            const response = await fetch(API + "/loadInitialData", { method: "GET" });
+            const status = response.status;
+            if (status === 201) {
+                confirmation = "Datos cargados correctamente";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000); 
+            } else {
+                errorMsg = `Error: Los datos ya han sido cargados`;
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
+        }
+    }
+     //CREAR UN DATO
+    async function createData() {
+        try {
+            const response = await fetch(API + "/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newData)
+            });
+            const status = response.status;
+            if (status === 201) {
+                getData();
+                confirmation = "Nuevo dato creado";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000); 
+            } else {
+                if (status == 409) {
+                    errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
+                    setTimeout(() => {
+                        errorMsg = "";
+                    }, 5000);
+                    confirmation = "";
+                } else if (status == 400) {
+                    errorMsg ="No se han completado los campos de manera correcta.";
+                    setTimeout(() => {
+                        errorMsg = "";
+                    }, 5000); 
+                    confirmation = "";
+                } else {
+                    errorMsg = "Error Servidor";
+                    setTimeout(() => {
+                        errorMsg = "";
+                    }, 5000); 
+                    confirmation = "";
+                }
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
+        }
+    }
+ //ELIMINAR TODOS LOS DATOS
+    async function deleteAllData() {
+        try {
+            const response = await fetch(API, { method: "DELETE" });
+            const status = response.status;
+            if (status === 200) {
+                dataset = [];
+                confirmation = "Todos los datos eliminados";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000); 
+            } else {
+                errorMsg = "Error: No se pudieron eliminar los datos";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
+        }
+    }
+    //ELIMINAR UN DATO
+    async function deleteData(country, year) {
+        try {
+            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
+            const status = response.status;
+            if (status === 200) {
+                getData();
+                confirmation = "Dato eliminado correctamente";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000); 
+            } else if (status === 404) {
+                errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
+            } else {
+                errorMsg = "Error : No se pudo eliminar el dato";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000); 
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000); 
+        }
+    }
 </script>
 
 <div>
+    <!-- Estilos -->
     <style>
         body {
             font-family: Arial, sans-serif;
