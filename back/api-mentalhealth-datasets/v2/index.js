@@ -199,10 +199,36 @@ function loadMentalApi2(app, dbMental) {
     app.post(API_BASE + "/", (req, res) => {
         // Pedimos el contenido
         let data = req.body;
+        const newData = req.body;
         const expectedFields = ['country', 'code', 'year', 'schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'];
         const receivedFields = Object.keys(data);
 
         const isValidData = expectedFields.every(field => receivedFields.includes(field));
+
+        // Validamos los campos
+        for (const field of expectedFields) {
+            if (newData[field] === "") {
+                return res.status(400).json({ error: `400, Bad Request: Fields can't be empty` });
+            }
+
+            // verificamos el tipo de campo según los requisitos
+            if (field === 'year') {
+                if (isNaN(newData[field])) {
+                    return res.status(400).json({ error: `400, Bad Request: Field year must be an integer` });
+                }
+            } else if (['schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'].includes(field)) {
+                if (isNaN(newData[field])) {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
+                } else {
+                    newData[field] = parseFloat(newData[field]);
+                }
+            } else {
+                if (typeof newData[field] !== 'string') {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a string` });
+                }
+            }
+        }
+
 
         // Verificar si los datos son válidos
         if (!isValidData) {
@@ -285,10 +311,42 @@ function loadMentalApi2(app, dbMental) {
         const countryName = req.params.country;
         const year = parseInt(req.params.year);
         const newData = req.body;
-        const expectedFields = ['code', 'schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'];
+        const expectedFields = ['country','year','code', 'schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'];
 
         // Verificar si los datos incluyen los campos esperados
         const isValidData = expectedFields.every(field => field in newData);
+
+        // validamos los campos
+        for (const field of expectedFields) {
+            if (!newData[field]) {
+                return res.status(400).json({ error: `400, Bad Request: Field '${field}' is missing` });
+            }
+
+            // verificamos que el campo no es vacío
+            if (newData[field] === "") {
+                return res.status(400).json({ error: `400, Bad Request: No field should be empty` });
+            }
+
+            // verificamos el tipo de campo según los requisitos
+            if (field === 'year') {
+                if (!Number.isInteger(newData[field])) {
+                    return res.status(400).json({ error: `400, Bad Request: Field 'year' must be an integer` });
+                }
+            } else if (['schizophrenia', 'bipolar_disorder', 'eating_disorder', 'anxiety_disorder', 'drug_use_disorder', 'depression', 'alcoholism'].includes(field)) {
+                if (isNaN(newData[field])) {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a number` });
+                } else {
+                    newData[field] = parseFloat(newData[field]);
+                }
+            } else {
+                if (typeof newData[field] !== 'string') {
+                    return res.status(400).json({ error: `400, Bad Request: Field '${field}' must be a string` });
+                }
+            }
+        }
+
+
+
 
         if (!isValidData) {
             return res.status(400).json({ error: 'Missing or invalid fields in the request body,400' })
