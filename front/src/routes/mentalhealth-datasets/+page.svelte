@@ -383,6 +383,7 @@
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <button on:click={prevPage}>Página anterior</button>
         <button on:click={nextPage}>Página siguiente</button>
+        <button on:click={search}>Buscar</button>
     </div>
 
     <!-- Sección para mostrar mensajes -->
