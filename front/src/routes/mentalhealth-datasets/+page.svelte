@@ -222,39 +222,43 @@
 
 // Buscar
 async function search() {
-    const params = new URLSearchParams();
-    params.append('from', from);
-    params.append('to', to);
-    params.append('countryFilter', countryFilter);
-    params.append('codeFilter', codeFilter);
-    params.append('schizophreniaFilter', schizophreniaFilter);
-    params.append('bipolarDisorderFilter', bipolarDisorderFilter);
-    params.append('eatingDisorderFilter', eatingDisorderFilter);
-    params.append('anxietyDisorderFilter', anxietyDisorderFilter);
-    params.append('drugUseDisorderFilter', drugUseDisorderFilter);
-    params.append('depressionFilter', depressionFilter);
-    params.append('alcoholismFilter', alcoholismFilter);
-    params.append('yearFilter', yearFilter);
+    let queryParams = `?from=${from}&to=${to}`;
 
-    const url = `${API}?${params.toString()}`;
+    // Agregar campos de filtro al query params según lo seleccionado en el formulario
+    if (countryFilter) queryParams += `&country=${countryFilter}`;
+    if (codeFilter) queryParams += `&code=${codeFilter}`;
+    if (schizophreniaFilter) queryParams += `&schizophrenia=${schizophreniaFilter}`;
+    if (bipolarDisorderFilter) queryParams += `&bipolar_disorder=${bipolarDisorderFilter}`;
+    if (eatingDisorderFilter) queryParams += `&eating_disorder=${eatingDisorderFilter}`;
+    if (anxietyDisorderFilter) queryParams += `&anxiety_disorder=${anxietyDisorderFilter}`;
+    if (drugUseDisorderFilter) queryParams += `&drug_use_disorder=${drugUseDisorderFilter}`;
+    if (depressionFilter) queryParams += `&depression=${depressionFilter}`;
+    if (alcoholismFilter) queryParams += `&alcoholism=${alcoholismFilter}`;
+    if (yearFilter) queryParams += `&year=${yearFilter}`;
 
     try {
-        const response = await fetch(url, { method: "GET" });
-        const data = await response.json();
-        const status = response.status;
-
-        if (status === 200) {
+        const response = await fetch(API + queryParams, { method: "GET" });
+        let data = await response.json();
+        console.log(data);
+        let status = await response.status;
+        if (status == 200) {
             dataset = data;
             errorMsg = "";
-        } else if (status === 404) {
+        } else if (status == 404) {
             errorMsg = "No se encontraron resultados para la búsqueda.";
-            dataset = []; // Limpiar el conjunto de datos si no hay resultados
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+            confirmation = "";
+            dataset = [];
         }
     } catch (error) {
         errorMsg = error.message;
+        setTimeout(() => {
+            errorMsg = "";
+        }, 5000);
     }
 }
-
 
 </script>
 
