@@ -353,12 +353,11 @@
         <button on:click={loadData}>Listar datos</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
+        <!-- Botón para mostrar/ocultar tabla de búsqueda -->
+        <button on:click={() => (showSearchTable = !showSearchTable)}>{showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}</button>
     </div>
 
-    <!-- Botón para mostrar/ocultar tabla de búsqueda -->
-<button on:click={() => (showSearchTable = !showSearchTable)}>
-    {showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}
-</button>
+
 
 <!-- Tabla de búsqueda -->
 {#if showSearchTable}

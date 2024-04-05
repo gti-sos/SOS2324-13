@@ -30,7 +30,7 @@
   "license": "GPL-3.0",
   "type": "module",
   "devDependencies": {
-    "@playwright/test": "^1.42.1",
+    "@playwright/test": "^1.43.0",
     "@types/node": "^20.12.3"
   }
 }
