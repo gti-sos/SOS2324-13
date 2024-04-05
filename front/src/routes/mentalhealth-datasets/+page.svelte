@@ -10,13 +10,13 @@
     let newData = {
         country: "country",
         code: "code",
-        schizophrenia: 0,
-        bipolar_disorder: 0,
-        eating_disorder: 0,
-        anxiety_disorder: 0,
-        drug_use_disorder: 0,
-        depression: 0,
-        alcoholism: 0,
+        schizophrenia: 0.0,
+        bipolar_disorder: 0.0,
+        eating_disorder: 0.0,
+        anxiety_disorder: 0.0,
+        drug_use_disorder: 0.0,
+        depression: 0.0,
+        alcoholism: 0.0,
         year: 0,
     };
 
