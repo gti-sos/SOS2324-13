@@ -63,7 +63,7 @@
             if (response.ok) {
                 fetchData(); // Recargar los datos después de la actualización
                 confirmationMessage = "Datos actualizados correctamente"; // Actualizar el mensaje de confirmación
-                window.location.href = "/mentalhealth-datsets";
+                window.location.href = "/mentalhealth-datasets";
                 errorMessage = ""; // Reiniciar el mensaje de error
             } else if (response.status === 404) {
                 errorMessage = "No existe un dato para este país y año";
