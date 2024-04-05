@@ -31,6 +31,8 @@ test('go to mentalhealth-api', async ({ page }) => {
   
       // Obtener la lista de elementos de datos
       const datasetItems = await page.$$('ul li');
+
+      await page.waitForTimeout(2000);
   
       // Verificar que haya al menos cinco elementos en la lista
       expect(datasetItems.length).toBeGreaterThanOrEqual(5);
@@ -162,3 +164,15 @@ test('Prueba de actualización de datos', async ({ page }) => {
     expect(errorMessage).toBeNull(); // Asegurarse de que no haya mensaje de error
 });
 
+//ELIMINAR UN DATO
+test('Eliminar un dato', async ({ page }) => {
+    // Hacer clic en el botón "Eliminar" de un dato específico (por ejemplo, país "Spain" y año "2023")
+    await page.click('li:has-text("Spain, 2023") >> button:has-text("Eliminar")');
+
+    // Esperar a que desaparezca el elemento eliminado de la lista
+    await page.waitForSelector('li:not(:has-text("Spain, 2023"))');
+
+    // Verificar que el elemento eliminado ya no está en la lista
+    const deletedElement = await page.$('li:has-text("Spain, 2023")');
+    expect(deletedElement).toBeNull();
+  });
