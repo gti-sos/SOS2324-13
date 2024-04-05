@@ -52,6 +52,7 @@
             const response = await fetch(API + "/loadInitialData", { method: "GET" });
             const status = response.status;
             if (status === 201) {
+                getData();
                 confirmation = "Datos cargados correctamente";
                 setTimeout(() => {
                     confirmation = "";
@@ -349,12 +350,9 @@
 
     <!-- Botones para realizar acciones -->
     <div>
-        <button on:click={loadData}>Cargar datos</button>
-        <button on:click={getData}>Obtener todos los datos</button>
+        <button on:click={loadData}>Listar datos</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
-        <button on:click={prevPage}>Página anterior</button>
-        <button on:click={nextPage}>Página siguiente</button>
     </div>
 
     <!-- Botón para mostrar/ocultar tabla de búsqueda -->
@@ -414,6 +412,13 @@
             </li>
         {/each}
     </ul>
+
+
+    <div>
+        <button on:click={prevPage}>Página anterior</button>
+        <button on:click={nextPage}>Página siguiente</button>
+    </div>
+
 
     <!-- Mensajes de confirmación y error -->
     {#if confirmation != ""}
