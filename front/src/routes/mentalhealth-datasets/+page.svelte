@@ -307,43 +307,31 @@
     <table>
         <thead>
             <tr>
-                <th> País </th>
-                <th> Código </th>
-                <th> Esquizofrenia </th>
-                <th> Trastorno bipolar </th>
-                <th> Trastorno alimentario </th>
+                <th><label for="country">País</label></th>
+                <th><label for="code">Código</label></th>
+                <th><label for="schizophrenia">Esquizofrenia</label></th>
+                <th><label for="bipolarDisorder">Trastorno bipolar</label></th>
+                <th><label for="eatingDisorder">Trastorno alimentario</label></th>
+                <th><label for="anxietyDisorder">Trastorno de ansiedad</label></th>
+                <th><label for="drugUseDisorder">Trastorno por consumo de drogas</label></th>
+                <th><label for="depression">Depresión</label></th>
+                <th><label for="alcoholismF">Alcoholismo</label></th>
+                <th><label for="yearFilter">Año</label></th>
             </tr>
         </thead>
-        <!-- Inputs para agregar nuevos datos -->
         <tbody>
             <tr>
-                <td><input bind:value={newData.country} /></td>
-                <td><input bind:value={newData.code} /></td>
-                <td><input bind:value={newData.schizophrenia} /></td>
-                <td><input bind:value={newData.bipolar_disorder} /></td>
-                <td><input bind:value={newData.eating_disorder} /></td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <table>
-        <thead>
-            <tr>
-                <th> Trastorno de ansiedad </th>
-                <th> Trastorno por consumo de drogas </th>
-                <th> Depresión </th>
-                <th> Alcoholismo </th>
-                <th> Año </th>
-            </tr>
-        </thead>
-        <!-- Inputs para agregar nuevos datos -->
-        <tbody>
-            <tr>
-                <td><input bind:value={newData.anxiety_disorder} /></td>
-                <td><input bind:value={newData.drug_use_disorder} /></td>
-                <td><input bind:value={newData.depression} /></td>
-                <td><input bind:value={newData.alcoholism} /></td>
-                <td><input bind:value={newData.year} /></td>
+                
+                <td><input type="text" bind:value={newData.country} id="country" placeholder="País" /></td>
+                <td><input type="text" bind:value={newData.code} id="code" placeholder="Código" /></td>
+                <td><input type="text" bind:value={newData.schizophrenia} id="schizophrenia" placeholder="Esquizofrenia" /></td>
+                <td><input type="text" bind:value={newData.bipolar_disorder} id="bipolarDisorder" placeholder="Trastorno bipolar" /></td>
+                <td><input type="text" bind:value={newData.eating_disorder} id="eatingDisorder" placeholder="Trastorno alimentario" /></td>
+                <td><input type="text" bind:value={newData.anxiety_disorder} id="anxietyDisorder" placeholder="Trastorno de ansiedad" /></td>
+                <td><input type="text" bind:value={newData.drug_use_disorder} id="drugUseDisorder" placeholder="Trastorno por consumo de drogas" /></td>
+                <td><input type="text" bind:value={newData.depression} id="depression" placeholder="Depresión" /></td>
+                <td><input type="text" bind:value={newData.alcoholism} id="alcoholism" placeholder="Alcoholismo" /></td>
+                <td><input type="text" bind:value={newData.year} id="year" placeholder="Año" /></td>
             </tr>
         </tbody>
     </table>
