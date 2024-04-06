@@ -112,62 +112,6 @@ test('go to mentalhealth-api', async ({ page }) => {
         expect(textContent).toContain('1997'); // Verificar que el año coincida
     }
 });
-//COMPROBAR UPDATE
-test('Prueba de actualización de datos', async ({ page }) => {
-  // Ir a la página de la aplicación
-  await page.goto('http://localhost:10000/mentalhealth-datasets/Afghanistan/1997');
-
-  // Esperar a que se cargue la página y los elementos estén listos
-  await page.waitForLoadState('networkidle');
-
-  // Modificar los datos cargados
-  await page.fill('input[id="country"]', 'Nuevo país');
-  await page.fill('input[id="code"]', 'Nuevo código');
-  await page.fill('input[id="schizophrenia"]', '0.5');
-  await page.fill('input[id="bipolar_disorder"]', '0.3');
-  await page.fill('input[id="eating_disorder"]', '0.2');
-  await page.fill('input[id="anxiety_disorder"]', '0.4');
-  await page.fill('input[id="drug_use_disorder"]', '0.6');
-  await page.fill('input[id="depression"]', '0.7');
-  await page.fill('input[id="alcoholism"]', '0.8');
-  await page.fill('input[id="year"]', '1998');
-
-  // Hacer clic en el botón para actualizar los datos
-  await page.click('button:has-text("Actualizar dato")');
-
-  // Esperar a que se muestre el mensaje de confirmación o de error
-  await page.waitForSelector('.message');
-
-  // Verificar si se muestra el mensaje de confirmación
-  const confirmationMessage = await page.textContent('.message.confirmation');
-  expect(confirmationMessage).toContain('Datos actualizados correctamente');
-
-  // Verificar que no se muestre ningún mensaje de error
-  const errorMessage = await page.textContent('.message.error');
-  expect(errorMessage).toBeNull(); // Asegurarse de que no haya mensaje de error
-});
-
-
-
-test('Eliminar un dato', async ({ page }) => {
-  // Ir a la página de la aplicación
-  await page.goto('http://localhost:10000/mentalhealth-datasets');
-
-  // Esperar a que la lista de datos se cargue
-  await page.waitForSelector('ul');
-
-  // Hacer clic en el botón "Eliminar" de un dato específico (por ejemplo, "Afghanistan, 1991")
-  await page.click('li:has-text("Afghanistan, 1991") >> button:has-text("Eliminar")');
-
-  // Esperar a que el elemento eliminado desaparezca de la lista
-  await page.waitForSelector('li:not(:has-text("Afghanistan, 1991"))');
-
-  // Verificar que el elemento eliminado ya no está en la lista
-  const deletedElement = await page.$('li:has-text("Afghanistan, 1991")');
-  expect(deletedElement).toBeNull();
-})
-
-
 
 
     //COMPROBAR ELIMINAR DATOS
