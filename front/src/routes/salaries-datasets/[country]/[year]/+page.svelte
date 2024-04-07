@@ -54,7 +54,7 @@
     // Función para actualizar los datos
     async function updateData() {
         try {
-            let response = await fetch(`${API}/country/${country}/year/${year}`, {
+            let response = await fetch(`${API}/${country}/${year}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
