@@ -3,7 +3,7 @@ const API_BASE = '/api/v2/salaries-datasets';
 function loadSalarieApi2(app, dbSalaries) {
 
     app.get(`${API_BASE}/docs`, (req, res) => {
-        res.redirect('https://documenter.getpostman.com/view/32965348/2sA35K31w8');
+        res.redirect('https://documenter.getpostman.com/view/32946791/2sA35MxyEF');
     });
 
     app.get(API_BASE + "/", (req, res) => {
@@ -151,32 +151,58 @@ function loadSalarieApi2(app, dbSalaries) {
         });
     });
     
-    app.post(API_BASE + "/", (req, res) => {
+// POST para añadir nuevo salario
+app.post(API_BASE, (req, res) => {
     const newData = req.body;
-    dbSalaries.create(newData, (err, newDoc) => {
+
+    // Verificar si los datos cumplen con todos los campos del CSV
+    if (!isValidData(newData)) {
+        return res.status(400).json({ error: 'Bad Request - Invalid data format' });
+    }
+
+    // Comprobar si los datos ya existen
+    dbSalaries.findOne(newData, (err, existingData) => {
         if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        res.status(201).json(newDoc);
+
+        if (existingData) {
+            return res.status(409).json({ error: 'Conflict - Data already exists' });
+        }
+
+        // Si los datos no existen, añadir nuevo salario
+        dbSalaries.insert(newData, (err, newDoc) => {
+            if (err) {
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            if (newDoc) {
+                const { _id, ...responseData } = newDoc;
+                return res.status(201).json({ id: _id, ...responseData });
+            } else {
+                return res.status(500).json({ error: 'Internal Server Error - Resource not created' });
+            }
+        });
     });
 });
 
 app.post(API_BASE + "/:country", (req, res) => {
-    const newData = req.body;
-    const countryName = req.params.country;
-    dbSalaries.create({ ...newData, country: countryName }, (err, newDoc) => {
-        if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-        }
-        res.status(201).json(newDoc);
-    });
+    res.status(405).json({ error: 'Method Not Allowed' });
 });
+
 
 app.put(API_BASE + "/:country", (req, res) => {
     const newData = req.body;
     const countryName = req.params.country;
+
+    // Verificar si newData contiene todos los campos necesarios
+    const requiredFields = ['year', 'timestamp', 'salary', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
+    const missingFields = requiredFields.filter(field => !(field in newData));
+
+    if (missingFields.length > 0) {
+        return res.status(400).json({ error: `Missing fields: ${missingFields.join(', ')}` });
+    }
+
     dbSalaries.update({ country: countryName }, { $set: newData }, { multi: true }, (err, numUpdated) => {
         if (err) {
             res.status(500).json({ error: 'Internal Server Error' });
@@ -190,22 +216,46 @@ app.put(API_BASE + "/:country", (req, res) => {
     });
 });
 
-app.put(API_BASE + "/:country/:year", (req, res) => {
-    const newData = req.body;
-    const countryName = req.params.country;
-    const year = req.params.year;
-    dbSalaries.update({ country: countryName, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
-        if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
-        }
-        if (numUpdated > 0) {
-            res.status(200).json({ message: 'Updated' });
+ // Función para validar datos
+ function isValidData(data) {
+    const expectedFields = ['year', 'timestamp', 'salary', 'country', 'primary_database', 'time_with_this_database', 'employment_state', 'job_title', 'manage_staff', 'time_in_current_job', 'other_people_on_your_team', 'magnitude_of_company', 'sector'];
+
+    return expectedFields.every(field => {
+        if (field === 'year') {
+            return !isNaN(parseInt(data[field]));
         } else {
-            res.status(404).json({ message: 'Country or year not found' });
+            return Object.keys(data).includes(field);
+        }
+    });
+}
+
+// PUT por país y año
+app.put(API_BASE + '/:country/:year', (req, res) => {
+    const country = req.params.country;
+    const year = parseInt(req.params.year);
+    const newData = req.body;
+
+    // Verificar si los datos son válidos
+    if (!isValidData(newData)) {
+        return res.status(400).json({ error: 'Bad Request - Invalid data format' });
+    }
+
+    // Actualizar datos en la base de datos
+    dbSalaries.update({ country: country, year: year }, { $set: newData }, { multi: true }, (err, numUpdated) => {
+        if (err) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Verificar si se actualizó algún documento
+        if (numUpdated > 0) {
+            return res.status(200).json({ message: 'Data updated successfully' });
+        } else {
+            return res.status(404).json({ error: 'Data not found for the specified country and year' });
         }
     });
 });
+
+
 
 app.delete(API_BASE, (req, res) => {
     dbSalaries.remove({}, { multi: true }, (err, numRemoved) => {
@@ -232,20 +282,24 @@ app.delete(API_BASE + "/:country", (req, res) => {
     });
 });
 
-app.delete(API_BASE + "/:country/:year", (req, res) => {
-    const countryName = req.params.country;
-    const year = req.params.year;
-    dbSalaries.remove({ country: countryName, year: year }, { multi: true }, (err, numRemoved) => {
+//DELETE por país y año
+app.delete(API_BASE + '/:country/:year', (req, res) => {
+    const country = req.params.country;
+    const year = parseInt(req.params.year);
+
+    // Eliminar datos por país y año en la base de datos
+    dbSalaries.remove({ country: country, year: year }, { multi: true }, (err, numRemoved) => {
         if (err) {
-            res.status(500).json({ error: 'Internal Server Error' });
-            return;
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
+
         if (numRemoved > 0) {
-            res.status(200).json({ message: 'Deleted' });
+            return res.status(200).json({ message: 'Data for ' + country + ' in year ' + year + ' deleted successfully' });
         } else {
-            res.status(404).json({ message: 'Country or year not found' });
+            return res.status(404).json({ error: 'Data not found for the specified country and year' });
         }
     });
 });
-}
+};
+
 export { loadSalarieApi2 }
