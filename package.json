@@ -21,10 +21,7 @@
     "test-integration": "npm run test-wris && npm run test-mentalhealth",
     "test-wris": "npx newman run ./tests/integration/api-wris-v2.json -e ./tests/integration/environments-wr/gcloud-v2.json",
     "test-mentalhealth": "npx newman run ./tests/integration/api-mentalhealth-v2.json -e ./tests/integration/environments-mh/gcloud.json",
-<<<<<<< HEAD
     "test-salaries": "npx newman run ./tests/integration/api-salaries-v2.json -e ./tests/integration/environments-sa/gcloud.json",
-=======
->>>>>>> b9893ee003cddca7ecc908a2dc1ef39cc3cb9e20
     "test-e2e": "npx playwright test",
     "test": "npm run test-integration && npm run test-e2e",
     "posttest": "kill `ps -uax | grep \"node index\" | grep -v \"grep\" | grep -v \"sh\" | awk '{print $2}'`"
