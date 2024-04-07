@@ -126,7 +126,7 @@
     }
     
     function nextPage() {
-        if (dataset.length >= pageSize) {
+        if (data.length >= pageSize) {
             currentPage++;
             getData();
         } else {
@@ -228,7 +228,7 @@ async function deleteData(country, year) {
     {/if}
     
     <button on:click={prevPage} disabled={loading}>Página anterior</button>
-    <button on:click={nextPage} disabled={loading}>Página posterior</button>
+    <button on:click={nextPage} >Página posterior</button>
 
     {#if confirmation !== ""}
         <div class="confirmation">{confirmation}</div>
