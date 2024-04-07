@@ -43,6 +43,7 @@
     let magnitude_of_companyFilter = "";
     let sectorFilter = "";
 
+    let showSearchTable = false;
 
        // Cargar datos iniciales
        async function loadData() {
@@ -305,7 +306,7 @@ async function deleteData(country, year) {
     <button on:click={loadData} disabled={loading}>Obtener todos los datos</button>
     <button on:click={createData} disabled={loading}>Crear nuevo dato</button>
     <button on:click={deleteAllData} disabled={loading}>Eliminar todos los datos</button>
-
+    <button on:click={() => (showSearchTable = !showSearchTable)}>{showSearchTable ? "Ocultar tabla de búsqueda" : "Mostrar tabla de búsqueda"}</button>
     {#if loading}
         <p>Cargando...</p>
     {:else}
@@ -377,35 +378,39 @@ async function deleteData(country, year) {
         <tr>
             <th><label for="from">From</label></th>
             <th><label for="to">To</label></th>
-            <th><label for="countryFilter">País</label></th>
-            <th><label for="codeFilter">Código</label></th>
-            <th><label for="schizophreniaFilter">Esquizofrenia</label></th>
-            <th><label for="bipolarDisorderFilter">Trastorno bipolar</label></th>
-            <th><label for="eatingDisorderFilter">Trastorno alimentario</label></th>
-            <th><label for="anxietyDisorderFilter">Trastorno de ansiedad</label></th>
-            <th><label for="drugUseDisorderFilter">Trastorno por consumo de drogas</label></th>
-            <th><label for="depressionFilter">Depresión</label></th>
-            <th><label for="alcoholismFilter">Alcoholismo</label></th>
             <th><label for="yearFilter">Año</label></th>
+            <th><label for="timestampFilter">Timestamp</label></th>
+            <th><label for="salaryFilter">Salario</label></th>
+            <th><label for="countryFilter">País</label></th>
+            <th><label for="primary_databaseFilter">Base de datos primaria</label></th>
+            <th><label for="time_with_this_databaseFilter">Tiempo con esta base de datos</label></th>
+            <th><label for="employment_stateFilter">Estado del empleo</label></th>
+            <th><label for="job_titleFilter">Trabajo</label></th>
+            <th><label for="manage_staffFilter">Gestionar personal</label></th>
+            <th><label for="time_in_current_jobFilter">Tiempo en el trabajo actual</label></th>
+            <th><label for="other_people_on_your_teamFilter">Otras personas en tu equipo</label></th>
+            <th><label for="magnitude_of_companyFilter">Magnitud de la empresa</label></th>
+            <th><label for="sectorFilter">Sector</label></th>
+
         </tr>
     </thead>
     <tbody>
         <tr>
             <td><input type="text" bind:value={from} id="from" placeholder="From" /></td>
             <td><input type="text" bind:value={to} id="to" placeholder="To" /></td>
-            <td><input type="text" bind:value={yearFilter} id="yearFilter" placeholder="País" /></td>
-            <td><input type="text" bind:value={timestampFilter} id="timestampFilter" placeholder="Código" /></td>
-            <td><input type="text" bind:value={salaryFilter} id="salaryFilter" placeholder="Esquizofrenia" /></td>
-            <td><input type="text" bind:value={countryFilter} id="countryFilter" placeholder="Trastorno bipolar" /></td>
-            <td><input type="text" bind:value={primary_databaseFilter} id="primary_databaseFilter" placeholder="Trastorno alimentario" /></td>
-            <td><input type="text" bind:value={time_with_this_databaseFilter} id="time_with_this_databaseFilter" placeholder="Trastorno de ansiedad" /></td>
-            <td><input type="text" bind:value={employment_stateFilter} id="employment_stateFilter" placeholder="Trastorno por consumo de drogas" /></td>
-            <td><input type="text" bind:value={job_titleFilter} id="job_titleFilter" placeholder="Depresión" /></td>
-            <td><input type="text" bind:value={manage_staffFilter} id="manage_staffFilter" placeholder="Alcoholismo" /></td>
-            <td><input type="text" bind:value={time_in_current_jobFilter} id="time_in_current_jobFilter" placeholder="Año" /></td>
-            <td><input type="text" bind:value={other_people_on_your_teamFilter} id="other_people_on_your_teamFilter" placeholder="Año" /></td>
-            <td><input type="text" bind:value={magnitude_of_companyFilter} id="magnitude_of_companyFilter" placeholder="Año" /></td>
-            <td><input type="text" bind:value={sectorFilter} id="sectorFilter" placeholder="Año" /></td>
+            <td><input type="text" bind:value={yearFilter} id="yearFilter" placeholder="Año" /></td>
+            <td><input type="text" bind:value={timestampFilter} id="timestampFilter" placeholder="Timestamp" /></td>
+            <td><input type="text" bind:value={salaryFilter} id="salaryFilter" placeholder="Salario" /></td>
+            <td><input type="text" bind:value={countryFilter} id="countryFilter" placeholder="País" /></td>
+            <td><input type="text" bind:value={primary_databaseFilter} id="primary_databaseFilter" placeholder="Base de datos primaria" /></td>
+            <td><input type="text" bind:value={time_with_this_databaseFilter} id="time_with_this_databaseFilter" placeholder="Tiempo con esta base de datos" /></td>
+            <td><input type="text" bind:value={employment_stateFilter} id="employment_stateFilter" placeholder="Estado del empleo" /></td>
+            <td><input type="text" bind:value={job_titleFilter} id="job_titleFilter" placeholder="Trabajo" /></td>
+            <td><input type="text" bind:value={manage_staffFilter} id="manage_staffFilter" placeholder="Gestionar personal" /></td>
+            <td><input type="text" bind:value={time_in_current_jobFilter} id="time_in_current_jobFilter" placeholder="Tiempo en el trabajo actual" /></td>
+            <td><input type="text" bind:value={other_people_on_your_teamFilter} id="other_people_on_your_teamFilter" placeholder="Otras personas en tu equipo" /></td>
+            <td><input type="text" bind:value={magnitude_of_companyFilter} id="magnitude_of_companyFilter" placeholder="Magnitud de la empresa" /></td>
+            <td><input type="text" bind:value={sectorFilter} id="sectorFilter" placeholder="Sector" /></td>
 
         </tr>
      </tbody>
