@@ -240,7 +240,7 @@ async function deleteData(country, year) {
         parametros += `year=${yearFilter}&`;
     }
     if (timestampFilter !== "") {
-        parametros += `timestamp=${timestampilter}&`;
+        parametros += `timestamp=${timestampFilter}&`;
     }
     if (salaryFilter !== "") {
             parametros += `salary=${salaryFilter}&`;
