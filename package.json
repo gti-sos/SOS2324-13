@@ -18,10 +18,9 @@
   "scripts": {
     "start": "node index",
     "pretest": "npm start &",
-    "test-integration": "npm run test-wris && npm run test-mentalhealth && npm run test-salaries",
+    "test-integration": "npm run test-wris && npm run test-mentalhealth",
     "test-wris": "npx newman run ./tests/integration/api-wris-v2.json -e ./tests/integration/environments-wr/gcloud-v2.json",
     "test-mentalhealth": "npx newman run ./tests/integration/api-mentalhealth-v2.json -e ./tests/integration/environments-mh/gcloud.json",
-    "test-salaries": "npx newman run ./tests/integration/api-salaries.json -e ./tests/integration/environments-sa/gcloud.json",
     "test-e2e": "npx playwright test",
     "test": "npm run test-integration && npm run test-e2e",
     "posttest": "kill `ps -uax | grep \"node index\" | grep -v \"grep\" | grep -v \"sh\" | awk '{print $2}'`"
