@@ -114,6 +114,35 @@ test('go to mentalhealth-api', async ({ page }) => {
 });
 
 
+ //Borrar Un dato
+ test('Borrar un país', async ({ page }) => {
+  await page.goto('http://localhost:10000/mentalhealth-datasets');
+
+  // Esperar a que la página cargue completamente
+  await page.waitForLoadState('domcontentloaded');
+
+  // Hacer clic en el botón "Listar datos" para cargar los datos
+  await page.click('button:has-text("Listar datos")');
+
+  // Esperar a que se carguen los datos
+  await page.waitForSelector('ul li');
+
+  // Obtener el primer país de la lista
+  const firstCountry = await page.$eval('ul li:first-child', el => el.textContent);
+
+  // Hacer clic en el botón "Eliminar" del primer país
+  await page.click('ul li:first-child button:has-text("Eliminar")');
+
+  // Esperar a que el elemento eliminado desaparezca de la lista
+  await page.waitForSelector(`ul li:has-text("${firstCountry}")`, { state: 'hidden' });
+
+  // Verificar que el elemento eliminado ya no está en la lista
+  const deletedElement = await page.$(`ul li:has-text("${firstCountry}")`);
+  expect(deletedElement).toBeNull();
+});
+
+
+
     //COMPROBAR ELIMINAR DATOS
     test('Prueba de eliminación de todos los datos', async ({ page }) => {
       // Ir a la página de la aplicación
@@ -132,3 +161,6 @@ test('go to mentalhealth-api', async ({ page }) => {
       const confirmationMessage = await page.textContent('.confirmation');
       expect(confirmationMessage).toContain('Todos los datos eliminados');
   });
+
+
+ 
