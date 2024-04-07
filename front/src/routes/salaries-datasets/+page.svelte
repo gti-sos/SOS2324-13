@@ -26,7 +26,22 @@
     let currentPage = 1;
     let pageSize = 10;
 
-
+// Variables para filtro
+    let from = "";
+    let to = "";
+    let yearFilter = "";
+    let timestampFilter = "";
+    let salaryFilter = "";
+    let countryFilter = "";
+    let primary_databaseFilter = "";
+    let time_with_this_databaseFilter = "";
+    let employment_stateFilter = "";
+    let job_titleFilter = "";
+    let manage_staffFilter = "";
+    let time_in_current_jobFilter = "";
+    let other_people_on_your_teamFilter = "";
+    let magnitude_of_companyFilter = "";
+    let sectorFilter = "";
 
 
        // Cargar datos iniciales
@@ -202,6 +217,84 @@ async function deleteData(country, year) {
     function setData(newData) {
         data = newData;
     }
+
+    async function search() {
+    let parametros = "?"; // Inicializamos la cadena de parámetros con el símbolo de interrogación para el primer parámetro
+
+    // Verificamos cada filtro y lo agregamos a la cadena de parámetros si está presente
+    if (from !== "") {
+        let parsedFrom = parseInt(from);
+        parametros += `from=${parsedFrom}&`;
+    }
+    if (to !== "") {
+        let parsedTo = parseInt(to);
+        parametros += `to=${parsedTo}&`;
+    }
+    if (yearFilter !== "") {
+        parametros += `year=${yearFilter}&`;
+    }
+    if (timestampFilter !== "") {
+        parametros += `timestamp=${timestampilter}&`;
+    }
+    if (salaryFilter !== "") {
+            parametros += `salary=${salaryFilter}&`;
+    }
+    if (countryFilter !== "") {
+            parametros += `country=${countryFilter}&`;
+    }
+    if (primary_databaseFilter !== "") {
+            parametros += `primary_database=${primary_databaseFilter}&`;
+    }
+    if (time_with_this_databaseFilter !== "") {
+            parametros += `time_with_this_database=${time_with_this_databaseFilter}&`;
+    }
+    if (employment_stateFilter !== "") {
+            parametros += `employment_state=${employment_stateFilter}&`;
+    }
+    if (job_titleFilter !== "") {
+            parametros += `job_title=${job_titleFilter}&`;
+    }
+    if (manage_staffFilter !== "") {
+            parametros += `manage_staff=${manage_staffFilter}&`;
+    }
+    if (time_in_current_jobFilter !== "") {
+            parametros += `time_in_current_job=${time_in_current_jobFilter}&`;
+    }
+    if (other_people_on_your_teamFilter !== "") {
+            parametros += `other_people_on_your_team=${other_people_on_your_teamFilter}&`;
+    }
+    if (magnitude_of_companyFilter !== "") {
+            parametros += `magnitude_of_company=${magnitude_of_companyFilter}&`;
+    }
+    if (sectorFilter !== "") {
+            parametros += `sector=${sectorFilter}&`;
+    }
+
+    try {
+        // Eliminamos el último carácter '&' de la cadena de parámetros
+        parametros = parametros.slice(0, -1);
+        const response = await fetch(API + parametros, { method: "GET" });
+        let datas = await response.json();
+        console.log(datas);
+        let status = await response.status;
+        if (status == 200) {
+            data = datas;
+            errorMsg = "";
+        } else if (status == 404) {
+            errorMsg = "No se encontraron resultados para la búsqueda.";
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+            confirmation = "";
+            data = [];
+        }
+    } catch (error) {
+        errorMsg = error.message;
+        setTimeout(() => {
+            errorMsg = "";
+        }, 5000);
+    }
+}
 </script>
 
 
@@ -275,6 +368,50 @@ async function deleteData(country, year) {
             </tr>
         </tbody>
     </table>
+
+    <!-- Tabla de búsqueda -->
+    {#if showSearchTable}
+    <h2>Búsqueda</h2>
+    <table>
+    <thead>
+        <tr>
+            <th><label for="from">From</label></th>
+            <th><label for="to">To</label></th>
+            <th><label for="countryFilter">País</label></th>
+            <th><label for="codeFilter">Código</label></th>
+            <th><label for="schizophreniaFilter">Esquizofrenia</label></th>
+            <th><label for="bipolarDisorderFilter">Trastorno bipolar</label></th>
+            <th><label for="eatingDisorderFilter">Trastorno alimentario</label></th>
+            <th><label for="anxietyDisorderFilter">Trastorno de ansiedad</label></th>
+            <th><label for="drugUseDisorderFilter">Trastorno por consumo de drogas</label></th>
+            <th><label for="depressionFilter">Depresión</label></th>
+            <th><label for="alcoholismFilter">Alcoholismo</label></th>
+            <th><label for="yearFilter">Año</label></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><input type="text" bind:value={from} id="from" placeholder="From" /></td>
+            <td><input type="text" bind:value={to} id="to" placeholder="To" /></td>
+            <td><input type="text" bind:value={yearFilter} id="yearFilter" placeholder="País" /></td>
+            <td><input type="text" bind:value={timestampFilter} id="timestampFilter" placeholder="Código" /></td>
+            <td><input type="text" bind:value={salaryFilter} id="salaryFilter" placeholder="Esquizofrenia" /></td>
+            <td><input type="text" bind:value={countryFilter} id="countryFilter" placeholder="Trastorno bipolar" /></td>
+            <td><input type="text" bind:value={primary_databaseFilter} id="primary_databaseFilter" placeholder="Trastorno alimentario" /></td>
+            <td><input type="text" bind:value={time_with_this_databaseFilter} id="time_with_this_databaseFilter" placeholder="Trastorno de ansiedad" /></td>
+            <td><input type="text" bind:value={employment_stateFilter} id="employment_stateFilter" placeholder="Trastorno por consumo de drogas" /></td>
+            <td><input type="text" bind:value={job_titleFilter} id="job_titleFilter" placeholder="Depresión" /></td>
+            <td><input type="text" bind:value={manage_staffFilter} id="manage_staffFilter" placeholder="Alcoholismo" /></td>
+            <td><input type="text" bind:value={time_in_current_jobFilter} id="time_in_current_jobFilter" placeholder="Año" /></td>
+            <td><input type="text" bind:value={other_people_on_your_teamFilter} id="other_people_on_your_teamFilter" placeholder="Año" /></td>
+            <td><input type="text" bind:value={magnitude_of_companyFilter} id="magnitude_of_companyFilter" placeholder="Año" /></td>
+            <td><input type="text" bind:value={sectorFilter} id="sectorFilter" placeholder="Año" /></td>
+
+        </tr>
+     </tbody>
+    </table>
+    <button on:click={search}>Buscar</button>
+    {/if}
 </div>
 
 <style>
