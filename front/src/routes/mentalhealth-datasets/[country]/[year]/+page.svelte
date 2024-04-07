@@ -162,16 +162,16 @@
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={loadedData.country} /></td>
-            <td><input bind:value={loadedData.code} /></td>
-            <td><input bind:value={loadedData.schizophrenia} /></td>
-            <td><input bind:value={loadedData.bipolar_disorder} /></td>
-            <td><input bind:value={loadedData.eating_disorder} /></td>
-            <td><input bind:value={loadedData.anxiety_disorder} /></td>
-            <td><input bind:value={loadedData.drug_use_disorder} /></td>
-            <td><input bind:value={loadedData.depression} /></td>
-            <td><input bind:value={loadedData.alcoholism} /></td>
-            <td><input bind:value={loadedData.year} /></td>
+            <td><input bind:value={loadedData.country} id="country" /></td>
+            <td><input bind:value={loadedData.code} id="code" /></td>
+            <td><input bind:value={loadedData.schizophrenia} id="schizophrenia"/></td>
+            <td><input bind:value={loadedData.bipolar_disorder} id="bipolar-disorder" /></td>
+            <td><input bind:value={loadedData.eating_disorder} id="eating-disorder"/></td>
+            <td><input bind:value={loadedData.anxiety_disorder} id="anxiety-disorder" /></td>
+            <td><input bind:value={loadedData.drug_use_disorder} id="drug-use-disorder"/></td>
+            <td><input bind:value={loadedData.depression} id="depression-disorder"/></td>
+            <td><input bind:value={loadedData.alcoholism} id="alcoholism-disorder"/></td>
+            <td><input bind:value={loadedData.year} id="year" /></td>
         </tr>
     </tbody>
 </table>
