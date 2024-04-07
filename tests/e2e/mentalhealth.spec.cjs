@@ -21,10 +21,10 @@ test('go to mentalhealth-api', async ({ page }) => {
       await page.goto('http://localhost:10000/mentalhealth-datasets');
   
       // Esperar a que se cargue el botón para listar los datos
-      await page.waitForSelector('button:has-text("Listar datos")');
+      await page.waitForSelector('button:has-text("Cargar datos iniciales")');
   
       // Hacer clic en el botón para listar los datos
-      await page.click('button:has-text("Listar datos")');
+      await page.click('button:has-text("Cargar datos iniciales")');
   
       // Esperar a que se carguen los datos
       await page.waitForSelector('ul li');
@@ -45,8 +45,6 @@ test('go to mentalhealth-api', async ({ page }) => {
       // Esperar a que se cargue el botón para crear un nuevo dato
       await page.waitForSelector('button:has-text("Crear un nuevo dato")');
   
-      // Hacer clic en el botón para crear un nuevo dato
-      await page.click('button:has-text("Crear un nuevo dato")');
   
       // Esperar a que se carguen los campos de entrada
       await page.waitForSelector('input');
@@ -112,6 +110,39 @@ test('go to mentalhealth-api', async ({ page }) => {
         expect(textContent).toContain('1997'); // Verificar que el año coincida
     }
 });
+//ACTUALIZAR DATO
+  
+test('Actualizar un país', async ({ page }) => {
+  await page.goto('http://localhost:10000/mentalhealth-datasets');
+
+  // Esperar a que la página cargue completamente
+  await page.waitForLoadState('domcontentloaded');
+
+  // Esperar a que se carguen los datos
+  await page.waitForSelector('ul li');
+
+  // Hacer clic en el enlace "Ir al dato" del primer país
+  await page.click('ul li:first-child a');
+
+
+  // Esperar a que la página de detalles del país cargue completamente
+  await page.waitForLoadState('domcontentloaded');
+
+  // Modificar los datos en los campos de entrada
+  await page.fill('input[id="schizophrenia"]', '1.5');
+  await page.fill('input[id="bipolar-disorder"]', '2.5');
+
+  // Hacer clic en el botón "Actualizar dato"
+  await page.click('button:has-text("Actualizar dato")');
+
+  // Esperar a que se procese la actualización
+  await page.waitForTimeout(2000);
+
+
+  });
+
+
+  
 
 
  //Borrar Un dato
@@ -120,9 +151,6 @@ test('go to mentalhealth-api', async ({ page }) => {
 
   // Esperar a que la página cargue completamente
   await page.waitForLoadState('domcontentloaded');
-
-  // Hacer clic en el botón "Listar datos" para cargar los datos
-  await page.click('button:has-text("Listar datos")');
 
   // Esperar a que se carguen los datos
   await page.waitForSelector('ul li');
@@ -161,6 +189,8 @@ test('go to mentalhealth-api', async ({ page }) => {
       const confirmationMessage = await page.textContent('.confirmation');
       expect(confirmationMessage).toContain('Todos los datos eliminados');
   });
+
+
 
 
  

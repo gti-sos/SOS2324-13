@@ -338,7 +338,7 @@
 
     <!-- Botones para realizar acciones -->
     <div>
-        <button on:click={loadData}>Listar datos</button>
+        <button on:click={loadData}>Cargar datos iniciales</button>
         <button on:click={createData}>Crear un nuevo dato</button>
         <button on:click={deleteAllData}>Eliminar todos los datos</button>
         <!-- Botón para mostrar/ocultar tabla de búsqueda -->
@@ -393,7 +393,7 @@
     <ul>
         {#each dataset as data}
             <li>
-                <a href="/mentalhealth-datasets/{data.country}/{data.year}">{data.country}</a>
+                <a href="/mentalhealth-datasets/{data.country}/{data.year}">Ir al dato</a>
                 <span>{data.country}, {data.code}, {data.schizophrenia}, {data.bipolar_disorder}, {data.eating_disorder}, {data.anxiety_disorder}, {data.drug_use_disorder}, {data.depression}, {data.alcoholism}, {data.year}</span>
                 <button on:click={() => deleteData(data.country, data.year)}>Eliminar</button>
             </li>
