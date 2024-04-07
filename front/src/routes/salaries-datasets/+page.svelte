@@ -23,23 +23,62 @@
     let errorMsg = "";
     let confirmation = "";
     let loading = false;
+    let currentPage = 1;
+    let pageSize = 10;
 
-    async function getData() {
-        loading = true;
+
+
+
+       // Cargar datos iniciales
+       async function loadData() {
         try {
-            const response = await fetch(API, { method: "GET" });
-            const data = await response.json();
-            console.log(data);
-            if (response.ok) {
-                createData(data);
-                confirmation = "Datos obtenidos correctamente";
+            const response = await fetch(API + "/loadInitialData", { method: "GET" });
+            const status = response.status;
+            if (status === 201) {
+                getData();
+                confirmation = "Datos cargados correctamente";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000);
             } else {
-                setError(`Error ${response.status}: Los datos no se han podido obtener`);
+                errorMsg = `Error: Los datos ya han sido cargados`;
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000);
             }
         } catch (error) {
-            setError(error.message);
-        } finally {
-            loading = false;
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
+    }
+
+
+
+        // Obtener datos
+        async function getData() {
+        try {
+            const response = await fetch(API + `?limit=${pageSize}&offset=${(currentPage - 1) * pageSize}`, { method: "GET" });
+            let dataset = await response.json();
+            console.log(data);
+            let status = await response.status;
+            if (status == 200) {
+                data = dataset;
+                errorMsg = "";
+            } else if (status == 404) {
+                errorMsg = "No hay datos existentes.";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000);
+                confirmation = "";
+                data = [];
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
         }
     }
 
@@ -249,7 +288,7 @@ async function deleteData(country, year) {
 <div class="container">
     <h1>Salaries Datasets</h1>
 
-    <button on:click={getData} disabled={loading}>Obtener todos los datos</button>
+    <button on:click={loadData} disabled={loading}>Obtener todos los datos</button>
     <button on:click={createData} disabled={loading}>Crear nuevo dato</button>
     <button on:click={deleteAllData} disabled={loading}>Eliminar todos los datos</button>
 
