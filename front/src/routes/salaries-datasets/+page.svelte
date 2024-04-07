@@ -31,7 +31,7 @@
             const data = await response.json();
             console.log(data);
             if (response.ok) {
-                setData(data);
+                getData(data);
                 confirmation = "Datos obtenidos correctamente";
             } else {
                 setError(`Error ${response.status}: Los datos no se han podido obtener`);
@@ -259,6 +259,7 @@ async function deleteData(country, year) {
         <ul class="data-list">
             {#each data as item}
                 <li class="data-item">
+                    <a href="/salaries-datasets/{item.country}/{item.year}">Ir al dato</a>
                     <span>{item.year}, {item.timestamp}, {item.salary}, {item.country}, {item.primary_database}, {item.time_with_this_database}, {item.employment_state}, {item.job_title}, {item.manage_staff}, {item.time_in_current_job}, {item.other_people_on_your_team}, {item.magnitude_of_company}, {item.sector}</span>
                     <button on:click={() => deleteData(item.country, item.year)} disabled={loading}>Eliminar</button>
                 </li>
