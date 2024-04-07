@@ -31,7 +31,7 @@
             const data = await response.json();
             console.log(data);
             if (response.ok) {
-                getData(data);
+                createData(data);
                 confirmation = "Datos obtenidos correctamente";
             } else {
                 setError(`Error ${response.status}: Los datos no se han podido obtener`);
