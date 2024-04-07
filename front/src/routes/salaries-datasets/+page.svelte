@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from "svelte";
+
     import { dev } from "$app/environment";
 
     let API = "/api/v2/salaries-datasets";
@@ -45,6 +47,9 @@
 
     let showSearchTable = false;
 
+    onMount(() => {
+        getData();
+    });
        // Cargar datos iniciales
        async function loadData() {
         try {
