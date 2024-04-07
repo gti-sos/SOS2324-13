@@ -204,6 +204,79 @@ async function deleteData(country, year) {
     }
 </script>
 
+
+
+<div class="container">
+    <h1>Salaries Datasets</h1>
+
+    <button on:click={loadData} disabled={loading}>Obtener todos los datos</button>
+    <button on:click={createData} disabled={loading}>Crear nuevo dato</button>
+    <button on:click={deleteAllData} disabled={loading}>Eliminar todos los datos</button>
+
+    {#if loading}
+        <p>Cargando...</p>
+    {:else}
+        <ul class="data-list">
+            {#each data as item}
+                <li class="data-item">
+                    <a href="/salaries-datasets/{item.country}/{item.year}">Editar dato</a>
+                    <span>{item.year}, {item.timestamp}, {item.salary}, {item.country}, {item.primary_database}, {item.time_with_this_database}, {item.employment_state}, {item.job_title}, {item.manage_staff}, {item.time_in_current_job}, {item.other_people_on_your_team}, {item.magnitude_of_company}, {item.sector}</span>
+                    <button on:click={() => deleteData(item.country, item.year)} disabled={loading}>Eliminar</button>
+                </li>
+            {/each}
+        </ul>
+    {/if}
+    
+    <button on:click={prevPage} disabled={loading}>Página anterior</button>
+    <button on:click={nextPage} disabled={loading}>Página posterior</button>
+
+    {#if confirmation !== ""}
+        <div class="confirmation">{confirmation}</div>
+    {/if}
+    {#if errorMsg !== ""}
+        <div class="error">Error: {errorMsg}</div>
+    {/if}
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th> Año </th>
+                <th> Timestamp </th>
+                <th> Salario </th>
+                <th> País </th>
+                <th> Base de datos primaria </th>
+                <th> Tiempo con esta base de datos </th>
+                <th> Estado de empleo </th>
+                <th> Título del trabajo </th>
+                <th> Gestionar personal </th>
+                <th> Tiempo en el trabajo actual </th>
+                <th> Otras personas en tu equipo </th>
+                <th> Magnitud de la empresa </th>
+                <th> Sector </th>
+                <th> Acción </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input bind:value={newSalarie.year} /></td>
+                <td><input bind:value={newSalarie.timestamp} /></td>
+                <td><input bind:value={newSalarie.salary} /></td>
+                <td><input bind:value={newSalarie.country} /></td>
+                <td><input bind:value={newSalarie.primary_database} /></td>
+                <td><input bind:value={newSalarie.time_with_this_database} /></td>
+                <td><input bind:value={newSalarie.employment_state} /></td>
+                <td><input bind:value={newSalarie.job_title} /></td>
+                <td><input bind:value={newSalarie.manage_staff} /></td>
+                <td><input bind:value={newSalarie.time_in_current_job} /></td>
+                <td><input bind:value={newSalarie.other_people_on_your_team} /></td>
+                <td><input bind:value={newSalarie.magnitude_of_company} /></td>
+                <td><input bind:value={newSalarie.sector} /></td>
+                <td><button on:click={createData} disabled={loading}>Crear</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 <style>
     .container {
         padding: 20px;
@@ -284,71 +357,3 @@ async function deleteData(country, year) {
         color: #721c24;
     }
 </style>
-
-<div class="container">
-    <h1>Salaries Datasets</h1>
-
-    <button on:click={loadData} disabled={loading}>Obtener todos los datos</button>
-    <button on:click={createData} disabled={loading}>Crear nuevo dato</button>
-    <button on:click={deleteAllData} disabled={loading}>Eliminar todos los datos</button>
-
-    {#if loading}
-        <p>Cargando...</p>
-    {:else}
-        <ul class="data-list">
-            {#each data as item}
-                <li class="data-item">
-                    <a href="/salaries-datasets/{item.country}/{item.year}">Ir al dato</a>
-                    <span>{item.year}, {item.timestamp}, {item.salary}, {item.country}, {item.primary_database}, {item.time_with_this_database}, {item.employment_state}, {item.job_title}, {item.manage_staff}, {item.time_in_current_job}, {item.other_people_on_your_team}, {item.magnitude_of_company}, {item.sector}</span>
-                    <button on:click={() => deleteData(item.country, item.year)} disabled={loading}>Eliminar</button>
-                </li>
-            {/each}
-        </ul>
-    {/if}
-
-    {#if confirmation !== ""}
-        <div class="confirmation">{confirmation}</div>
-    {/if}
-    {#if errorMsg !== ""}
-        <div class="error">Error: {errorMsg}</div>
-    {/if}
-
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th> Año </th>
-                <th> Timestamp </th>
-                <th> Salario </th>
-                <th> País </th>
-                <th> Base de datos primaria </th>
-                <th> Tiempo con esta base de datos </th>
-                <th> Estado de empleo </th>
-                <th> Título del trabajo </th>
-                <th> Gestionar personal </th>
-                <th> Tiempo en el trabajo actual </th>
-                <th> Otras personas en tu equipo </th>
-                <th> Magnitud de la empresa </th>
-                <th> Sector </th>
-                <th> Acción </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input bind:value={newSalarie.year} /></td>
-                <td><input bind:value={newSalarie.timestamp} /></td>
-                <td><input bind:value={newSalarie.salary} /></td>
-                <td><input bind:value={newSalarie.country} /></td>
-                <td><input bind:value={newSalarie.primary_database} /></td>
-                <td><input bind:value={newSalarie.time_with_this_database} /></td>
-                <td><input bind:value={newSalarie.employment_state} /></td>
-                <td><input bind:value={newSalarie.job_title} /></td>
-                <td><input bind:value={newSalarie.manage_staff} /></td>
-                <td><input bind:value={newSalarie.time_in_current_job} /></td>
-                <td><input bind:value={newSalarie.other_people_on_your_team} /></td>
-                <td><input bind:value={newSalarie.magnitude_of_company} /></td>
-                <td><input bind:value={newSalarie.sector} /></td>
-                <td><button on:click={createData} disabled={loading}>Crear</button></td>
-            </tr>
-        </tbody>
-    </table>
-</div>

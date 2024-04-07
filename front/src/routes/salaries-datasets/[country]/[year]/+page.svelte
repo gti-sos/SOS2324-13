@@ -84,77 +84,6 @@
     });
 </script>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f3f3f3;
-        color: #333;
-        margin: 0;
-        padding: 0;
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    input[type="text"] {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-    }
-
-    button {
-        background-color: #4caf50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    .message {
-        margin-top: 10px;
-        padding: 10px;
-        border-radius: 4px;
-    }
-
-    .confirmation {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-    }
-
-    .error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-    }
-</style>
 
 <p>Detalles del dato del país: {country} para el año {year}.</p>
 
@@ -179,16 +108,20 @@
     </thead>
     <tbody>
         <tr>
-            <td><input bind:value={loadedSalarie.country} /></td>
-            <td><input bind:value={loadedSalarie.code} /></td>
-            <td><input bind:value={loadedSalarie.schizophrenia} /></td>
-            <td><input bind:value={loadedSalarie.bipolar_disorder} /></td>
-            <td><input bind:value={loadedSalarie.eating_disorder} /></td>
-            <td><input bind:value={loadedSalarie.anxiety_disorder} /></td>
-            <td><input bind:value={loadedSalarie.drug_use_disorder} /></td>
-            <td><input bind:value={loadedSalarie.depression} /></td>
-            <td><input bind:value={loadedSalarie.alcoholism} /></td>
-            <td><input bind:value={loadedSalarie.year} /></td>
+                <td><input bind:value={loadedSalarie.year} /></td>
+                <td><input bind:value={loadedSalarie.timestamp} /></td>
+                <td><input bind:value={loadedSalarie.salary} /></td>
+                <td><input bind:value={loadedSalarie.country} /></td>
+                <td><input bind:value={loadedSalarie.primary_database} /></td>
+                <td><input bind:value={loadedSalarie.time_with_this_database} /></td>
+                <td><input bind:value={loadedSalarie.employment_state} /></td>
+                <td><input bind:value={loadedSalarie.job_title} /></td>
+                <td><input bind:value={loadedSalarie.manage_staff} /></td>
+                <td><input bind:value={loadedSalarie.time_in_current_job} /></td>
+                <td><input bind:value={loadedSalarie.other_people_on_your_team} /></td>
+                <td><input bind:value={loadedSalarie.magnitude_of_company} /></td>
+                <td><input bind:value={loadedSalarie.sector} /></td>
+            
         </tr>
     </tbody>
 </table>
