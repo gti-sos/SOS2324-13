@@ -86,22 +86,38 @@
         } 
     }
 
-    async function deleteData(n){
-        console.log(`Deleting contact with country ${n}`);
-        try{
-            let response =  await   fetch(API+"/"+n,{
-                                    method: "DELETE"
-                                    });
+    // Borrar dato concreto
+    async function deleteData(country, year) {
+        try {
+            const response = await fetch(API + "/" + country + "/" + year, { method: "DELETE" });
+            const status = response.status;
+            if (status === 200) {
+                // Eliminar el dato del conjunto de datos local
+                getData();
+                confirmation = "Dato eliminado correctamente";
+                setTimeout(() => {
+                    confirmation = "";
+                }, 5000);
+            } else if (status === 404) {
+                errorMsg = `No existe un dato para el país ${country} para el año ${year}.`;
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000);
+            } else {
+                errorMsg = "Error : No se pudo eliminar el dato";
+                setTimeout(() => {
+                    errorMsg = "";
+                }, 5000);
+            }
+        } catch (error) {
+            errorMsg = error.message;
+            setTimeout(() => {
+                errorMsg = "";
+            }, 5000);
+        }
     
-        if(response.status == 200)
-        getContacts();
-        else
-            errorMsg = "code:"+response.status;
-    
-            }catch(e){
-                    errorMsg = e;
-            } 
-} 
+    }
+ 
 
 async function deleteAllData() {
         try {
@@ -131,7 +147,7 @@ async function deleteAllData() {
         {#each salaries as salaries}
     <li class="data-item">
         <span>{salaries.year}, {salaries.timestamp}, {salaries.salary}, {salaries.country}, {salaries.primary_database}, {salaries.time_with_this_database}, {salaries.employment_state}, {salaries.job_title}, {salaries.manage_staff}, {salaries.time_in_current_job}, {salaries.other_people_on_your_team}, {salaries.magnitude_of_company}, {salaries.sector}</span>
-        <button on:click={() => deleteData(salaries.year, salaries.country)}>Eliminar</button>
+        <button on:click={() => deleteData(salaries.country, salaries.year)}>Eliminar</button>
     </li>
 {/each}
 

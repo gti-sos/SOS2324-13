@@ -28,6 +28,7 @@
     };
 
     let confirmationMessage = ""; // Mensaje de confirmación
+    let errorMessage = "Error al cargar los datos";
 
     // Función para cargar los datos del país y año específicos
     async function fetchData() {
@@ -40,24 +41,25 @@
 
             // Verificar si se encontraron datos para el país y año especificados
             if (response.ok) {
-                loadedSalarie = salarie;
+                loadedSalarie = data;
             } else if (response.status === 404) {
-                console.log("No hay datos disponibles");
+                errorMessage = "No hay datos disponibles";
             }
         } catch (e) {
             console.error(e);
+            errorMessage = "Error al cargar los datos";
         }
     }
 
     // Función para actualizar los datos
     async function updateData() {
         try {
-            let response = await fetch(API + "/" + country + "/" + year, {
+            let response = await fetch(`${API}/country/${country}/year/${year}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(loadedSalarie),
+                body: JSON.stringify(loadedSalarie), // Incluir los datos actualizados
             });
 
             // Verificar el estado de la respuesta
