@@ -1,6 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
+    import Highcharts from 'highcharts';
+    import HighchartsMore from 'highcharts/highcharts-more';
+    import HighchartsPackedBubble from 'highcharts/modules/packed-bubble';
 
     let API = "/api/v2/salaries-datasets";
 
@@ -43,7 +46,7 @@
             const data = await response.json();
             const status = response.status;
             if (status === 200) {
-                createPackedBubbleChart(data);
+                createChart(data);
                 errorMsg = "";
             } else if (status === 404) {
                 errorMsg = "No hay datos.";
@@ -60,7 +63,7 @@
         }
     }
 
-    function createPackedBubbleChart(data) {
+    function createChart(data) {
         const countries = [...new Set(data.map(item => item.country))];
 
         Highcharts.chart('container', {
@@ -113,48 +116,6 @@
             }))
         });
     }
-
-    function createPyramidChart(data) {
-        const sectors = [...new Set(data.map(item => item.sector))];
-
-        const dataForPyramid = sectors.map(sector => {
-            const count = data.filter(item => item.sector === sector).length;
-            return { name: sector, y: count };
-        });
-
-        dataForPyramid.sort((a, b) => b.y - a.y); // Ordenar los datos por número de trabajos descendente
-
-        Highcharts.chart('container', {
-            chart: {
-                type: 'pyramid'
-            },
-            title: {
-                text: 'Número de trabajos por sector'
-            },
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b> ({point.y})',
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                        softConnector: true
-                    },
-                    center: ['50%', '50%'],
-                    width: '50%',
-                    height: '80%'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            series: [{
-                name: 'Número de trabajos',
-                data: dataForPyramid
-            }]
-        });
-    }
-
-    
 </script>
 
 <svelte:head>
