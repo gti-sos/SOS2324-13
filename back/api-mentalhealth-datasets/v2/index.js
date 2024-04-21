@@ -113,6 +113,11 @@ function loadMentalApi2(app, dbMental) {
                 { country: "Afghanistan", code: "AFG", year: 1997, schizophrenia: 0.160554, bipolar_disorder: 0.699127, eating_disorder: 0.088372, anxiety_disorder: 4.827726, drug_use_disorder: 1.746891, depression: 4.110834, alcoholism: 0.66622 },
                 { country: "Argentina", code: "ARG", year: 2017, schizophrenia: 0.198094, bipolar_disorder: 0.773376, eating_disorder: 0.404033, anxiety_disorder: 6.283678, drug_use_disorder: 1.008901, depression: 3.665488, alcoholism: 1.824515 },
                 { country: "Armenia", code: "ARM", year: 1990, schizophrenia: 0.192443, bipolar_disorder: 0.711719, eating_disorder: 0.141317, anxiety_disorder: 2.578688, drug_use_disorder: 0.457313, depression: 2.642647, alcoholism: 2.155621 },
+                { country: "Kiribati", code: "KIR", year: 2012, schizophrenia: 0.208329, bipolar_disorder: 0.423826, eating_disorder: 0.092016, anxiety_disorder: 3.277054, drug_use_disorder: 0.713237, depression: 3.188206, alcoholism: 1.051525 },
+                { country: "Malta", code: "MAL", year: 2012, schizophrenia: 0.256444, bipolar_disorder: 0.961946, eating_disorder: 0.491893, anxiety_disorder: 5.317027, drug_use_disorder: 0.873326, depression: 3.327814, alcoholism: 1.1067 },
+                { country: "Katar", code: "QAT", year: 2012, schizophrenia: 0.215382, bipolar_disorder: 0.820656, eating_disorder: 0.314643, anxiety_disorder: 4.3381, drug_use_disorder: 1.941896, depression: 3.48764, alcoholism: 0.734513 },
+                { country: "Spain", code: "SPA", year: 2012, schizophrenia: 0.280139, bipolar_disorder: 0.976649, eating_disorder: 0.726458, anxiety_disorder: 5.274071, drug_use_disorder: 1.417659, depression: 3.470575, alcoholism: 0.902213 },
+                { country: "Guatemala", code: "GTM", year: 2012, schizophrenia: 2.571028, bipolar_disorder: 3.931493, eating_disorder: 1.5271, anxiety_disorder: 11.62372, drug_use_disorder: 7.237825, depression: 4.94677, alcoholism: 2.931299 },
                 { country: "Afghanistan", code: "AFG", year: 2000, schizophrenia: 0.161621, bipolar_disorder: 0.700015, eating_disorder: 0.086021, anxiety_disorder: 4.827047, drug_use_disorder: 1.788395, depression: 4.11861, alcoholism: 0.662479 }];
                 dbMental.insert(initialData, (err, newDocs) => {
                     if (err) {

@@ -173,10 +173,6 @@
     <h2>Gráficas de la API: wri-datasets</h2>
 </div>
 
-<div class="botones">
-    <button on:click={getInitialData}>Cargar datos de prueba</button>
-</div>
-
 <!-- DIV DE LA GRAFICA 1 -->
 <figure class="highcharts-figure">
     <div id="container1"></div>
@@ -187,11 +183,16 @@
     <div id="container2"></div>
 </figure>
 
+<div class="botones">
+    <button on:click={getInitialData}>Cargar datos de prueba</button>
+</div>
+
 <!-- MENSAJE DE ERROR -->
 {#if errorMsg != ""}
     <hr />
     <div class="err">ERROR: {errorMsg}</div>
 {/if}
+<!-- MENSAJE DE CONFIRMACION-->
 {#if confMsg != ""}
     <hr />
     <div class="conf">{confMsg}</div>
