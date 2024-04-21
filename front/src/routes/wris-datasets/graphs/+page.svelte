@@ -79,14 +79,14 @@
                 type: "area",
             },
             title: {
-                text: "Vulnerability index by Country according to World Risk Index",
+                text: "Gráfica de índices de vulnerabilidad por país y año según el reporte del World Risk Index",
             },
             xAxis: {
                 categories: years,
             },
             yAxis: {
                 title: {
-                    text: "Vulnerability Index",
+                    text: "Índice de vulnerabilidad",
                 },
             },
             plotOptions: {
@@ -137,7 +137,7 @@
                 type: "pie",
             },
             title: {
-                text: "Vulnerability Category Distribution",
+                text: "Distribución de Categoría de Vulnerabilidad de los datos",
             },
             tooltip: {
                 pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>",

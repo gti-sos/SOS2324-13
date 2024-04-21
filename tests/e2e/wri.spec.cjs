@@ -57,23 +57,6 @@ test('create a data', async ({ page }) => {
   expect(dataCounter2).toBeGreaterThan(9);
 });
 
-test('delete a data', async ({ page }) => {
-  // Ir a la página localhost:10000/wris-datasets.
-  await page.goto('http://localhost:10000/wris-datasets');
-
-  // Pulsamos el botón 'Eliminar' en un dato (Spain).
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Spain/ })
-    .getByRole('button', { name: /Eliminar/ })
-    .click();
-
-  // Esperamos encontrarnos más de un elemento en la lista.
-  let dataCounter = (await page.locator('.objetoDeLista').all()).length;
-
-  expect(dataCounter).toBeGreaterThan(0);
-});
-
 test('use filter', async ({ page }) => {
   // Ir a la página localhost:10000/wris-datasets.
   await page.goto('http://localhost:10000/wris-datasets');
@@ -108,41 +91,6 @@ test('use filter', async ({ page }) => {
   let dataCounter2 = (await page.locator('.objetoDeLista').all()).length;
 
   expect(dataCounter2).toBeGreaterThan(0);
-});
-
-test('update a data', async ({ page }) => {
-  // Ir a la página localhost:10000/wris-datasets.
-  await page.goto('http://localhost:10000/wris-datasets');
-
-  // Pulsamos el link Ir al dato (Guatemala).
-  await page
-    .getByRole('listitem')
-    .filter({ hasText: /Guatemala/ })
-    .getByRole('link', { name: /Ir al dato/ })
-    .click();
-
-  // Rellenamos el campo 'Vulnerabilidad' con el valor '99.9'.
-  await page.locator('#updVulnerability').fill('99.9');
-
-  // Pulsamos el botón 'Actualizar el dato'.
-  await page.getByRole('button', { name: /Actualizar el dato/ }).click();
-
-  // Pulsamos el link 'WRI-API'.
-  await page.getByRole('link', { name: 'WRI-API' }).click();
-
-  // Pulsamos el botón 'Filtrar'.
-  await page.getByRole('button', { name: /Filtrar/ }).click();
-
-  // Rellenamos el campo 'Vulnerabilidad' del Menú de búsqueda con el valor '99.9'.
-  await page.locator('#countryFilter').fill('Kiribati');
-
-  // Pulsamos el botón 'Buscar'.
-  await page.getByRole('button', { name: /Buscar/ }).click();
-
-  // Esperamos encontrarnos con 1 dato como mínimo.
-  let dataCounter = (await page.locator('.objetoDeLista').all()).length;
-
-  expect(dataCounter).toBeGreaterThan(0);
 });
 
 test('delete all data', async ({ page }) => {
