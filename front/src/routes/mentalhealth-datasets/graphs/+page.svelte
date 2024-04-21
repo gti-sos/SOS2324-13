@@ -62,11 +62,12 @@
 
     function getGraficoColumnas(data) {
     let years = [...new Set(data.map((item) => item.year))];
-    years = years.sort(); // Ordenar los años cronológicamente
+    years = years.sort(); // Ordenamos los años cronológicamente
     const countries = [...new Set(data.map((item) => item.country))];
     const colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1']; // Definir colores
 
-    // Completar los datos faltantes con ceros para todos los países
+    // Completamos los datos faltantes con ceros(los que no tenga pais para ese año,
+    //por ejemplo para GUATEMALA 1990, devolveria 0 ya que no esta en los datos)
     const allSeriesData = countries.map((country, countryIndex) => ({
         name: country,
         color: colors[countryIndex % colors.length], 
@@ -131,7 +132,7 @@
             }
         },
         plotOptions: {
-            column: { // Configuraciones específicas para gráficos de columnas
+            column: { 
                 borderRadius: 5,
                 dataLabels: {
                     enabled: true,
