@@ -38,44 +38,60 @@
     }
 
     async function getData() {
-        try {
-            const response = await fetch(API, { method: "GET" });
-            const data = await response.json();
-            const status = response.status;
-            if (status === 200) {
-                getGraficoColumnas(data);
-                errorMsg = "";
-            } else if (status === 404) {
-                errorMsg = "No hay datos existentes.";
-                setTimeout(() => {
-                    errorMsg = "";
-                }, 5000);
-                confMsg = "";
-            }
-        } catch (error) {
-            errorMsg = error.message;
+    try {
+        const response = await fetch(API+"?limit=100&offset=0", { method: "GET" });
+        const data = await response.json();
+        const status = response.status;
+        if (status === 200) {
+            getGraficoColumnas(data);
+            errorMsg = "";
+        } else if (status === 404) {
+            errorMsg = "No hay datos existentes.";
             setTimeout(() => {
                 errorMsg = "";
             }, 5000);
+            confMsg = "";
         }
+    } catch (error) {
+        errorMsg = error.message;
+        setTimeout(() => {
+            errorMsg = "";
+        }, 5000);
     }
+}
 
     function getGraficoColumnas(data) {
     let years = [...new Set(data.map((item) => item.year))];
-    years = years.sort(); // Ordenamos los años cronológicamente
-    const countries = [...new Set(data.map((item) => item.country))];
-    const colors = ['#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1']; // Definir colores
+    let countries = [...new Set(data.map((item) => item.country))];
 
-    // Completamos los datos faltantes con ceros(los que no tenga pais para ese año,
-    //por ejemplo para GUATEMALA 1990, devolveria 0 ya que no esta en los datos)
-    const allSeriesData = countries.map((country, countryIndex) => ({
-        name: country,
-        color: colors[countryIndex % colors.length], 
-        data: years.map((year) => {
+    years = years.sort();
+
+    let allSeriesData = [];
+
+    countries.forEach((country) => {
+        let countryData = [];
+
+        years.forEach((year) => {
             const item = data.find((d) => d.country === country && d.year === year);
-            return item ? parseFloat(item.alcoholism) : 0; 
-        })
-    }));
+
+            if (item) {
+                countryData.push(parseFloat(item.alcoholism));
+            } else {
+                // Agregar un valor predeterminado para los años sin datos
+                countryData.push(0);
+            }
+        });
+
+        // Agregar el país solo si tiene datos para al menos un año
+        if (countryData.some((value) => value !== 0)) {
+            allSeriesData.push({
+                name: country,
+                data: countryData
+            });
+        }
+    });
+
+     console.log(allSeriesData);
 
     Highcharts.chart('container-bar', {
         chart: {
