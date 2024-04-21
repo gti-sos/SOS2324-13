@@ -96,7 +96,13 @@
             },
             tooltip: {
                 shared: true,
-                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y}</b><br/>'
+                formatter: function() {
+                    let tooltip = `<b>Año:</b> ${this.x}<br/>`;
+                    this.points.forEach(point => {
+                        tooltip += `<span style="color:${point.series.color}">${point.series.name}: <b>${point.y}</b><br/></span>`;
+                    });
+                    return tooltip;
+                }
             },
             series: seriesData
         });
