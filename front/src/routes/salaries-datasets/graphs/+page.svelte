@@ -1,9 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
-    import Highcharts from 'highcharts/highcharts';
-    import HighchartsBubble from 'highcharts/modules/bubble';
-
+    import Highcharts from 'highcharts';
 
     let API = "/api/v2/salaries-datasets";
 
@@ -64,43 +62,45 @@
     }
 
     function createChart(data) {
-        const countries = [...new Set(data.map(item => item.country))];
+        const sectors = [...new Set(data.map(item => item.sector))];
+        const years = [...new Set(data.map(item => item.year))];
+
+        const seriesData = sectors.map(sector => {
+            return {
+                name: sector,
+                data: years.map(year => {
+                    const salary = data.find(item => item.sector === sector && item.year === year);
+                    return salary ? parseFloat(salary.average_salary) : null;
+                })
+            };
+        });
 
         Highcharts.chart('container', {
             chart: {
-                type: 'bubble'
+                polar: true,
+                type: 'line'
             },
             title: {
-                text: 'Promedio de salarios por país',
-                align: 'center'
+                text: 'Comparación de salarios por sector',
+                x: -80
             },
             xAxis: {
-                title: {
-                    text: 'Año'
-                }
+                categories: years.map(String),
+                tickmarkPlacement: 'on',
+                lineWidth: 0
             },
             yAxis: {
-                title: {
-                    text: 'País'
-                }
+                gridLineInterpolation: 'polygon',
+                lineWidth: 0,
+                min: 0
             },
             tooltip: {
-                headerFormat: '<b>{series.name}</b><br>',
-                pointFormat: '{point.x} año, {point.y} país: {point.value}'
+                shared: true,
+                pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y}</b><br/>'
             },
-            series: countries.map(country => ({
-                name: country,
-                data: data.filter(item => item.country === country).map(item => ({
-                    x: item.year,
-                    y: Math.random() * 100, // Solo para propósitos de demostración
-                    z: parseFloat(item.average_salary)
-                }))
-            }))
+            series: seriesData
         });
     }
-
-    HighchartsBubble(Highcharts);
-
 </script>
 
 <svelte:head>
