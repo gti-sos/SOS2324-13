@@ -1,7 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
-    import Highcharts from 'highcharts';
+    import Highcharts from 'highcharts/highcharts';
+    import HighchartsBubble from 'highcharts/modules/bubble';
+
 
     let API = "/api/v2/salaries-datasets";
 
@@ -96,6 +98,9 @@
             }))
         });
     }
+
+    HighchartsBubble(Highcharts);
+
 </script>
 
 <svelte:head>
