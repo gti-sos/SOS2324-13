@@ -2,8 +2,6 @@
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
     import Highcharts from 'highcharts';
-    import HighchartsMore from 'highcharts/highcharts-more';
-    import HighchartsPackedBubble from 'highcharts/modules/packed-bubble';
 
     let API = "/api/v2/salaries-datasets";
 
@@ -68,50 +66,32 @@
 
         Highcharts.chart('container', {
             chart: {
-                type: 'packedbubble'
+                type: 'bubble'
             },
             title: {
                 text: 'Promedio de salarios por país',
                 align: 'center'
             },
-            tooltip: {
-                useHTML: true,
-                pointFormat: '<b>{point.name}:</b> {point.value}'
-            },
-            plotOptions: {
-                packedbubble: {
-                    minSize: '13%',
-                    maxSize: '35%',
-                    zMin: 0,
-                    zMax: 300,
-                    layoutAlgorithm: {
-                        gravitationalConstant: 0.05,
-                        splitSeries: true,
-                        seriesInteraction: false,
-                        dragBetweenSeries: true,
-                        parentNodeLimit: true
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name}',
-                        filter: {
-                            property: 'y',
-                            operator: '>',
-                            value: 0
-                        },
-                        style: {
-                            color: 'black',
-                            textOutline: 'none',
-                            fontWeight: 'normal'
-                        }
-                    }
+            xAxis: {
+                title: {
+                    text: 'Año'
                 }
+            },
+            yAxis: {
+                title: {
+                    text: 'País'
+                }
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br>',
+                pointFormat: '{point.x} año, {point.y} país: {point.value}'
             },
             series: countries.map(country => ({
                 name: country,
                 data: data.filter(item => item.country === country).map(item => ({
-                    name: item.year,
-                    value: parseFloat(item.average_salary)
+                    x: item.year,
+                    y: Math.random() * 100, // Solo para propósitos de demostración
+                    z: parseFloat(item.average_salary)
                 }))
             }))
         });

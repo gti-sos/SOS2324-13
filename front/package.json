@@ -21,6 +21,7 @@
 		"cors": "^2.8.5",
 		"enviroment": "^1.0.0",
 		"expres": "^0.0.5",
-		"express": "^4.19.2"
+		"express": "^4.19.2",
+		"highcharts": "^11.4.1"
 	}
 }
