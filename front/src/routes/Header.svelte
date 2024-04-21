@@ -7,6 +7,7 @@
         <a href="/mentalhealth-datasets/graphs">MentalHealth-Api-Graph</a>
         <a href="/mentalhealth-datasets">MentalHealth-Api</a>
         <a href="/salaries-datasets">Salaries-Api</a>
+        <a href="/salaries-datasets/graphs">Salaries-Api-Graph</a>
     </nav>
 </body>
 
