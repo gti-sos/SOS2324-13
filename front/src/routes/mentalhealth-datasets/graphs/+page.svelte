@@ -69,8 +69,8 @@
     // Completar los datos faltantes con ceros para todos los países
     const allSeriesData = countries.map((country, countryIndex) => ({
         name: country,
-        color: colors[countryIndex % colors.length], // Ciclar colores si hay más países que colores definidos
-        data: years.map((year, yearIndex) => {
+        color: colors[countryIndex % colors.length], 
+        data: years.map((year) => {
             const item = data.find((d) => d.country === country && d.year === year);
             return item ? parseFloat(item.alcoholism) : 0; 
         })
@@ -78,7 +78,7 @@
 
     Highcharts.chart('container-bar', {
         chart: {
-            type: 'column', // Cambiar el tipo de gráfico a columnas
+            type: 'column', 
             backgroundColor: '#f4f4f4', 
         },
         title: {
@@ -147,7 +147,7 @@
             align: 'right',
             verticalAlign: 'top',
             x: -40,
-            y: 80,
+            y: 0,
             floating: true,
             borderWidth: 1,
             backgroundColor: '#fff', 
