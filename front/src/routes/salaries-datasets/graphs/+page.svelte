@@ -12,7 +12,7 @@
 
     async function getData() {
         try {
-            const response = await fetch(API+"?limit=100&offset=0", { method: "GET" });
+            const response = await fetch(API, { method: "GET" });
             const data = await res.json();
 
             if (data.length > 0) {
