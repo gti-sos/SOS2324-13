@@ -34,8 +34,8 @@
 
             let status = await response.status;
 
-            if (status === 200) {
-            await getData();
+            if (status === 201) {
+            getData();
             
             createGraph1(data);
             createGraph2(data);
