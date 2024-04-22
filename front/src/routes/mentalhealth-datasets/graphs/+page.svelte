@@ -138,7 +138,7 @@
 </script>
 
 <div>
-    <button on:click={loadData}>Cargar datos</button>
+    <button on:click={loadData}>Cargar los datos</button>
 </div>
 
 <div id="pie-chart-container"></div>
