@@ -62,12 +62,12 @@
         try {
             let newData = {
                 country: loadedData.country,
-                wri: loadedData.wri,
-                exposure: loadedData.exposure,
-                vulnerability: loadedData.vulnerability,
-                susceptibility: loadedData.susceptibility,
-                lack_of_coping_capability: loadedData.lack_of_coping_capability,
-                lack_of_adaptive_capacity: loadedData.lack_of_adaptive_capacity,
+                wri: parseInt(loadedData.wri),
+                exposure: parseInt(loadedData.exposure),
+                vulnerability: parseInt(loadedData.vulnerability),
+                susceptibility: parseInt(loadedData.susceptibility),
+                lack_of_coping_capability: parseInt(loadedData.lack_of_coping_capability),
+                lack_of_adaptive_capacity: parseInt(loadedData.lack_of_adaptive_capacity),
                 year: parseInt(loadedData.year),
                 exposure_category: loadedData.exposure_category,
                 wri_category: loadedData.wri_category,
