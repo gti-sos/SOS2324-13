@@ -16,15 +16,15 @@
         getThisData();
     });
 
-    //estos son los datos que cargo para verlos en la tabla
+    //estos son los datos iniciales que cargo para verlos en la tabla
     let loadedData = {
         country: ldcountry,
-        wri: 0,
-        exposure: 0,
-        vulnerability: 0,
-        susceptibility: 0,
-        lack_of_coping_capability: 0,
-        lack_of_adaptive_capacity: 0,
+        wri: 0.0,
+        exposure: 0.0,
+        vulnerability: 0.0,
+        susceptibility: 0.0,
+        lack_of_coping_capability: 0.0,
+        lack_of_adaptive_capacity: 0.0,
         year: ldyear,
         exposure_category: "Low",
         wri_category: "Low",
@@ -61,7 +61,7 @@
     async function updateData() {
         try {
             let newData = {
-                country: loadedData.country,
+                country: ldcountry,
                 wri: parseFloat(loadedData.wri),
                 exposure: parseFloat(loadedData.exposure),
                 vulnerability: parseFloat(loadedData.vulnerability),
@@ -72,40 +72,57 @@
                 lack_of_adaptive_capacity: parseFloat(
                     loadedData.lack_of_adaptive_capacity,
                 ),
-                year: parseInt(loadedData.year),
+                year: parseInt(ldyear),
                 exposure_category: loadedData.exposure_category,
                 wri_category: loadedData.wri_category,
                 vulnerability_category: loadedData.vulnerability_category,
                 susceptibility_category: loadedData.susceptibility_category,
             };
 
-            let response = await fetch(API + "/" + ldcountry + "/" + ldyear, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newData),
-            });
-
-            //Devuelve un mensaje con un estado
-            let status = await response.status;
-            console.log(`Status code: ${status}`);
-            if (status == 200) {
-                getThisData();
-                errorMsg = "";
-                confirmation = "Dato actualizado correctamente.";
+            if (
+                newData.wri == 0 ||
+                newData.exposure == 0 ||
+                newData.vulnerability == 0 ||
+                newData.susceptibility == 0 ||
+                newData.lack_of_coping_capability == 0 ||
+                newData.lack_of_adaptive_capacity == 0 ||
+                newData.year == 0
+            ) {
+                confirmation = "";
+                errorMsg =
+                    "No puede actualizarse un dato que contenga campos con valor 0.";
             } else {
-                if (status == 404) {
-                    errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
-                    confirmation = "";
-                } else if (status == 400) {
-                    console.log(newData);
-                    errorMsg =
-                        "No se han completado los campos de manera correcta.";
-                    confirmation = "";
+                let response = await fetch(
+                    API + "/" + ldcountry + "/" + ldyear,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(newData),
+                    },
+                );
+
+                //Devuelve un mensaje con un estado
+                let status = await response.status;
+                console.log(`Status code: ${status}`);
+                if (status == 200) {
+                    getThisData();
+                    errorMsg = "";
+                    confirmation = "Dato actualizado correctamente.";
                 } else {
-                    errorMsg = "Error " + status;
-                    confirmation = "";
+                    if (status == 404) {
+                        errorMsg = `No existe un dato para el país ${ldcountry} para el año ${ldyear}.`;
+                        confirmation = "";
+                    } else if (status == 400) {
+                        console.log(newData);
+                        errorMsg =
+                            "No se han completado los campos de manera correcta.";
+                        confirmation = "";
+                    } else {
+                        errorMsg = "Error " + status;
+                        confirmation = "";
+                    }
                 }
             }
         } catch (e) {

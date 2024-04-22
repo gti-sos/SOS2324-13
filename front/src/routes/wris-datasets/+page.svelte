@@ -26,14 +26,14 @@
 
     //datos a crear y por defecto en la tabla
     let newData = {
-        country: "country",
-        wri: 0.0,
-        exposure: 0.0,
-        vulnerability: 0.0,
-        susceptibility: 0.0,
-        lack_of_coping_capability: 0.0,
-        lack_of_adaptive_capacity: 0.0,
-        year: 0,
+        country: "NombrePais",
+        wri: 100.0,
+        exposure: 100.0,
+        vulnerability: 100.0,
+        susceptibility: 100.0,
+        lack_of_coping_capability: 100.0,
+        lack_of_adaptive_capacity: 100.0,
+        year: 2000,
         exposure_category: "Very Low",
         wri_category: "Very Low",
         vulnerability_category: "Very Low",
@@ -186,36 +186,69 @@
     //Hacer un POST (201, 400, 409, 500)
     async function createData() {
         try {
+            let createdData = {
+                country: newData.country,
+                wri: parseFloat(newData.wri),
+                exposure: parseFloat(newData.exposure),
+                vulnerability: parseFloat(newData.vulnerability),
+                susceptibility: parseFloat(newData.susceptibility),
+                lack_of_coping_capability: parseFloat(
+                    newData.lack_of_coping_capability,
+                ),
+                lack_of_adaptive_capacity: parseFloat(
+                    newData.lack_of_adaptive_capacity,
+                ),
+                year: parseInt(newData.year),
+                exposure_category: newData.exposure_category,
+                wri_category: newData.wri_category,
+                vulnerability_category: newData.vulnerability_category,
+                susceptibility_category: newData.susceptibility_category,
+            };
+
             let response = await fetch(API, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(newData),
+                body: JSON.stringify(createdData),
             });
 
-            //Devuelve un mensaje con un estado
-            let status = await response.status;
-            console.log(`Status code: ${status}`);
-            if (status == 201) {
-                //aqui deberia establecer que el dataset ahora es dataset+newData
-                dataset.push(newData);
-                console.log("nuevo dataset");
-                console.log(dataset);
-                getData();
-                errorMsg = "";
-                confirmation = "Dato creado correctamente.";
+            if (
+                createdData.wri == 0 ||
+                createdData.exposure == 0 ||
+                createdData.vulnerability == 0 ||
+                createdData.susceptibility == 0 ||
+                createdData.lack_of_coping_capability == 0 ||
+                createdData.lack_of_adaptive_capacity == 0 ||
+                createdData.year == 0
+            ) {
+                confirmation = "";
+                errorMsg =
+                    "No puede crearse un dato que contenga campos con valor 0.";
             } else {
-                if (status == 409) {
-                    errorMsg = `Ya existe un dato para el país ${newData.country} para el año ${newData.year}.`;
-                    confirmation = "";
-                } else if (status == 400) {
-                    errorMsg =
-                        "No se han completado los campos de manera correcta.";
-                    confirmation = "";
+                //Devuelve un mensaje con un estado
+                let status = await response.status;
+                console.log(`Status code: ${status}`);
+                if (status == 201) {
+                    //aqui deberia establecer que el dataset ahora es dataset+createdData
+                    dataset.push(createdData);
+                    console.log("nuevo dataset");
+                    console.log(dataset);
+                    getData();
+                    errorMsg = "";
+                    confirmation = "Dato creado correctamente.";
                 } else {
-                    errorMsg = "Error " + status;
-                    confirmation = "";
+                    if (status == 409) {
+                        errorMsg = `Ya existe un dato para el país ${createdData.country} para el año ${createdData.year}.`;
+                        confirmation = "";
+                    } else if (status == 400) {
+                        errorMsg =
+                            "No se han completado los campos de manera correcta.";
+                        confirmation = "";
+                    } else {
+                        errorMsg = "Error " + status;
+                        confirmation = "";
+                    }
                 }
             }
         } catch (e) {
