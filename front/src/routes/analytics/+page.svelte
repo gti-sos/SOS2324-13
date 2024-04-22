@@ -139,7 +139,7 @@
                 type: "bar",
             },
             title: {
-                text: "Datos de 2012 por país",
+                text: "Datos del 2012 por país (salario medio en puestos de IT, trastornos de ansiedad y vulnerabilidad a desastres)",
             },
             xAxis: {
                 categories: countries,
@@ -152,7 +152,7 @@
             yAxis: {
                 min: 0,
                 title: {
-                    text: "Value",
+                    text: "Valor",
                     align: "high",
                 },
                 labels: {

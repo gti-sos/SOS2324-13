@@ -156,7 +156,7 @@
             },
             series: [
                 {
-                    name: "Percentage",
+                    name: "Porcentaje",
                     colorByPoint: true,
                     data: seriesData,
                 },
