@@ -11,7 +11,7 @@
 
     async function getData() {
         try {
-            const res = await fetch(API);
+            const response = await fetch(API+"?limit=100&offset=0", { method: "GET" });
             const data = await res.json();
 
             if (data.length > 0) {
@@ -75,36 +75,38 @@
     function createGraph1(data) {
         const processedData = aggregateDataByCountry(data);
 
-        const pieChart = Highcharts.chart('pie-chart-container', {
+        const splineChart = Highcharts.chart('pie-chart-container', {
             chart: {
-                type: 'pie',
+                type: 'spline',
                 height: 420, 
                 width: 1580   
             },
             title: {
-                text: 'Salario total por país'
+                text: 'Salarios por país'
             },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                            return this.point.name;
-                        }
-                    }
+            xAxis: {
+                type: 'category',
+                title: {
+                    text: 'País'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Salario'
                 }
             },
             series: [{
-                name: 'Salario total',
+                name: 'Salario',
                 data: processedData
             }]
         });
     }
 
+
     function createGraph2(data) {
         const processedData = findHighestSalarySectors(data);
+
+        const colors = Highcharts.getOptions().colors; // Obtener una lista de colores predefinidos
 
         const barChart = Highcharts.chart('bar-chart-container', {
             chart: {
@@ -125,11 +127,19 @@
                 }
             },
             series: [{
-                name: 'Salario más elevado',
-                data: processedData.map(item => item.y)
-            }]
+                name: '',
+                data: processedData.map((item, index) => ({
+                    y: item.y,
+                    color: colors[index % colors.length] // Asignar colores diferentes basados en el índice
+                }))
+            }],
+            legend: {
+                enabled: false // Ocultar la leyenda
+            }
         });
     }
+
+
 
     onMount(() => {
         getData();
