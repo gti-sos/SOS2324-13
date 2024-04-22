@@ -164,7 +164,7 @@ function getGraficoColumnas(data) {
             align: 'right',
             verticalAlign: 'top',
             x: -40,
-            y: 0,
+            y: -10,
             floating: true,
             borderWidth: 1,
             backgroundColor: '#fff', 
