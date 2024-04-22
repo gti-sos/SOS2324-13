@@ -134,7 +134,7 @@
                 }))
             }],
             legend: {
-                enabled: false // Ocultar la leyenda
+                enabled: false 
             }
         });
     }
