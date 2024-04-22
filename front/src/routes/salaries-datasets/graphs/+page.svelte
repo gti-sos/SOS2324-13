@@ -11,19 +11,20 @@
     let API = "/api/v2/salaries-datasets";
 
     async function getData() {
-        try {
-            const response = await fetch(API, { method: "GET" });
-            const data = await res.json();
+    try {
+        const response = await fetch(API+"?limit=100&offset=0", { method: "GET" });
+        const data = await response.json(); 
 
-            if (data.length > 0) {
-                dataAvailable = true; 
-                createGraph1(data);
-                createGraph2(data);
-            }
-        } catch (error) {
-            console.log(`Error fetching data: ${error}`);
+        if (data.length > 0) {
+            dataAvailable = true; 
+            createGraph1(data);
+            createGraph2(data);
         }
+    } catch (error) {
+        console.log(`Error fetching data: ${error}`);
     }
+}
+
 
     async function loadData() {
         try {
