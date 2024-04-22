@@ -35,8 +35,11 @@
             let status = await response.status;
 
             if (status === 200) {
-                await getData();
-            } 
+            await getData();
+            
+            createGraph1(data);
+            createGraph2(data);
+        } 
         } catch (e) {
             console.error(e);
         }
