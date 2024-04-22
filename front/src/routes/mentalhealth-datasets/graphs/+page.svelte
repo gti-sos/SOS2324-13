@@ -84,7 +84,6 @@ function getGraficoColumnas(data) {
             }
         });
 
-        // Agregar el país solo si tiene datos para al menos un año
         if (countryData.some((value) => value !== 0)) {
             allSeriesData.push({
                 name: country,
@@ -182,7 +181,6 @@ function getGraficoColumnas(data) {
 
 //GRAFICO SCATTER
 function drawScatterPlot(data) {
-    // Crear el arreglo de datos para el gráfico de dispersión
     const chartData = data.map(item => ({
         country: item.country, 
         year: item.year, 
@@ -190,7 +188,6 @@ function drawScatterPlot(data) {
         y: parseFloat(item.bipolar_disorder), 
     }));
 
-    // Configurar y dibujar el gráfico de dispersión
     Highcharts.chart('container-scatter', {
         chart: {
             type: 'scatter',
@@ -245,7 +242,7 @@ function drawScatterPlot(data) {
             scatter: {
                 marker: {
                     symbol: 'circle',
-                    fillColor: '#333' // Color de los marcadores
+                    fillColor: '#333' 
                 }
             }
         },
