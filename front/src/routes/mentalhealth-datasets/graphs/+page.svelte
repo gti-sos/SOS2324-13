@@ -44,6 +44,7 @@
         const status = response.status;
         if (status === 200) {
             getGraficoColumnas(data);
+            drawScatterPlot(data)
             errorMsg = "";
         } else if (status === 404) {
             errorMsg = "No hay datos existentes.";
@@ -60,7 +61,8 @@
     }
 }
 
-    function getGraficoColumnas(data) {
+//GRAFICO COLUMNAS
+function getGraficoColumnas(data) {
     let years = [...new Set(data.map((item) => item.year))];
     let countries = [...new Set(data.map((item) => item.country))];
 
@@ -90,8 +92,6 @@
             });
         }
     });
-
-     console.log(allSeriesData);
 
     Highcharts.chart('container-bar', {
         chart: {
@@ -180,10 +180,86 @@
     });
 }
 
+//GRAFICO SCATTER
+function drawScatterPlot(data) {
+    // Crear el arreglo de datos para el gráfico de dispersión
+    const chartData = data.map(item => ({
+        country: item.country, 
+        year: item.year, 
+        x: parseFloat(item.alcoholism), 
+        y: parseFloat(item.bipolar_disorder), 
+    }));
 
-
-
-
+    // Configurar y dibujar el gráfico de dispersión
+    Highcharts.chart('container-scatter', {
+        chart: {
+            type: 'scatter',
+            backgroundColor: '#f4f4f4'
+        },
+        title: {
+            text: 'Nivel de Alcoholismo vs Nivel de Bipolarismo',
+            align: 'left',
+            style: {
+                color: '#333',
+                fontSize: '18px',
+                fontWeight: 'bold'
+            }
+        },
+        xAxis: {
+            title: {
+                text: 'Nivel de Alcoholismo',
+                style: {
+                    color: '#333'
+                }
+            },
+            labels: {
+                style: {
+                    color: '#333'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'Nivel de Bipolarismo',
+                style: {
+                    color: '#333'
+                }
+            },
+            labels: {
+                style: {
+                    color: '#333'
+                }
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return `<b>${this.point.country}</b><br/>Año: ${this.point.year}<br/>Alcoholismo: ${this.point.x}<br/>Bipolarismo: ${this.point.y}`;
+            },
+            backgroundColor: '#fff',
+            borderColor: '#333',
+            style: {
+                color: '#333'
+            }
+        },
+        plotOptions: {
+            scatter: {
+                marker: {
+                    symbol: 'circle',
+                    fillColor: '#333' // Color de los marcadores
+                }
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        credits: {
+            enabled: false
+        },
+        series: [{
+            data: chartData
+        }]
+    });
+}
 
 
 
@@ -203,6 +279,7 @@
 
 <figure class="highcharts-figure">
     <div id="container-bar"></div>
+    <div id="container-scatter"></div>
 </figure>
 
 {#if errorMsg != ""}
