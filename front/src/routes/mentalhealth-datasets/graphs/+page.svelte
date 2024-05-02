@@ -44,7 +44,8 @@
         const status = response.status;
         if (status === 200) {
             getGraficoColumnas(data);
-            drawScatterPlot(data)
+            drawScatterPlot(data);
+            drawDonutChart(data);
             errorMsg = "";
         } else if (status === 404) {
             errorMsg = "No hay datos existentes.";
@@ -258,12 +259,77 @@ function drawScatterPlot(data) {
     });
 }
 
+//FUNCION DONUT CHART 
+
+let donutChart = null; 
+
+function drawDonutChart(data) {
+    const years = [...new Set(data.map(item => item.year))];
+    const depressionData = years.map(year => {
+        const yearData = data.filter(item => item.year === year);
+        const totalDepression = yearData.reduce((acc, cur) => acc + parseFloat(cur.depression), 0);
+        const averageDepression = totalDepression / yearData.length; 
+        return averageDepression;
+    });
+
+    const ctx = document.getElementById('donut-chart').getContext('2d');
+
+    
+    if (donutChart) {
+        donutChart.destroy();
+    }
+
+    
+    donutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: years.map(String),
+            datasets: [{
+                data: depressionData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'top', 
+                align: 'center', 
+                labels: {
+                    boxWidth: 20, 
+                    padding: 20 
+                }
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+}
+
+
+
 
 
 </script>
 
 <svelte:head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </svelte:head>
 
 <div class="titulo">
@@ -277,7 +343,14 @@ function drawScatterPlot(data) {
 <figure class="highcharts-figure">
     <div id="container-bar"></div>
     <div id="container-scatter"></div>
+    
 </figure>
+
+<div class="titulo2">
+    <h2>Media depresion por año</h2>
+</div>
+
+<div><canvas id="donut-chart" width="400" height="400"></canvas></div>
 
 {#if errorMsg != ""}
     <hr />
