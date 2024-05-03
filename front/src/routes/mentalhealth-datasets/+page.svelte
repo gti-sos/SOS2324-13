@@ -392,7 +392,7 @@
     <!-- Lista de resultados -->
     <ul>
         {#each dataset as data}
-            <li>
+            <li class="listaElementos">
                 <a href="/mentalhealth-datasets/{data.country}/{data.year}">Ir al dato</a>
                 <span>{data.country}, {data.code}, {data.schizophrenia}, {data.bipolar_disorder}, {data.eating_disorder}, {data.anxiety_disorder}, {data.drug_use_disorder}, {data.depression}, {data.alcoholism}, {data.year}</span>
                 <button on:click={() => deleteData(data.country, data.year)}>Eliminar</button>
