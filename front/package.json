@@ -19,6 +19,7 @@
 	"dependencies": {
 		"@sveltestrap/sveltestrap": "^6.2.7",
 		"cors": "^2.8.5",
+		"echarts": "^5.5.0",
 		"enviroment": "^1.0.0",
 		"expres": "^0.0.5",
 		"express": "^4.19.2",
