@@ -350,7 +350,7 @@ function drawDonutChart(data) {
     <h2>Media depresion por año</h2>
 </div>
 
-<div><canvas id="donut-chart" width="400" height="400"></canvas></div>
+<div><canvas id="donut-chart" width="300" height="300"></canvas></div>
 
 {#if errorMsg != ""}
     <hr />
