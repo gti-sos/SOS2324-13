@@ -1,3 +1,18 @@
-Página donde estarán las integraciones/usos de los miembros.
+<h2>Integraciones de los miembros del equipo</h2>
+<br>
+<h3>Rubén Romero Guisado</h3>
+Aquí el enlace a las <a href="/rubromgui">integraciones</a>.
 
-Dividir en 3 secciones y cada uno que ponga sus gráficas o tablas.
+<br>
+<hr>
+<br>
+
+<h3>Antonio López Barrios</h3>
+Aquí el enlace a las <a href="/antlopbar">integraciones</a>.
+
+<br>
+<hr>
+<br>
+
+<h3>Aaron López Leal</h3>
+Aquí el enlace a las <a href="/aarloplea">integraciones</a>.
