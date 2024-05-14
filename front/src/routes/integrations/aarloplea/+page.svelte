@@ -7,7 +7,7 @@
 
 <script>
         import { onMount } from 'svelte';
-        import Chartist from 'chartist';
+    
 
     const url = 'https://free-nba.p.rapidapi.com/players?page=0&per_page=25';
 const options = {
