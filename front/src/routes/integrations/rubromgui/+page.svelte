@@ -12,6 +12,10 @@
     let data2 = [];
     let data3 = [];
     let data4 = [];
+    // VARIABLES PARA LA GRAFICA DE ECHARTS
+    let myChart;
+    var app = {};
+    var option;
 
     // Mensajes
     let errorMsg = "";
@@ -23,11 +27,17 @@
         //data1 = await getData1(); --> proxy
         //data2 = await getData2(); //terminada
         //data3 = await getData3(); //terminada
-        //data4 = await getData4();
+        //data4 = await getData4(); //terminada
         //getGraph1();
         //getGraph2(); //terminada
         //getGraph3(); //terminada
-        //getGraph4();
+        
+        var dom = document.getElementById("chart-container");
+        myChart = echarts.init(dom, null, {
+            renderer: "canvas",
+            useDirtyRect: false,
+        });
+        //getGraph4(); //terminada
     });
 
     // Mi API, para la integración
@@ -55,7 +65,6 @@
     }
 
     // API externa 1, con proxy
-    /*
     async function getData1() {
         try {
             const res = await fetch(APIproxy, {
@@ -68,7 +77,6 @@
             console.error(err);
         }
     }
-    */
 
     // API externa 2
     async function getData2() {
@@ -113,11 +121,13 @@
 
     // API externa 4
     async function getData4() {
-        const url = "rellenar";
+        const url = "https://covid-19-statistics.p.rapidapi.com/regions";
         const options = {
             method: "GET",
             headers: {
-                "X-Api-Key": "rellenar",
+                "X-RapidAPI-Key":
+                    "e58c859225mshd3e3a25a799ba8fp19238fjsn784d0977673e",
+                "X-RapidAPI-Host": "covid-19-statistics.p.rapidapi.com",
             },
         };
         try {
@@ -258,7 +268,7 @@
                     kiribatiData[0].lack_of_adaptive_capacity,
                     kiribatiData[0].vulnerability,
                     kiribatiData[0].susceptibility,
-                    data3Value*10,
+                    data3Value * 10,
                 ],
                 fill: true,
                 backgroundColor: "rgba(54, 162, 235, 0.2)",
@@ -300,10 +310,88 @@
     }
 
     // Gráfica 4
+    async function getGraph4() {
+        // Normalizar nombres de países en backData
+        const normalizedBackData = backData.map((item) => {
+            if (item.country === "Katar") {
+                return { ...item, country: "Qatar" };
+            }
+            return item;
+        });
+
+        // Contar el número de ocurrencias por 'country' en normalizedBackData
+        const countryCount = normalizedBackData.reduce((acc, item) => {
+            acc[item.country] = (acc[item.country] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Contar el número de ocurrencias por 'name' en data4
+        const nameCount = data4.data.reduce((acc, item) => {
+            acc[item.name] = (acc[item.name] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Combinar ambos conteos en un solo arreglo de datos para la gráfica
+        const chartData = [];
+
+        for (const [country, count] of Object.entries(countryCount)) {
+            chartData.push({ value: count, name: country });
+        }
+
+        for (const [name, count] of Object.entries(nameCount)) {
+            chartData.push({ value: count, name });
+        }
+
+        // Configuración de la gráfica
+        const option = {
+            tooltip: {
+                trigger: "item",
+            },
+            legend: {
+                top: "5%",
+                left: "center",
+                show: false,
+            },
+            series: [
+                {
+                    name: "Datos recogidos",
+                    type: "pie",
+                    radius: ["40%", "70%"],
+                    avoidLabelOverlap: false,
+                    label: {
+                        show: false,
+                        position: "center",
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: "40",
+                            fontWeight: "bold",
+                        },
+                    },
+                    labelLine: {
+                        show: false,
+                    },
+                    data: chartData,
+                },
+            ],
+        };
+
+        // Si la opción es un objeto, asignamos la configuración a la gráfica
+        if (option && typeof option === "object") {
+            myChart.setOption(option);
+        }
+
+        // Hacemos que la gráfica se redimensione cuando se cambia el tamaño de la ventana
+        window.addEventListener("resize", myChart.resize);
+    }
 </script>
 
 <svelte:head>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://fastly.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"
+    ></script>
 </svelte:head>
 <div id="body">
     <h2>Integraciones de rubromgui</h2>
@@ -326,8 +414,9 @@
     </div>
 
     <!-- API 4 -->
-    <h3>Integración con API ""nombre4""</h3>
-    Gráfica 4
+    <h3>Integración con API Covid-19 (Lista de Regiones)</h3>
+    Número de datos recibidos de cada país
+    <div id="chart-container"></div>
 
     <!-- MENSAJE DE ERROR -->
     {#if errorMsg != ""}
@@ -342,6 +431,17 @@
 </div>
 
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #chart-container {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+    }
+
     #body {
         text-align: center;
     }

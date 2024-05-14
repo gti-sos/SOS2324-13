@@ -2,10 +2,6 @@
     import { onMount } from "svelte";
     import { dev } from "$app/environment";
 
-    // VARIABLES PARA LA GRAFICA ECHARTS //
-    import * as echarts from "echarts";
-    // --------------------------------- //
-
     let API = "/api/v2/wris-datasets";
 
     if (dev) API = "http://localhost:10000" + API;
