@@ -33,24 +33,26 @@
         <ul>
             <li>
                 <a href="/api/v1/wris-datasets"
-                    >api-wris-datasets v1 (desarrollada por Rubén Romero Guisado)</a
+                    >api-wris-datasets v1 (desarrollada por Rubén Romero
+                    Guisado)</a
                 >
             </li>
             <li>
                 <a href="/api/v2/wris-datasets"
-                    >api-wris-datasets v2 (desarrollada por Rubén Romero Guisado)</a
+                    >api-wris-datasets v2 (desarrollada por Rubén Romero
+                    Guisado)</a
                 >
             </li>
             <li>
                 <a href="/api/v1/mentalhealth-datasets"
-                    >api-mentalhealth-datasets v1 (desarrollada por Antonio López
-                    Barrios)</a
+                    >api-mentalhealth-datasets v1 (desarrollada por Antonio
+                    López Barrios)</a
                 >
             </li>
             <li>
                 <a href="/api/v2/mentalhealth-datasets"
-                    >api-mentalhealth-datasets v2 (desarrollada por Antonio López
-                    Barrios)</a
+                    >api-mentalhealth-datasets v2 (desarrollada por Antonio
+                    López Barrios)</a
                 >
             </li>
             <li>
@@ -65,7 +67,7 @@
             </li>
         </ul>
 
-        <h3>Documentacion en POSTMAN:</h3>
+        <h3>Documentación en POSTMAN:</h3>
         <ul>
             <li>
                 <a
@@ -111,11 +113,71 @@
             </li>
         </ul>
 
-        <h3>Repositorio Github del equipo SOS2324-13</h3>
+        <h3>Repositorio Github del equipo SOS2324-13:</h3>
         <ul>
             <li>
-                <a href="https://github.com/gti-sos/SOS2324-13"
+                Enlace al repositorio <a
+                    href="https://github.com/gti-sos/SOS2324-13"
                     >gti-sos2324-13</a
+                >
+            </li>
+        </ul>
+
+        <h3>Enlaces a las gráficas:</h3>
+        <ul>
+            <li>
+                <a href="/analytics">Gráfica en común</a>
+            </li>
+            <li>
+                Gráficas desarrolladas por <a href="/wris-datasets/graphs"
+                    >Rubén Romero Guisado</a
+                >
+            </li>
+            <li>
+                Gráficas desarrolladas por <a
+                    href="/mentalhealth-datasets/graphs"
+                    >Antonio López Barrios</a
+                >
+            </li>
+            <li>
+                Gráficas desarrolladas por <a href="/salaries-datasets/graphs"
+                    >Aaron López Leal</a
+                >
+            </li>
+        </ul>
+
+        <h3>Enlaces a las integraciones:</h3>
+        <ul>
+            <li>
+                Integraciones/usos desarrollados por <a
+                    href="/integrations/rubromgui"
+                >
+                    Rubén Romero Guisado</a
+                >
+            </li>
+            <li>
+                Integraciones/usos desarrollados por <a
+                    href="/integrations/antlopbar"
+                >
+                    Antonio López Barrios</a
+                >
+            </li>
+            <li>
+                Integraciones/usos desarrollados por <a
+                    href="/integrations/aarloplea"
+                >
+                    Aaron López Leal</a
+                >
+            </li>
+        </ul>
+
+        <h3>Enlace a los vídeos:</h3>
+        <ul>
+            <li>
+                Vídeos de los <a
+                    href="/about"
+                >
+                    miembros del equipo</a
                 >
             </li>
         </ul>

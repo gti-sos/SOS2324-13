@@ -29,7 +29,7 @@
                     </ul>
                 </li>
                 <li><a href="/integrations">Integraciones</a></li>
-                <li><a href="/about">About</a></li>
+                <li><a href="/about">Vídeos</a></li>
             </ul>
         </div>
     </nav>
