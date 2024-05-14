@@ -1,30 +1,31 @@
 <svelte:head>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.js"></script>
 </svelte:head>
 
 <script>
     import { onMount } from "svelte";
 
     let dataAvailable = false;
-
     let API = "/api/v2/salaries-datasets";
 
     async function getData() {
-    try {
-        const response = await fetch(API+"?limit=100&offset=0", { method: "GET" });
-        const data = await response.json(); 
+        try {
+            const response = await fetch(API + "?limit=100&offset=0", { method: "GET" });
+            const data = await response.json(); 
 
-        if (data.length > 0) {
-            dataAvailable = true; 
-            createGraph1(data);
-            createGraph2(data);
+            if (data.length > 0) {
+                dataAvailable = true; 
+                createGraph1(data);
+                createGraph2(data);
+                createChartistGraph(data);
+            }
+        } catch (error) {
+            console.log(`Error fetching data: ${error}`);
         }
-    } catch (error) {
-        console.log(`Error fetching data: ${error}`);
     }
-}
-
 
     async function loadData() {
         try {
@@ -35,11 +36,8 @@
             let status = await response.status;
 
             if (status === 201) {
-            getData();
-            
-            createGraph1(data);
-            createGraph2(data);
-        } 
+                getData();
+            } 
         } catch (e) {
             console.error(e);
         }
@@ -107,11 +105,10 @@
         });
     }
 
-
     function createGraph2(data) {
         const processedData = findHighestSalarySectors(data);
 
-        const colors = Highcharts.getOptions().colors; // Obtener una lista de colores predefinidos
+        const colors = Highcharts.getOptions().colors;
 
         const barChart = Highcharts.chart('bar-chart-container', {
             chart: {
@@ -135,7 +132,7 @@
                 name: '',
                 data: processedData.map((item, index) => ({
                     y: item.y,
-                    color: colors[index % colors.length] // Asignar colores diferentes basados en el índice
+                    color: colors[index % colors.length]
                 }))
             }],
             legend: {
@@ -144,7 +141,15 @@
         });
     }
 
+    function createChartistGraph(data) {
+        const labels = data.map(item => item.label); 
+        const series = [data.map(item => item.value)];
 
+        new Chartist.Bar('.ct-chart', {
+            labels: labels,
+            series: series
+        });
+    }
 
     onMount(() => {
         getData();
@@ -158,3 +163,4 @@
 
 <div id="pie-chart-container"></div>
 <div id="bar-chart-container"></div>
+<div class="ct-chart"></div>
