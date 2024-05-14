@@ -6,52 +6,41 @@
 </svelte:head>
 
 <script>
-    import { onMount } from "svelte";
-    import { dev } from "$app/environment";
+        import { onMount } from 'svelte';
+        import Chartist from 'chartist';
 
-    let API = "/api/v2/salaries-datasets";
-    let APIproxy = "/proxyALL";
-    let metalPrices = [];
-
-    if (dev) API = "http://localhost:10000" + API;
-
-    
-
-    async function fetchMetalPrices() {
-    const url = 'https://live-metal-prices.p.rapidapi.com/v1/latest/XAU,XAG,PA,PL,GBP,EUR/EUR';
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': '9e8ab8c42bmsh8e20b25b9d62171p1aa1d2jsn26e4918af5b7',
-        'X-RapidAPI-Host': 'live-metal-prices.p.rapidapi.com'
-      }
-    };
-
-    try {
-      const response = await fetch(url, options);
-      const result = await response.json();
-      // Aquí procesamos los datos para obtener los precios de las distintas monedas
-      metalPrices = Object.entries(result.rates).map(([currency, rate]) => ({ currency, rate }));
-      console.log(metalPrices);
-      createChart();
-    } catch (error) {
-      console.error(error);
-    }
+    const url = 'https://free-nba.p.rapidapi.com/players?page=0&per_page=25';
+const options = {
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': '9e8ab8c42bmsh8e20b25b9d62171p1aa1d2jsn26e4918af5b7',
+    'X-RapidAPI-Host': 'free-nba.p.rapidapi.com'
   }
+};
 
-  function createChart() {
-    const labels = metalPrices.map(item => item.currency);
-    const series = metalPrices.map(item => item.rate);
+onMount(async () => {
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
 
+    // Procesar los datos para contar el número de jugadores por nacionalidad
+    const nationalityCounts = {};
+    data.data.forEach(player => {
+      const nationality = player.country;
+      nationalityCounts[nationality] = (nationalityCounts[nationality] || 0) + 1;
+    });
+
+    // Preparar los datos para la gráfica de barras
+    const labels = Object.keys(nationalityCounts);
+    const series = labels.map(label => nationalityCounts[label]);
+
+    // Crear la gráfica de barras con Chart.js
     new Chartist.Bar('.ct-chart', {
-      labels: labels,
+      labels,
       series: [series]
     });
+  } catch (error) {
+    console.error(error);
   }
-
-  onMount(() => {
-    fetchMetalPrices();
-  });
+});
 </script>
-
-<div class="ct-chart"></div>
