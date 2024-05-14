@@ -43,7 +43,6 @@ app.use("/proxyRRG", function (req, res) {
     req.pipe(request(url)).pipe(res);
 });
 
-
 // Cargamos el handler
 app.use(handler);
 
