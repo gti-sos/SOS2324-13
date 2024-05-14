@@ -49,7 +49,7 @@
                     { label: "Sodio (mg)", y: data.sodium_mg },
                     { label: "Carbohidratos totales (g)", y: data.carbohydrates_total_g },
                     { label: "Fibra (g)", y: data.fiber_g },
-                    { label: "Azúcares (g)", y: data.sugar_g }
+                    
                 ]
             }]
         };
