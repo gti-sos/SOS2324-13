@@ -17,7 +17,7 @@
         const options = {
             method: "GET",
             headers: {
-                "X-Api-Key": "GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf",
+                "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I",
             },
         };
         try {
