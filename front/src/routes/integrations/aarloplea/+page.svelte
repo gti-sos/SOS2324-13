@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <svelte:head>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </svelte:head>
@@ -69,4 +67,3 @@
 <div id="chart-container"></div>
 
 <p>Este gráfico de tipo bar muestra algunas características clave de la motocicleta Kawasaki Ninja 650 del año 2022, como la potencia, el par motor, el peso total, la altura del asiento y la capacidad de combustible.</p>
->>>>>>> e91c5dced91e3354bdead037327f532aad4ca51e
