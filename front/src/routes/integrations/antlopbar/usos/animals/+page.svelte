@@ -1,80 +1,74 @@
+<svelte:head>
+    <script src="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.css">
+</svelte:head>
+
 <script>
     import { onMount } from "svelte";
-    import { afterUpdate } from 'svelte';
-    
+
     let animalData = {};
-    let chartInitialized = false;
-    
+
     onMount(async () => {
         await getData();
     });
-    
+
     async function getData() {
         const url = 'https://api.api-ninjas.com/v1/animals';
+        
         const options = {
             method: 'GET',
             headers: {
-                'X-NinjaAPI-Key': '5GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf',   
+                'X-NinjaAPI-Key': 'GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf',
             }
         };
-    
-        const response = await fetch(url, options);
-        const data = await response.json();
-        // Procesar los datos para extraer la distribución de animales por ubicación
-        animalData = processAnimalData(data);
+
+        try {
+            const response = await fetch(url, options);
+            animalData = await response.json();
+            createGraph(animalData);
+        } catch (error) {
+            console.error(error);
+        }
     }
-    
-    function processAnimalData(data) {
-        const distribution = {};
-        data.forEach(animal => {
-            animal.locations.forEach(location => {
-                if (!distribution[location]) {
-                    distribution[location] = 0;
-                }
-                distribution[location]++;
-            });
-        });
-        return distribution;
-    }
-    
-    $: if (Object.keys(animalData).length > 0 && !chartInitialized) {
-        renderChart();
-        chartInitialized = true;
-    }
-    
-    function renderChart() {
-        const labels = Object.keys(animalData);
-        const dataValues = Object.values(animalData);
-    
-        const chartData = {
-            labels,
-            series: [dataValues]
+
+    function createGraph(animalData) {
+        const data = {
+            labels: animalData.map(animal => animal.name),
+            series: [animalData.map(animal => animal.locations.length)]
         };
-    
+
         const options = {
-            seriesBarDistance: 10,
             axisX: {
-                labelInterpolationFnc: function(value) {
-                    return value;
-                }
+                offset: 60
+            },
+            axisY: {
+                offset: 80
             }
         };
-    
-        new Chartist.Bar('.ct-chart', chartData, options);
+
+        new Chartist.Bar('.ct-chart', data, options);
     }
-  </script>
-    
-  <svelte:head>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.css">
-      <script src="https://cdn.jsdelivr.net/npm/chartist/dist/chartist.min.js"></script>
-  </svelte:head>
-    
-  <style>
+</script>
+
+<style>
     .ct-chart {
-        height: 300px;
+        width: 100%;
+        height: 360px;
+        margin-bottom: 20px;
     }
-  </style>
-    
-  <div class="ct-chart"></div>
-  
-  
+
+    h1 {
+        font-family: '';
+        font-size: 60px;
+        color: #290ef5;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<br>
+<h1>Cantidad de ubicaciones por animal</h1>
+<div class="ct-chart"></div>
