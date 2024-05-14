@@ -20,7 +20,7 @@
                 dataAvailable = true; 
                 createGraph1(data);
                 createGraph2(data);
-                createChartistGraph(data);
+                createPieChart(data);
             }
         } catch (error) {
             console.log(`Error fetching data: ${error}`);
@@ -141,14 +141,23 @@
         });
     }
 
-    function createChartistGraph(data) {
-        const labels = data.map(item => item.label); 
-        const series = [data.map(item => item.value)];
+    function createPieChart(data) {
+        const jobCounts = countJobsByCountry(data);
+        const labels = Object.keys(jobCounts);
+        const series = Object.values(jobCounts);
 
-        new Chartist.Bar('.ct-chart', {
+        new Chartist.Pie('.ct-chart', {
             labels: labels,
             series: series
         });
+    }
+
+    function countJobsByCountry(data) {
+        const jobCounts = {};
+        data.forEach(item => {
+            jobCounts[item.country] = (jobCounts[item.country] || 0) + 1;
+        });
+        return jobCounts;
     }
 
     onMount(() => {
