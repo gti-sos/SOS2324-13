@@ -3,9 +3,13 @@
 <h3>Rubén Romero Guisado</h3>
 <div class="video-container">
     <iframe
-        src="https://www.youtube.com/watch?v=M9ePlEFwpJ4"
-        title="Vídeo de Rubén Romero Guisado"
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/M9ePlEFwpJ4?si=tIVsALysPLGL-Rpg"
+        title="Vídeo de SOS - rubromgui"
         frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen
     ></iframe>
 </div>
