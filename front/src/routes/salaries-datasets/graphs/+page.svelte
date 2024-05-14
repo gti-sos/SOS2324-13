@@ -147,9 +147,12 @@
         const series = Object.values(jobCounts);
 
         new Chartist.Pie('.ct-chart', {
-            labels: labels,
-            series: series
-        });
+        labels: labels,
+        series: series
+    }, {
+        width: '600px',
+        height: '400px'
+    });
     }
 
     function countJobsByCountry(data) {
