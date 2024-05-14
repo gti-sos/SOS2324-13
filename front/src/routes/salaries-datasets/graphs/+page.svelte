@@ -155,6 +155,7 @@
     });
     }
 
+
     function countJobsByCountry(data) {
         const jobCounts = {};
         data.forEach(item => {
@@ -172,6 +173,12 @@
 <div>
     <button on:click={loadData}>Cargar los datos</button>
 </div>
+<style>
+    .ct-chart {
+        width: 600px;
+        height: 400px;
+    }
+</style>
 
 <div id="pie-chart-container"></div>
 <div id="bar-chart-container"></div>
