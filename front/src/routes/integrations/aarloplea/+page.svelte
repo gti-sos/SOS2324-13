@@ -18,40 +18,40 @@
     
 
     async function fetchMetalPrices() {
-        const url = 'https://live-metal-prices.p.rapidapi.com/v1/latest/XAU,XAG,PA,PL,GBP,EUR/EUR';
-        const options = {
-            method: 'GET',
-            headers: {
-                'X-RapidAPI-Key': '9e8ab8c42bmsh8e20b25b9d62171p1aa1d2jsn26e4918af5b7',
-                'X-RapidAPI-Host': 'live-metal-prices.p.rapidapi.com'
-            }
-        };
+    const url = 'https://live-metal-prices.p.rapidapi.com/v1/latest/XAU,XAG,PA,PL,GBP,EUR/EUR';
+    const options = {
+      method: 'GET',
+      headers: {
+        'X-RapidAPI-Key': '9e8ab8c42bmsh8e20b25b9d62171p1aa1d2jsn26e4918af5b7',
+        'X-RapidAPI-Host': 'live-metal-prices.p.rapidapi.com'
+      }
+    };
 
-        try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            // Extract metal prices from the response
-            metalPrices = Object.entries(result.rates).map(([metal, price]) => ({ metal, price }));
-            // Log the metal prices for debugging
-            console.log(metalPrices);
-            // Render the chart
-            renderChart();
-        } catch (error) {
-            console.error(error);
-        }
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      // Aquí procesamos los datos para obtener los precios de las distintas monedas
+      metalPrices = Object.entries(result.rates).map(([currency, rate]) => ({ currency, rate }));
+      console.log(metalPrices);
+      createChart();
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    function renderChart() {
-        // Use Chartist to render the chart
-        const labels = metalPrices.map(metal => metal.metal);
-        const series = [metalPrices.map(metal => metal.price)];
-        new Chartist.Bar('.ct-chart', {
-            labels,
-            series
-        });
-    }
+  function createChart() {
+    const labels = metalPrices.map(item => item.currency);
+    const series = metalPrices.map(item => item.rate);
 
-    onMount(fetchMetalPrices);
+    new Chartist.Bar('.ct-chart', {
+      labels: labels,
+      series: [series]
+    });
+  }
+
+  onMount(() => {
+    fetchMetalPrices();
+  });
 </script>
 
 <div class="ct-chart"></div>
