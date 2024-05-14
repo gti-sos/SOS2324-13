@@ -8,10 +8,9 @@ Aquí el enlace a las <a href="/integrations/rubromgui">integraciones</a>.
 <br>
 
 <h3>Antonio López Barrios</h3>
-Aquí el enlace a las <a href="/integrations/antlopbar">integraciones</a>.
 
 <br> Coches <a href="/integrations/antlopbar/usos/coches">USO 1</a>
-<hr>
+<hr> Nutrientes <a href="/integrations/antlopbar/usos/nutrition">USO 2</a>
 <br>
 
 <h3>Aaron López Leal</h3>
