@@ -10,7 +10,7 @@ Aquí el enlace a las <a href="/integrations/rubromgui">integraciones</a>.
 <h3>Antonio López Barrios</h3>
 Aquí el enlace a las <a href="/integrations/antlopbar">integraciones</a>.
 
-<br>
+<br> Coches <a href="/integrations/antlopbar/usos/coches">USO 1</a>
 <hr>
 <br>
 
