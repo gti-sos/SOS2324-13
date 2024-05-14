@@ -19,9 +19,7 @@ let dbMental = new dataStore();
 
 // Aaron López Leal
 let dbSalarie = new dataStore();
-
 let app = express();
-
 // Configuracion del puerto
 const PORT = (process.env.PORT || 10000);
 app.use(cors());
@@ -40,11 +38,11 @@ loadSalarieApi2(app, dbSalarie);
 
 // Proxy: Rubén Romero Guisado
 app.use("/proxyRRG", function (req, res) {
-    // POR HACER: cambiar la url por una api externa
-    var url = "https://sos2324-13.appspot.com/api/v2/wris-datasets";
+    var url = 'https://api.api-ninjas.com/v1/interestrate?country=Australia';
     console.log("piped: " + req.url);
     req.pipe(request(url)).pipe(res);
 });
+
 
 // Cargamos el handler
 app.use(handler);

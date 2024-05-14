@@ -18,6 +18,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltestrap/sveltestrap": "^6.2.7",
+		"c3": "^0.7.20",
 		"cors": "^2.8.5",
 		"echarts": "^5.5.0",
 		"enviroment": "^1.0.0",

@@ -5,7 +5,10 @@
     let API = "/api/v2/wris-datasets";
     let APIproxy = "/proxyRRG";
 
-    if (dev) API = "http://localhost:10000" + API;
+    if (dev) {
+        API = "http://localhost:10000" + API;
+        APIproxy = "http://localhost:10000" + APIproxy;
+    }
 
     let backData = [];
     let data1 = [];
@@ -23,21 +26,20 @@
 
     // Cargar los datos cuando se cargue la pagina
     onMount(async () => {
-        backData = await getData(); //terminada
-        //data1 = await getData1(); --> proxy
-        //data2 = await getData2(); //terminada
-        //data3 = await getData3(); //terminada
-        //data4 = await getData4(); //terminada
-        //getGraph1();
-        //getGraph2(); //terminada
-        //getGraph3(); //terminada
-        
+        backData = await getData();
+        data1 = await getData1();
+        data2 = await getData2();
+        data3 = await getData3();
+        data4 = await getData4();
+        getGraph1();
+        getGraph2();
+        getGraph3();
         var dom = document.getElementById("chart-container");
         myChart = echarts.init(dom, null, {
             renderer: "canvas",
             useDirtyRect: false,
         });
-        //getGraph4(); //terminada
+        getGraph4();
     });
 
     // Mi API, para la integración
@@ -67,14 +69,18 @@
     // API externa 1, con proxy
     async function getData1() {
         try {
-            const res = await fetch(APIproxy, {
+            const options = {
+                method: "GET",
                 headers: {
-                    "X-Api-Key": "rellenar",
+                    "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM",
                 },
-            });
-            return await res.json();
+            };
+            const response = await fetch(APIproxy, options);
+            const data = await response.json();
+            //console.log(data);
+            return data;
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
@@ -93,7 +99,7 @@
             //console.log(data);
             return data;
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
@@ -115,7 +121,7 @@
             //console.log(data);
             return data;
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
@@ -136,11 +142,59 @@
             //console.log(data);
             return data;
         } catch (err) {
-            console.error(err);
+            console.log(err);
         }
     }
 
     // Gráfica 1
+    async function getGraph1() {
+        // Filtramos los datos de España entre 2011 y 2014
+        const kiribati2011 = backData.filter(
+            (item) => item.country === "Kiribati" && item.year === 2011,
+        );
+
+        // Obtenemos el valor del tipo de interes
+        const ratePct = data1.central_bank_rates[0].rate_pct;
+
+        const ctx = document.getElementById("polarArea-chart").getContext("2d");
+
+        const labels = [
+            "Tipo de interés",
+            "Índice de riesgo",
+            "Índice de susceptibilidad (/10)",
+            "Índice de exposición",
+        ];
+        const datasets = [
+            {
+                label: "Datos",
+                data: [
+                    ratePct,
+                    kiribati2011[0].wri,
+                    kiribati2011[0].susceptibility / 10,
+                    kiribati2011[0].exposure,
+                ],
+                backgroundColor: [
+                    "rgb(255, 99, 132, 0.8)",
+                    "rgb(221, 226, 67, 0.8)",
+                    "rgb(79, 226, 67, 0.8)",
+                    "rgb(65, 68, 255, 0.8)",
+                ],
+            },
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: datasets,
+        };
+
+        const options = {};
+
+        new Chart(ctx, {
+            type: "polarArea",
+            data: data,
+            options: options,
+        });
+    }
 
     // Gráfica 2
     async function getGraph2() {
@@ -151,7 +205,7 @@
         );
         //console.log(guatemalaData);
 
-        const ctx = document.getElementById("radar-chart").getContext("2d");
+        const ctx = document.getElementById("bar-chart").getContext("2d");
 
         const labels = [
             "Índice de riesgo",
@@ -396,26 +450,29 @@
 <div id="body">
     <h2>Integraciones de rubromgui</h2>
     <!-- API 1 -->
-    <h3>Integración con proxy de API ""nombre1""</h3>
-    Gráfica 1
+    <h3>Integración con proxy de API de tipo de interés</h3>
+    <div class="texto">Datos sobre Kiribati para el año 2011</div>
+    <div class="chart-container">
+        <canvas id="polarArea-chart" width="400" height="400"></canvas>
+    </div>
 
     <!-- API 2 -->
     <h3>Integración con API de Países</h3>
-    Datos sobre Guatemala para el año 2014
-    <div>
+    <div class="texto">Datos sobre Guatemala para el año 2014</div>
+    <div class="chart-container">
         <canvas id="bar-chart" width="400" height="400"></canvas>
     </div>
 
     <!-- API 3 -->
     <h3>Integración con API de Conversión de Monedas</h3>
-    Datos sobre Kiribati y España para el año 2013
-    <div>
+    <div class="texto">Datos sobre Kiribati y España para el año 2013</div>
+    <div class="chart-container">
         <canvas id="radar-chart" width="400" height="400"></canvas>
     </div>
 
     <!-- API 4 -->
     <h3>Integración con API Covid-19 (Lista de Regiones)</h3>
-    Número de datos recibidos de cada país
+    <div class="texto">Número de datos recibidos de cada país</div>
     <div id="chart-container"></div>
 
     <!-- MENSAJE DE ERROR -->
@@ -446,9 +503,25 @@
         text-align: center;
     }
 
+    .chart-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+    }
+
+    #polarArea-chart {
+        max-height: 500px;
+        max-width: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     #bar-chart {
         max-height: 500px;
         max-width: 600px;
+        display: flex;
         justify-content: center;
         align-items: center;
     }
@@ -456,7 +529,13 @@
     #radar-chart {
         max-height: 500px;
         max-width: 600px;
+        display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .texto {
+        padding: 15px;
+        font-size: 20px;
     }
 </style>
