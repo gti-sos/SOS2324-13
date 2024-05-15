@@ -49,6 +49,12 @@ app.use("/proxyALL", function (req, res) {
     console.log("piped: " + req.url);
     req.pipe(request(url)).pipe(res);
 });
+// Proxy: Antonio López Barrios
+app.use("/proxyALB", function (req, res) {
+    var url = 'https://api.api-ninjas.com/v1/weather?city=Spain';
+    console.log("piped: " + req.url);
+    req.pipe(request(url)).pipe(res);
+});
 
 // Cargamos el handler
 app.use(handler);

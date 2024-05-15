@@ -13,6 +13,7 @@ Aquí el enlace a las <a href="/integrations/rubromgui">integraciones</a>.
     <li>Coches <a href="/integrations/antlopbar/usos/coches">USO 1</a></li>
     <li>Nutrientes <a href="/integrations/antlopbar/usos/nutrition">USO 2</a></li>
     <li>Covid <a href="/integrations/antlopbar/integraciones/sinProxy">Integracion 1</a></li>
+    <li>Tiempo <a href="/integrations/antlopbar/integraciones/conProxy">Integracion 2</a></li>
 </ul>
 
 
