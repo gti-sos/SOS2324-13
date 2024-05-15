@@ -7,18 +7,19 @@
 
     let data1 = {};
     let data2 = {};
-    let inflationData = [];
-    let salaryData = [];
+    let data3 = {};
+    let data4 = {};
+    let averageSalary = {};
+
 
     onMount(async () => {
         data1 = await getData1();
         data2 = await getData2();
+        data3 = await getInflationData();
+        data4 = await getLocalData();
         generateBarChart(data1);
-        generateRadarChart(data2);
-        inflationData = await getInflationData();
-        salaryData = await getSalaryData();
-        generateAreaChart();
-
+        plotScatterChart(data2);
+        plotRangeAreaChart(data3, data4);
     });
 
     async function getData1() {
@@ -39,7 +40,7 @@
     }
 
     async function getData2() {
-        const url = "https://api.api-ninjas.com/v1/dogs?name=golden retriever";
+        const url = "https://api.api-ninjas.com/v1/historicalevents?text=roman empire";
         const options = {
             method: "GET",
             headers: {
@@ -55,9 +56,25 @@
         }
     }
 
-
     async function getInflationData() {
-        const url = "https://api.api-ninjas.com/v1/inflation?country=Austria";
+        const url = `https://api.api-ninjas.com/v1/inflation?country=Canada`;
+        const options = {
+            method: "GET",
+            headers: {
+                "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I",
+            },
+        };
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            return data; // Devolvemos todos los resultados
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async function getLocalData() {
+        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets";
         try {
             const response = await fetch(url);
             const data = await response.json();
@@ -67,27 +84,55 @@
         }
     }
 
-    async function getSalaryData() {
-        try {
-            const response = await fetch(API);
-            const status = await response.status;
-            if (status == 200) {
-                confirmation = "";
-                errorMsg = "";
-                const data = await response.json();
-                //console.log(data);
-                return data;
-            } else {
-                confirmation = "";
-                errorMsg =
-                    "No hay datos en el backend para construir la gráfica";
-                console.log(`Error: ${status}`);
+    function plotScatterChart(data) {
+        const events = data.map(event => ({
+            x: parseInt(event.year),
+            y: parseInt(event.month),
+            event: event.event
+        }));
+
+        const options = {
+            chart: {
+                height: 350,
+                type: 'scatter',
+                zoom: {
+                    enabled: true,
+                    type: 'xy'
+                }
+            },
+            series: [{
+                name: 'Events',
+                data: events
+            }],
+            xaxis: {
+                type: 'numeric',
+                title: {
+                    text: 'Year'
+                }
+            },
+            yaxis: {
+                type: 'numeric',
+                min: 1,
+                max: 12,
+                title: {
+                    text: 'Month'
+                }
+            },
+            tooltip: {
+                custom: function({ series, seriesIndex, dataPointIndex, w }) {
+                    if (seriesIndex !== undefined && dataPointIndex !== undefined) {
+                        const event = series[seriesIndex][dataPointIndex].event;
+                        const year = series[seriesIndex][dataPointIndex].x;
+                        const month = series[seriesIndex][dataPointIndex].y;
+                        return '<div class="apexcharts-tooltip">' + 'Year: ' + year + '<br>' + 'Month: ' + month + '<br>' + 'Event: ' + event + '</div>';
+                    }
+                    return '';
+                }
             }
-        } catch (error) {
-            confirmation = "";
-            errorMsg = "";
-            console.error(error);
-        }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#scatter-chart"), options);
+        chart.render();
     }
 
     function generateBarChart(data) {
@@ -118,91 +163,93 @@
         chart.render();
     }
 
-    function generateRadarChart(data) {
-        const chartData = {
-            series: [{
-                name: 'Características',
-                data: [
-                    data[0].city_mpg,
-                    data[0].combination_mpg,
-                    data[0].highway_mpg,
-                    data[0].cylinders,
-                    data[0].displacement
-                ]
-            }],
-            chart: {
-                type: 'radar',
-                height: 400
-            },
-            title: {
-                text: 'Características del Toyota Camry (${data[0].year})'
-            },
-            labels: ['MPG en ciudad', 'MPG combinado', 'MPG en carretera', 'Cilindros', 'Desplazamiento (litros)']
-        };
-
-        const chart = new ApexCharts(document.querySelector("#radar-chart-container"), chartData);
-        chart.render();
-    }
-
-    function combineData() {
-        const combined = [];
-        for (const inflationCountry of inflationData) {
-            const salaryCountry = salaryData.find(item => item.country === inflationCountry.country);
-            if (salaryCountry) {
-                combined.push({
-                    country: inflationCountry.country,
-                    inflationRate: inflationCountry.yearly_rate_pct,
-                    averageSalary: salaryCountry.salary
-                });
-            }
-        }
-        return combined;
-    }
-
-    function generateAreaChart() {
-        const combinedData = combineData();
-
-        const chartData = {
-            series: [
-                {
-                    name: 'Tasa de inflación',
-                    data: combinedData.map(item => item.inflationRate)
-                },
-                {
-                    name: 'Salario promedio',
-                    data: combinedData.map(item => item.averageSalary)
-                }
-            ],
-            chart: {
-                type: 'area',
-                height: 400
-            },
-            title: {
-                text: 'Comparación de tasa de inflación y salario promedio por país'
-            },
-            xaxis: {
-                categories: combinedData.map(item => item.country)
-            }
-        };
-
-        const chart = new ApexCharts(document.querySelector("#area-chart-container"), chartData);
-        chart.render();
-    }
-
-
     function getNumericValue(str) {
         // Extraer el valor numérico de una cadena de texto en el formato "XX.X" o "XX.XX"
         return parseFloat(str.match(/\d+(\.\d+)?/)[0]);
     }
+
+    function plotRangeAreaChart(inflationData, localData) {
+    console.log("Inflation Data:", inflationData);
+    console.log("Local Data:", localData);
+
+    // Verificar la estructura de los datos de inflación
+    if (!Array.isArray(inflationData) || inflationData.length === 0) {
+        console.error("Los datos de inflación no están en el formato esperado.");
+        return;
+    }
+
+    // Verificar la estructura de los datos locales
+    if (!Array.isArray(localData) || localData.length === 0) {
+        console.error("Los datos locales no están en el formato esperado.");
+        return;
+    }
+
+    // Filtrar los datos locales solo para el país "United States"
+    const usData = localData.filter(entry => entry.country === "United States");
+    if (usData.length === 0) {
+        console.error("No se encontraron datos para el país 'United States'.");
+        return;
+    }
+
+    // Calcular la media de los salarios para "United States"
+    const salaries = usData.map(entry => entry.salary);
+    const averageSalary1 = salaries.reduce((total, salary) => total + salary, 0) / salaries.length;
+    const averageSalary2 = (averageSalary1/12);
+
+    console.log("Salario Promedio (United States):", averageSalary2);
+
+    // Encontrar la inflación anual para "United States"
+    const usInflationEntry = inflationData.find(entry => entry.country === "Canada");
+    if (!usInflationEntry) {
+        console.error("No se encontró información de inflación para el país 'United States'.");
+        return;
+    }
+    const inflationRate = usInflationEntry.yearly_rate_pct;
+
+    console.log("Inflación Anual (United States):", inflationRate);
+
+    const options = {
+    chart: {
+        type: 'bar',
+        height: 400
+    },
+    series: [{
+        name: 'Salario Promedio (United States)',
+        data: [averageSalary2]
+    }, {
+        name: 'Inflación Anual (United States)',
+        data: [inflationRate]
+    }],
+    xaxis: {
+        categories: ['']
+    },
+    yaxis: {
+        title: {
+            text: 'Valor'
+        },
+        min: 0,
+        max: 10000
+    }
+};
+
+    const chart = new ApexCharts(document.querySelector("#range-area-chart"), options);
+    chart.render();
+}
+
+
+
+
+
+
 </script>   
 
 <h1>Gráfico de tipo bar: Características de la motocicleta Kawasaki Ninja 650 (2022)</h1>
 <div id="bar-chart-container"></div>
 <p>Datos clave de la motocicleta Kawasaki Ninja 650 del año 2022, como la potencia, el par motor, el peso total, la altura del asiento y la capacidad de combustible.</p>
 
-<h1>Gráfico de tipo radar: Características del Toyota Camry</h1>
-<div id="radar-chart-container"></div>
-<p>El gráfico de radar muestra algunas características del Toyota Camry.</p>
+<h1>Gráfico de dispersión: Eventos históricos del Imperio Romano</h1>
+<div id="scatter-chart"></div>
+<p>Eventos ocurridos al Imperio Romano a lo largo de los años</p>
 
-<h1>Gráfico de área: Comparación de tasa de inflación y salario promedio por país</h1>
-<div id="area-chart-container"></div>
+<h1>Gráfico de Tipo Range Area: Inflación vs Salario Promedio Mensual</h1>
+<div id="range-area-chart"></div>
