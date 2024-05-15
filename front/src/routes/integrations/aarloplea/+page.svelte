@@ -309,3 +309,4 @@
 
 <h1>Gráfico de Pendiente: Relación entre Ejercicios de Bíceps y Dificultad</h1>
 <div id="column-chart"></div>
+<p>Número de ejercicios físicos diferenciados por dificultad</p>
