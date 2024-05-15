@@ -15,31 +15,34 @@
     }
 
     let data1 = {};
-    let data2 = {};
+    let data2 = [];
     let salaryData = [];
     let exchangeRates = {};
     let exerciseData = [];
-
+    let stockData = {};
 
     onMount(async () => {
         data1 = await getData1();
         data2 = await getData2();
         console.log("Data 1:", data1);
         console.log("Data 2:", data2);
-        
+
         salaryData = await getSalaryData();
         exchangeRates = await getExchangeRates();
         console.log("Salary Data:", salaryData);
         console.log("Exchange Rates:", exchangeRates);
-        
+
         exerciseData = await getDataProxy();
         console.log("Exercise Data:", exerciseData);
-        
-        generateBarChart(data1);
-        plotScatterChart(data2);
-        generateRadarChart(salaryData, exchangeRates);
-        generateColumnChart(exerciseData);
 
+        stockData = await getStockData('AAPL');
+        console.log("Stock Data:", stockData);
+
+        if (data1) generateBarChart(data1);
+        if (Array.isArray(data2)) plotScatterChart(data2);
+        if (Array.isArray(salaryData) && exchangeRates) generateRadarChart(salaryData, exchangeRates);
+        if (Array.isArray(exerciseData)) generateColumnChart(exerciseData);
+        if (Array.isArray(salaryData) && stockData) generateBubbleChart(salaryData, stockData);
     });
 
     async function getData1() {
@@ -53,9 +56,10 @@
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            return data[0]; // Tomamos solo el primer resultado ya que la API devuelve un solo objeto
+            return data[0]; // Take only the first result since the API returns a single object
         } catch (err) {
             console.log(err);
+            return null;
         }
     }
 
@@ -70,21 +74,23 @@
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            return data; // Devolvemos todos los resultados
+            return data;
         } catch (err) {
             console.log(err);
+            return [];
         }
     }
 
     async function getSalaryData() {
-        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets/United%20States"; 
+        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets"; 
         try {
             const response = await fetch(url);
             const data = await response.json();
             console.log("Salary Data Response:", data);
-            return data; // No es necesario tomar solo el primer resultado
+            return data;
         } catch (err) {
             console.log(err);
+            return [];
         }
     }
 
@@ -97,9 +103,9 @@
             return data.conversion_rates;
         } catch (err) {
             console.log(err);
+            return {};
         }
     }
-
 
     async function getDataProxy() {
         try {
@@ -114,9 +120,27 @@
             return data;
         } catch (err) {
             console.log(err);
+            return [];
         }
     }
 
+    async function getStockData(ticker) {
+        const url = `https://api.api-ninjas.com/v1/stockprice?ticker=${ticker}`;
+        const options = {
+            method: "GET",
+            headers: {
+                "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I",
+            },
+        };
+        try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
 
     function plotScatterChart(data) {
         const events = data.map(event => ({
@@ -198,20 +222,14 @@
     }
 
     function getNumericValue(str) {
-        // Extraer el valor numérico de una cadena de texto en el formato "XX.X" o "XX.XX"
         return parseFloat(str.match(/\d+(\.\d+)?/)[0]);
     }
 
     function generateRadarChart(salaryData, exchangeRates) {
-        // Verificar si salaryData está definido
-        if (salaryData) {
-            // Tomar los valores de los salarios en USD
+        if (salaryData && exchangeRates) {
             const salariesUSD = salaryData.map(salary => salary.salary);
-
-            // Convertir los salarios de USD a EUR
             const salariesEUR = salariesUSD.map(salaryUSD => salaryUSD * exchangeRates.EUR);
 
-            // Configurar las opciones del gráfico radar
             const options = {
                 chart: {
                     height: 350,
@@ -229,7 +247,6 @@
                 }
             };
 
-            // Renderizar el gráfico
             const chart = new ApexCharts(document.querySelector("#radar-chart"), options);
             chart.render();
         } else {
@@ -238,25 +255,20 @@
     }
 
     function generateColumnChart(data) {
-        // Filtrar los ejercicios de bíceps
         const bicepsExercises = data.filter(exercise => exercise.muscle === "biceps");
 
-        // Crear un objeto que contenga las dificultades únicas
         const difficultyLevels = {};
         bicepsExercises.forEach(exercise => {
             difficultyLevels[exercise.difficulty] = true;
         });
 
-        // Convertir las dificultades únicas en un array
         const difficulties = Object.keys(difficultyLevels);
 
-        // Contar la cantidad de ejercicios para cada dificultad
         const exerciseCounts = {};
         difficulties.forEach(difficulty => {
             exerciseCounts[difficulty] = bicepsExercises.filter(exercise => exercise.difficulty === difficulty).length;
         });
 
-        // Preparar los datos para el gráfico
         const seriesData = [];
         difficulties.forEach(difficulty => {
             seriesData.push({
@@ -265,7 +277,6 @@
             });
         });
 
-        // Configurar las opciones del gráfico
         const options = {
             chart: {
                 type: 'bar',
@@ -288,11 +299,64 @@
             }
         };
 
-        // Renderizar el gráfico
         const chart = new ApexCharts(document.querySelector("#column-chart"), options);
         chart.render();
     }
 
+    function generateBubbleChart(salaryData, stockData) {
+        if (Array.isArray(salaryData) && stockData) {
+            const salarySeries = salaryData.map(salary => ({
+                x: salary.country,
+                y: salary.salary,
+                z: 10,
+                name: "Salary"
+            }));
+
+            const stockSeries = [{
+                x: stockData.ticker,
+                y: stockData.price,
+                z: 10,
+                name: "Stock Price"
+            }];
+
+            const options = {
+                chart: {
+                    height: 400,
+                    type: 'bubble'
+                },
+                series: [
+                    {
+                        name: "Salary",
+                        data: salarySeries
+                    },
+                    {
+                        name: "Stock Price",
+                        data: stockSeries
+                    }
+                ],
+                xaxis: {
+                    title: {
+                        text: 'Category'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Value'
+                    },
+                    min: 0,
+                    max: 60000
+                },
+                title: {
+                    text: 'Bubble Chart of Salaries and Stock Prices'
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#bubble-chart"), options);
+            chart.render();
+        } else {
+            console.error("Error: Los datos de salario o de precios de acciones no son arrays.");
+        }
+    }
 </script>
 
 <h1>Gráfico de tipo bar: Características de la motocicleta Kawasaki Ninja 650 (2022)</h1>
@@ -310,3 +374,7 @@
 <h1>Gráfico de Pendiente: Relación entre Ejercicios de Bíceps y Dificultad</h1>
 <div id="column-chart"></div>
 <p>Número de ejercicios físicos diferenciados por dificultad</p>
+
+<h1>Gráfico Bubble: Salarios y Precios de Acciones</h1>
+<div id="bubble-chart"></div>
+<p>Comparación de los salarios de diferentes países y los precios de las acciones de AAPL.</p>
