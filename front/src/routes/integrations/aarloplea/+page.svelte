@@ -61,7 +61,7 @@
     }
 
     async function getSalaryData() {
-        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets/United%20States"; // Reemplaza con la URL de tu API
+        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets/United%20States"; 
         try {
             const response = await fetch(url);
             const data = await response.json();
@@ -214,3 +214,4 @@
 
 <h1>Gráfico Radar de Salarios en USD y EUR</h1>
 <div id="radar-chart"></div>
+<p>Distintos salarios de programadores en Estados Unidos, tanto en Euros como en Dólares</p>
