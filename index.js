@@ -44,8 +44,8 @@ app.use("/proxyRRG", function (req, res) {
 });
 
 // Proxy: Aaron López Leal
-app.use("/proxyRRG", function (req, res) {
-    var url = '';
+app.use("/proxyALL", function (req, res) {
+    var url = 'https://api.api-ninjas.com/v1/exercises?muscle=biceps';
     console.log("piped: " + req.url);
     req.pipe(request(url)).pipe(res);
 });

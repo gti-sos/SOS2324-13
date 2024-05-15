@@ -4,11 +4,22 @@
 
 <script>
     import { onMount } from 'svelte';
+    import { dev } from "$app/environment";
+
+    let API = "/api/v2/salaries-datasets";
+    let APIproxy = "/proxyALL";
+
+    if (dev) {
+        API = "http://localhost:10000" + API;
+        APIproxy = "http://localhost:10000" + APIproxy;
+    }
 
     let data1 = {};
     let data2 = {};
     let salaryData = [];
     let exchangeRates = {};
+    let exerciseData = [];
+
 
     onMount(async () => {
         data1 = await getData1();
@@ -21,9 +32,14 @@
         console.log("Salary Data:", salaryData);
         console.log("Exchange Rates:", exchangeRates);
         
+        exerciseData = await getDataProxy();
+        console.log("Exercise Data:", exerciseData);
+        
         generateBarChart(data1);
         plotScatterChart(data2);
         generateRadarChart(salaryData, exchangeRates);
+        generateColumnChart(exerciseData);
+
     });
 
     async function getData1() {
@@ -83,6 +99,24 @@
             console.log(err);
         }
     }
+
+
+    async function getDataProxy() {
+        try {
+            const options = {
+                method: "GET",
+                headers: {
+                    "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM",
+                },
+            };
+            const response = await fetch("/proxyALL", options);
+            const data = await response.json();
+            return data;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
 
     function plotScatterChart(data) {
         const events = data.map(event => ({
@@ -202,6 +236,63 @@
             console.error("Error: No se pudo obtener el salario o los datos del salario están vacíos.");
         }
     }
+
+    function generateColumnChart(data) {
+        // Filtrar los ejercicios de bíceps
+        const bicepsExercises = data.filter(exercise => exercise.muscle === "biceps");
+
+        // Crear un objeto que contenga las dificultades únicas
+        const difficultyLevels = {};
+        bicepsExercises.forEach(exercise => {
+            difficultyLevels[exercise.difficulty] = true;
+        });
+
+        // Convertir las dificultades únicas en un array
+        const difficulties = Object.keys(difficultyLevels);
+
+        // Contar la cantidad de ejercicios para cada dificultad
+        const exerciseCounts = {};
+        difficulties.forEach(difficulty => {
+            exerciseCounts[difficulty] = bicepsExercises.filter(exercise => exercise.difficulty === difficulty).length;
+        });
+
+        // Preparar los datos para el gráfico
+        const seriesData = [];
+        difficulties.forEach(difficulty => {
+            seriesData.push({
+                name: difficulty,
+                data: [exerciseCounts[difficulty]]
+            });
+        });
+
+        // Configurar las opciones del gráfico
+        const options = {
+            chart: {
+                type: 'bar',
+                height: 600,
+                toolbar: {
+                    show: false
+                }
+            },
+            series: seriesData,
+            title: {
+                text: 'Relación entre Ejercicios de Bíceps y Dificultad'
+            },
+            xaxis: {
+                categories: ['Ejercicios de Bíceps']
+            },
+            yaxis: {
+                title: {
+                    text: 'Cantidad de Ejercicios'
+                }
+            }
+        };
+
+        // Renderizar el gráfico
+        const chart = new ApexCharts(document.querySelector("#column-chart"), options);
+        chart.render();
+    }
+
 </script>
 
 <h1>Gráfico de tipo bar: Características de la motocicleta Kawasaki Ninja 650 (2022)</h1>
@@ -215,3 +306,6 @@
 <h1>Gráfico Radar de Salarios en USD y EUR</h1>
 <div id="radar-chart"></div>
 <p>Distintos salarios de programadores en Estados Unidos, tanto en Euros como en Dólares</p>
+
+<h1>Gráfico de Pendiente: Relación entre Ejercicios de Bíceps y Dificultad</h1>
+<div id="column-chart"></div>
