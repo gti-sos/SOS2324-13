@@ -43,6 +43,13 @@ app.use("/proxyRRG", function (req, res) {
     req.pipe(request(url)).pipe(res);
 });
 
+// Proxy: Aaron López Leal
+app.use("/proxyRRG", function (req, res) {
+    var url = '';
+    console.log("piped: " + req.url);
+    req.pipe(request(url)).pipe(res);
+});
+
 // Cargamos el handler
 app.use(handler);
 

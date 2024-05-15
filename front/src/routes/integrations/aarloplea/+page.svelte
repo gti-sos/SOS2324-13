@@ -7,19 +7,23 @@
 
     let data1 = {};
     let data2 = {};
-    let data3 = {};
-    let data4 = {};
-    let averageSalary = {};
-
+    let salaryData = [];
+    let exchangeRates = {};
 
     onMount(async () => {
         data1 = await getData1();
         data2 = await getData2();
-        data3 = await getInflationData();
-        data4 = await getLocalData();
+        console.log("Data 1:", data1);
+        console.log("Data 2:", data2);
+        
+        salaryData = await getSalaryData();
+        exchangeRates = await getExchangeRates();
+        console.log("Salary Data:", salaryData);
+        console.log("Exchange Rates:", exchangeRates);
+        
         generateBarChart(data1);
         plotScatterChart(data2);
-        plotRangeAreaChart(data3, data4);
+        generateRadarChart(salaryData, exchangeRates);
     });
 
     async function getData1() {
@@ -56,29 +60,25 @@
         }
     }
 
-    async function getInflationData() {
-        const url = `https://api.api-ninjas.com/v1/inflation?country=Canada`;
-        const options = {
-            method: "GET",
-            headers: {
-                "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I",
-            },
-        };
+    async function getSalaryData() {
+        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets/United%20States"; // Reemplaza con la URL de tu API
         try {
-            const response = await fetch(url, options);
+            const response = await fetch(url);
             const data = await response.json();
-            return data; // Devolvemos todos los resultados
+            console.log("Salary Data Response:", data);
+            return data; // No es necesario tomar solo el primer resultado
         } catch (err) {
             console.log(err);
         }
     }
 
-    async function getLocalData() {
-        const url = "https://sos2324-13.ew.r.appspot.com/api/v2/salaries-datasets";
+    async function getExchangeRates() {
+        const url = "https://v6.exchangerate-api.com/v6/30323d8e62e86ef3e389553e/latest/USD";
         try {
             const response = await fetch(url);
             const data = await response.json();
-            return data;
+            console.log("Exchange Rates Response:", data);
+            return data.conversion_rates;
         } catch (err) {
             console.log(err);
         }
@@ -142,7 +142,7 @@
                 height: 400
             },
             title: {
-                text: 'Características de la motocicleta ${data.make} ${data.model} (${data.year})'
+                text: `Características de la motocicleta ${data.make} ${data.model} (${data.year})`
             },
             series: [{
                 name: 'Valor',
@@ -168,80 +168,41 @@
         return parseFloat(str.match(/\d+(\.\d+)?/)[0]);
     }
 
-    function plotRangeAreaChart(inflationData, localData) {
-    console.log("Inflation Data:", inflationData);
-    console.log("Local Data:", localData);
+    function generateRadarChart(salaryData, exchangeRates) {
+        // Verificar si salaryData está definido
+        if (salaryData) {
+            // Tomar los valores de los salarios en USD
+            const salariesUSD = salaryData.map(salary => salary.salary);
 
-    // Verificar la estructura de los datos de inflación
-    if (!Array.isArray(inflationData) || inflationData.length === 0) {
-        console.error("Los datos de inflación no están en el formato esperado.");
-        return;
+            // Convertir los salarios de USD a EUR
+            const salariesEUR = salariesUSD.map(salaryUSD => salaryUSD * exchangeRates.EUR);
+
+            // Configurar las opciones del gráfico radar
+            const options = {
+                chart: {
+                    height: 350,
+                    type: 'radar'
+                },
+                series: [{
+                    name: 'Salario en USD',
+                    data: salariesUSD
+                }, {
+                    name: 'Salario en EUR',
+                    data: salariesEUR
+                }],
+                xaxis: {
+                    categories: salaryData.map((_, index) => `Salario ${index + 1}`)
+                }
+            };
+
+            // Renderizar el gráfico
+            const chart = new ApexCharts(document.querySelector("#radar-chart"), options);
+            chart.render();
+        } else {
+            console.error("Error: No se pudo obtener el salario o los datos del salario están vacíos.");
+        }
     }
-
-    // Verificar la estructura de los datos locales
-    if (!Array.isArray(localData) || localData.length === 0) {
-        console.error("Los datos locales no están en el formato esperado.");
-        return;
-    }
-
-    // Filtrar los datos locales solo para el país "United States"
-    const usData = localData.filter(entry => entry.country === "United States");
-    if (usData.length === 0) {
-        console.error("No se encontraron datos para el país 'United States'.");
-        return;
-    }
-
-    // Calcular la media de los salarios para "United States"
-    const salaries = usData.map(entry => entry.salary);
-    const averageSalary1 = salaries.reduce((total, salary) => total + salary, 0) / salaries.length;
-    const averageSalary2 = (averageSalary1/12);
-
-    console.log("Salario Promedio (United States):", averageSalary2);
-
-    // Encontrar la inflación anual para "United States"
-    const usInflationEntry = inflationData.find(entry => entry.country === "Canada");
-    if (!usInflationEntry) {
-        console.error("No se encontró información de inflación para el país 'United States'.");
-        return;
-    }
-    const inflationRate = usInflationEntry.yearly_rate_pct;
-
-    console.log("Inflación Anual (United States):", inflationRate);
-
-    const options = {
-    chart: {
-        type: 'bar',
-        height: 400
-    },
-    series: [{
-        name: 'Salario Promedio (United States)',
-        data: [averageSalary2]
-    }, {
-        name: 'Inflación Anual (United States)',
-        data: [inflationRate]
-    }],
-    xaxis: {
-        categories: ['']
-    },
-    yaxis: {
-        title: {
-            text: 'Valor'
-        },
-        min: 0,
-        max: 10000
-    }
-};
-
-    const chart = new ApexCharts(document.querySelector("#range-area-chart"), options);
-    chart.render();
-}
-
-
-
-
-
-
-</script>   
+</script>
 
 <h1>Gráfico de tipo bar: Características de la motocicleta Kawasaki Ninja 650 (2022)</h1>
 <div id="bar-chart-container"></div>
@@ -251,5 +212,5 @@
 <div id="scatter-chart"></div>
 <p>Eventos ocurridos al Imperio Romano a lo largo de los años</p>
 
-<h1>Gráfico de Tipo Range Area: Inflación vs Salario Promedio Mensual</h1>
-<div id="range-area-chart"></div>
+<h1>Gráfico Radar de Salarios en USD y EUR</h1>
+<div id="radar-chart"></div>
