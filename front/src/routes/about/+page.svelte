@@ -17,19 +17,17 @@
     <br />
     <hr />
     <br />
-
+    
     <br />
     <div class="video-container">
-        <iframe
-            width="560"
-            height="315"
-            src="https://youtu.be/lBPWsXLc9Fo"
-            title="Vídeo de SOS - Aaron López Leal"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen
-        ></iframe>
+        <iframe width="560" 
+         height="315" 
+         src="https://www.youtube.com/embed/lBPWsXLc9Fo?si=NqGRL8M__mwxTjfP"
+         title="Video Antonio Lopez Barrios" 
+         frameborder="0" 
+         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+         referrerpolicy="strict-origin-when-cross-origin" 
+         allowfullscreen></iframe>
     </div>
 
     <br />
