@@ -11,8 +11,8 @@
     - Documentación api-wris-datasets v2: [https://sos2324-13.appspot.com/api/v2/wris-datasets/docs](https://sos2324-13.appspot.com/api/v2/wris-datasets/docs) (developed by Rubén Romero Guisado)
     - Documentación api-mentalhealth-datasets v1: [https://sos2324-13.appspot.com/api/v1/mentalhealth-datasets/docs](https://sos2324-13.appspot.com/api/v1/mentalhealth-datasets/docs) (developed by Antonio López Barrios)
     - Documentación api-mentalhealth-datasets v2: [https://sos2324-13.appspot.com/api/v2/mentalhealth-datasets/docs](https://sos2324-13.appspot.com/api/v2/mentalhealth-datasets/docs) (developed by Antonio López Barrios)
-    - Documentación api-salaries-datasets v1: [https://sos2324-13.appspot.com//api/v1/salaries-datasets/docs](https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs) (developed by Aaron López Leal)
-    - Documentación api-salaries-datasets v2: [https://sos2324-13.appspot.com//api/v2/salaries-datasets/docs](https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs) (developed by Aaron López Leal)
+    - Documentación api-salaries-datasets v1: [https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs](https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs) (developed by Aaron López Leal)
+    - Documentación api-salaries-datasets v2: [https://sos2324-13.appspot.com/api/v2/salaries-datasets/docs](https://sos2324-13.appspot.com/api/v1/salaries-datasets/docs) (developed by Aaron López Leal)
 -  **Front-Ends**:
     - api-wris-datasets: [https://sos2324-13.appspot.com/wris-datasets](https://sos2324-13.appspot.com/wris-datasets) (developed by Rubén Romero Guisado)
     - api-mentalhealth-datasets: [https://sos2324-13.appspot.com/mentalhealth-datasets](https://sos2324-13.appspot.com/mentalhealth-datasets) (developed by Rubén Romero Guisado)
