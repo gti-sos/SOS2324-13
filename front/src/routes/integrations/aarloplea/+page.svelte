@@ -56,7 +56,7 @@
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            return data[0]; // Take only the first result since the API returns a single object
+            return data[0]; 
         } catch (err) {
             console.log(err);
             return null;
@@ -165,7 +165,7 @@
             xaxis: {
                 type: 'numeric',
                 title: {
-                    text: 'Year'
+                    text: 'Año'
                 }
             },
             yaxis: {
@@ -173,7 +173,7 @@
                 min: 1,
                 max: 12,
                 title: {
-                    text: 'Month'
+                    text: 'Mes'
                 }
             },
             tooltip: {
@@ -245,6 +245,7 @@
                 xaxis: {
                     categories: salaryData.map((_, index) => `Salario ${index + 1}`)
                 }
+                
             };
 
             const chart = new ApexCharts(document.querySelector("#radar-chart"), options);
@@ -336,18 +337,18 @@
                 ],
                 xaxis: {
                     title: {
-                        text: 'Category'
+                        text: 'País'
                     }
                 },
                 yaxis: {
                     title: {
-                        text: 'Value'
+                        text: 'Precio'
                     },
                     min: 0,
                     max: 60000
                 },
                 title: {
-                    text: 'Bubble Chart of Salaries and Stock Prices'
+                    text: 'Bubble Chart de salarios y precios en las acciones'
                 }
             };
 
@@ -369,7 +370,7 @@
 
 <h1>Gráfico Radar de Salarios en USD y EUR</h1>
 <div id="radar-chart"></div>
-<p>Distintos salarios de programadores en Estados Unidos, tanto en Euros como en Dólares</p>
+<p>Distintos salarios de programadores, tanto en Euros como en Dólares</p>
 
 <h1>Gráfico de Pendiente: Relación entre Ejercicios de Bíceps y Dificultad</h1>
 <div id="column-chart"></div>
