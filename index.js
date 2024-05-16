@@ -49,16 +49,44 @@ app.use("/proxyRRG", function (req, res) {
 
 // Proxy: Aaron López Leal
 app.use("/proxyALL", function (req, res) {
-    var url = 'https://api.api-ninjas.com/v1/exercises?muscle=biceps';
-    console.log("piped: " + req.url);
-    req.pipe(request(url)).pipe(res);
-});
+    const url = 'https://api.api-ninjas.com/v1/exercises?muscle=biceps';
+    const options = {
+        url: url,
+        headers: {
+        "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM"
+        }
+    };
+    request(options, (error, response, body) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send(error);
+        } else {
+            console.log(response.statusCode);
+            console.log(body);
+            res.send(body);
+        }
+    });
+  })
 // Proxy: Antonio López Barrios
 app.use("/proxyALB", function (req, res) {
-    var url = 'https://api.api-ninjas.com/v1/weather?city=Spain';
-    console.log("piped: " + req.url);
-    req.pipe(request(url)).pipe(res);
-});
+    const url = 'https://api.api-ninjas.com/v1/weather?city=Spain';
+    const options = {
+        url: url,
+        headers: {
+        "X-Api-Key": "GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf"
+        }
+    };
+    request(options, (error, response, body) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send(error);
+        } else {
+            console.log(response.statusCode);
+            console.log(body);
+            res.send(body);
+        }
+    });
+  })
 
 // Cargamos el handler
 app.use(handler);
