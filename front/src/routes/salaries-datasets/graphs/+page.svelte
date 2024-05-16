@@ -152,7 +152,7 @@
     }, {
         width: '600px',
         height: '400px'
-    });
+        });
     }
 
 
@@ -182,4 +182,7 @@
 
 <div id="pie-chart-container"></div>
 <div id="bar-chart-container"></div>
+<div style="text-align: center;">
+    <h3>Relación entre número de empleos registrados y país</h3>
+</div>
 <div class="ct-chart"></div>
