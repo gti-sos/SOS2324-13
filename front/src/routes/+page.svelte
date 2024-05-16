@@ -174,10 +174,31 @@
         <h3>Enlace a los vídeos:</h3>
         <ul>
             <li>
-                Vídeos de los <a
+                Vista de los vídeos de los <a
                     href="/about"
                 >
                     miembros del equipo</a
+                >
+            </li>
+            <li>
+                Vídeo de <a
+                    href="https://www.youtube.com/watch?v=M9ePlEFwpJ4"
+                >
+                    Rubén Romero Guisado</a
+                >
+            </li>
+            <li>
+                Vídeos de <a
+                    href="https://www.youtube.com/watch?v=lBPWsXLc9Fo"
+                >
+                    Antonio López Barrios</a
+                >
+            </li>
+            <li>
+                Vídeo de <a
+                    href="https://www.youtube.com/watch?v=zZmAlXItNJU"
+                >
+                    Aaron López Leal</a
                 >
             </li>
         </ul>
