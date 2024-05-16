@@ -3,7 +3,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import { loadWRIApi1 } from "./back/api-wris-datasets/v1/index.js";
 import { loadWRIApi2 } from "./back/api-wris-datasets/v2/index.js";
+import { loadMentalApi } from "./back/api-mentalhealth-datasets/v1/index.js";
 import { loadMentalApi2 } from "./back/api-mentalhealth-datasets/v2/index.js";
+import { loadSalarieApi } from "./back/api-salaries-datasets/v1/index.js";
 import { loadSalarieApi2 } from "./back/api-salaries-datasets/v2/index.js";
 import dataStore from "nedb";
 import { handler } from "./front/build/handler.js";
@@ -31,9 +33,11 @@ loadWRIApi1(app, dbRisk);
 loadWRIApi2(app, dbRisk);
 
 // Antonio López Barrios
+loadMentalApi(app, dbMental);
 loadMentalApi2(app, dbMental);
 
 // Aaron López Leal
+loadSalarieApi(app, dbSalarie);
 loadSalarieApi2(app, dbSalarie);
 
 // Proxy: Rubén Romero Guisado
