@@ -43,8 +43,22 @@ loadSalarieApi2(app, dbSalarie);
 // Proxy: Rubén Romero Guisado
 app.use("/proxyRRG", function (req, res) {
     var url = 'https://api.api-ninjas.com/v1/interestrate?country=Australia';
-    console.log("piped: " + req.url);
-    req.pipe(request(url)).pipe(res);
+    const options = {
+        url: url,
+        headers: {
+            "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM"
+        }
+    };
+    request(options, (error, response, body) => {
+        if (error) {
+            console.error(error);
+            res.status(500).send(error);
+        } else {
+            console.log(response.statusCode);
+            console.log(body);
+            res.send(body);
+        }
+    });
 });
 
 // Proxy: Aaron López Leal
@@ -53,7 +67,7 @@ app.use("/proxyALL", function (req, res) {
     const options = {
         url: url,
         headers: {
-        "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM"
+            "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I"
         }
     };
     request(options, (error, response, body) => {
@@ -66,14 +80,15 @@ app.use("/proxyALL", function (req, res) {
             res.send(body);
         }
     });
-  })
+});
+
 // Proxy: Antonio López Barrios
 app.use("/proxyALB", function (req, res) {
     const url = 'https://api.api-ninjas.com/v1/weather?city=Spain';
     const options = {
         url: url,
         headers: {
-        "X-Api-Key": "GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf"
+            "X-Api-Key": "GHE89hJhpa+HwvIeMM+qFg==4g61JJEy3roxAdRf"
         }
     };
     request(options, (error, response, body) => {
@@ -86,7 +101,7 @@ app.use("/proxyALB", function (req, res) {
             res.send(body);
         }
     });
-  })
+});
 
 // Cargamos el handler
 app.use(handler);

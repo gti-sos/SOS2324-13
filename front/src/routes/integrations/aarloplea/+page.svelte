@@ -112,7 +112,7 @@
             const options = {
                 method: "GET",
                 headers: {
-                    "X-Api-Key": "jHej/uBsT4gBENm3TtFEOA==gn7ENOczOs6oDiKM",
+                    "X-Api-Key": "BoZ7aGNrvqoVxf92RrE15Q==XD7zepsgjfNgVN5I",
                 },
             };
             const response = await fetch("/proxyALL", options);
