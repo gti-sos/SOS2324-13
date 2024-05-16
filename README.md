@@ -6,7 +6,7 @@
 - **Project description**: Our information sources are aimed at analyzing if there is a relationship between the risk of natural disasters by country, salaries and the most common mental problems.
 - **Repository**: [https://github.com/gti-sos/SOS2324-13](https://github.com/gti-sos/SOS2324-13)
 - **URL**: [https://sos2324-13.appspot.com](https://sos2324-13.appspot.com)
-- **To run the following container do** : docker pull antonioolb15/sos2324-13;docker run -p 10000:10000 -d antonioolb15/sos2324-13:0.0.3
+- **To run the following container do**: docker pull antonioolb15/sos2324-13;docker run -p 10000:10000 -d antonioolb15/sos2324-13:0.0.3
 -  **APIs**:
     - Documentación api-wris-datasets v1: [https://sos2324-13.appspot.com/api/v1/wris-datasets/docs](https://sos2324-13.appspot.com/api/v1/wris-datasets/docs) (developed by Rubén Romero Guisado)
     - Documentación api-wris-datasets v2: [https://sos2324-13.appspot.com/api/v2/wris-datasets/docs](https://sos2324-13.appspot.com/api/v2/wris-datasets/docs) (developed by Rubén Romero Guisado)
