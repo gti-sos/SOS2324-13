@@ -39,14 +39,14 @@
         const mentalHealthData = data1[0];
         const covidData = data2;
 
-        // Eliminar comas y convertir a número
+       
         const totalDeaths = parseFloat(covidData["Total Deaths_text"].replace(/,/g, ""));
         const depression = mentalHealthData.depression;
         const schizophrenia = mentalHealthData.schizophrenia;
 
         const data = [
             {
-                x: ["Total Deaths of COVID-19", "Depression", "Schizophrenia"],
+                x: ["Total muertes de COVID-19", "Depresion", "Esquizofrenia"],
                 y: [totalDeaths, depression, schizophrenia],
                 type: "bar",
                 marker: {
@@ -58,10 +58,10 @@
         const layout = {
             title: "Total muertes de COVID-19, depresion, y esquizofrenia en Kiribati",
             xaxis: {
-                title: "Attribute"
+                title: "Atributo"
             },
             yaxis: {
-                title: "Value"
+                title: "Valor"
             }
         };
 

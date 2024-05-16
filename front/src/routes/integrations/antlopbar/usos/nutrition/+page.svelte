@@ -23,7 +23,7 @@
         try {
             const response = await fetch(url, options);
             const data = await response.json();
-            return data[0]; // Tomamos el primer elemento del array, ya que la API devuelve un array con un solo elemento
+            return data[0];
         } catch (err) {
             console.log(err);
         }

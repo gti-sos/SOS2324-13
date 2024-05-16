@@ -48,14 +48,14 @@
         const temperature = data2.temp;
 
         var data = google.visualization.arrayToDataTable([
-            ['Category', 'Value'],
-            ['Alcoholism', alcoholism],
-            ['Bipolar Disorder', bipolar_disorder],
-            ['Temperature (°C)', temperature]
+            ['Categoria', 'Valor'],
+            ['Alcoholismo', alcoholism],
+            ['Bipolarismo', bipolar_disorder],
+            ['Temperatura (°C)', temperature]
         ]);
 
         var options = {
-            title: 'Alcoholism, Bipolar Disorder, and Temperature in Spain',
+            title: 'Alcoholismo, Bipolaridad, y temperatura en España',
             hAxis: {
                 title: 'Value'
             },
@@ -69,5 +69,5 @@
     }
 </script>
 
-<h1>Alcoholism, Bipolar Disorder, and Temperature in Spain</h1>
+<h1>Alcoholismo, Bipolaridad, y temperatura en España</h1>
 <div id="chart-container" style="width: 100%; height: 400px;"></div>
